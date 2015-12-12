@@ -1,0 +1,31 @@
+<?
+$aMenuLinks = Array(
+	Array(
+		"Проекты", 
+		"/projects/", 
+		Array(), 
+		Array("CLASS"=>"fa-rocket"), 
+		"" 
+	),
+	Array(
+		"Задачи", 
+		"/tasks/", 
+		Array(), 
+		Array("CLASS"=>"fa-bug"), 
+		"" 
+	),
+	Array(
+		"Настройки", 
+		"/config/", 
+		Array(), 
+		Array("CLASS"=>"fa-wrench"), 
+		"" 
+	),
+	Array(
+		"Отчёты", 
+		"/report/", 
+		Array(), 
+		Array('CLASS'=>'fa-calendar'), 
+		"" 
+	)
+); 
