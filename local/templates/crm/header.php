@@ -17,6 +17,10 @@
         <!-- Theme styling --> 
         <link href="/css/custom.css" rel="stylesheet">
         <script src="/js/custom.js"></script>
+        
+        <!-- PNotify -->
+        <script type="text/javascript" src="/js/notify/pnotify.core.js"></script> 
+
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -25,16 +29,14 @@
     </head> 
     <body class="nav-sm"> 
         <div class="container body">
-        <?$APPLICATION->ShowPanel();?> 
+        <?//$APPLICATION->ShowPanel();?> 
             <div class="main_container"> 
                 <div class="col-md-3 left_col">
-                    <div class="left_col scroll-view">
-
+                    <div class="left_col scroll-view"> 
                         <div class="navbar nav_title" style="border: 0;">
                             <a href="/index.php" class="site_title"><div class="fa fa-paw"></div> <div class="sitename">devteam CRM</div></a>
                         </div>
-                        <div class="clearfix"></div>
- 
+                        <div class="clearfix"></div> 
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu"> 
                         <?$APPLICATION->IncludeComponent(
                                 "bitrix:menu",
@@ -52,8 +54,7 @@
                                         "ROOT_MENU_TYPE" => "left",
                                         "USE_EXT" => "N"
                                 )
-                        );?> </div>
-                       
+                        );?> </div> 
                     </div>
                 </div>
 

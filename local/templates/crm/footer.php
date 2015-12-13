@@ -2,6 +2,7 @@
                 </div>
             </div>  
         </div> 
-    </div>  
+    </div> 
+    <?ToolTip::ShowJs(true);?> 
 </body> 
 </html>
