@@ -15,6 +15,13 @@ $aMenuLinks = Array(
 		"" 
 	),
 	Array(
+		"Сотрудники", 
+		"/users/", 
+		Array(), 
+		Array("CLASS"=>"fa-users"), 
+		"" 
+	),
+	Array(
 		"Настройки", 
 		"/config/", 
 		Array(), 

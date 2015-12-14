@@ -20,11 +20,23 @@ class CrmUser extends CUser {
         return $this->hasRightsToWorkWithProjects();
     }
     
-    /* Вернёт фильтр, который вытянет проекты, которые можно видеть пользователю */
+    /* Вернёт фильтр, который вытянет проекты, которые можно видеть пользователю
+       то что возвращает этот метод нужно мержить к фильтру везде где тянем проект или проекты
+    */
     function GetViewProjectsFilter() {
-        
+        if(parent::IsAdmin()) {  
+            return array(); 
+        }
+        $arFilter = array( // остальные видят проекты где они или исполнители или заказчики
+                array(
+                    "LOGIC" => "OR",
+                    array("PROPERTY_PROGRAMMER" => parent::GetID()),
+                    array("PROPERTY_CUSTOMER" => parent::GetID())
+                )
+        );
+        return $arFilter;
     }
-     
+
 }
  
 AddEventHandler("iblock", "OnBeforeIBlockElementAdd",    Array("ProjectsRightsHandler", "OnBeforeIBlockElementAddHandler"));

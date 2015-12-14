@@ -4,9 +4,9 @@ define('NEED_AUTH', 'Y');
 
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
-$APPLICATION->SetTitle('Задачи');
+$APPLICATION->SetTitle('Сотрудники');
  
-$APPLICATION->IncludeComponent('devteam:tasks_list');
+$APPLICATION->IncludeComponent('devteam:users_list');
 
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php");
  

@@ -1164,7 +1164,11 @@ legend {
 }
 
 .well.profile_view {
-    background: #fff;
+    background: #fff; 
+}
+
+.well.profile_view .col-sm-12{
+    height: 135px;
 }
 
 .well.profile_view .bottom {
@@ -3363,11 +3367,9 @@ textarea:focus {
     background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
     background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
     background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
-    background-repeat: repeat-x;
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+    background-repeat: repeat-x; 
     border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    filter: progid: DXImageTransform.Microsoft.gradient(enabled false);
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); 
     border: 1px solid #cccccc;
     border-bottom-color: #b3b3b3;
     -webkit-border-radius: 4px;
@@ -4268,9 +4270,7 @@ ul.widget_tally .count {
     padding-bottom: 15px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
-    border-radius: 4px;
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
-    filter: progid: DXImageTransform.Microsoft.gradient(enabled=false);
+    border-radius: 4px;  
     padding-bottom: 10px;
     -webkit-box-shadow: 0 4px 6px -6px #222;
     -moz-box-shadow: 0 4px 6px -6px #222;
@@ -5859,7 +5859,7 @@ form:after {
     border: 1px solid #A878AF;
     outline: none;
 }
-}
+
 #username { background-position: 10px 10px !important }
 #password { background-position: 10px -53px !important }
 .login_content form div a {
@@ -6366,7 +6366,40 @@ ul.notifications {
     padding-left: 60px; padding-top: 4px;
 }
 
-
 #menu_toggle{
     cursor: pointer;
+}
+
+.tasks_filter{
+    background: rgb(247, 247, 247) none repeat scroll 0% 0%; 
+    padding: 10px;
+
+}
+
+#tasks_sort_by{
+    float: left;
+}
+
+.tasks_filter .f1{
+    float: left;
+}
+.tasks_filter .f1 p{
+    margin-top: 8px; 
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.tasks_filter .f2{
+    float: left;
+}
+
+.tasks_filter .btn{
+    margin-left: 20px;
+}
+
+.tasks_advanced_filter{
+    display: none;
+    background: rgb(247, 247, 247) none repeat scroll 0% 0%; 
+    padding: 10px;
+
 }
