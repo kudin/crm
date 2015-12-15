@@ -7,8 +7,7 @@ while($arUser = $rsUsers->Fetch()) {
     $arResult['USERS'][] = $arUser;
 }
  
-if ($_REQUEST['add']) {
-     
+if ($_REQUEST['add']) { 
     CModule::IncludeModule('iblock');
     $el = new CIBlockElement;
     $name = trim($_REQUEST['name']);
@@ -30,8 +29,7 @@ if ($_REQUEST['add']) {
         LocalRedirect(PROJECTS_LIST_URL);
     } else {
         $arResult['ERROR'] = $el->LAST_ERROR;
-    }
-    
+    } 
 } 
 
 $this->IncludeComponentTemplate();

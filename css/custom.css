@@ -6380,16 +6380,16 @@ ul.notifications {
     float: left;
 }
 
-.tasks_filter .f1{
+.x_content .f1{
     float: left;
 }
-.tasks_filter .f1 p{
+.x_content .f1 p{
     margin-top: 8px; 
     margin-right: 10px;
     margin-left: 10px;
 }
 
-.tasks_filter .f2{
+.x_content .f2{
     float: left;
 }
 
@@ -6398,8 +6398,18 @@ ul.notifications {
 }
 
 .tasks_advanced_filter{
+    border-top: 2px solid #ddd;
     display: none;
+    height: 90px;
     background: rgb(247, 247, 247) none repeat scroll 0% 0%; 
-    padding: 10px;
+    padding: 10px 10px 10px 20px; 
+}
 
+.tasks_advanced_filter .select2-selection{
+    min-width: 200px;
+}
+
+.x_content .f3{
+    float: left;  
+    margin-right: 10px;
 }

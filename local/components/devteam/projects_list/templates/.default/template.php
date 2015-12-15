@@ -32,21 +32,26 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <small>Описание проекта</small>
                             </td>
                             <td>
+                                <?if($project['PROPERTIES']['CUSTOMER']['VALUE']) {?> 
                                 <ul class="list-inline">
+                                    <?foreach($project['PROPERTIES']['CUSTOMER']['VALUE'] as $userId) {?>
                                     <li>
-                                        <img alt="Avatar" class="avatar" src="/images/user.png">
+                                        <img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] ? $arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] : '/images/user.png';?>">
                                     </li> 
+                                     <?}?>
                                 </ul>
+                                <? } ?>
                             </td>
                             <td> 
+                               <?if($project['PROPERTIES']['PROGRAMMER']['VALUE']) {?> 
                                 <ul class="list-inline">
+                                    <?foreach($project['PROPERTIES']['PROGRAMMER']['VALUE'] as $userId) {?>
                                     <li>
-                                        <img alt="Avatar" class="avatar" src="/images/user.png">
-                                    </li>
-                                    <li>
-                                        <img alt="Avatar" class="avatar" src="/images/user.png">
-                                    </li>
-                                </ul> 
+                                        <img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] ? $arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] : '/images/user.png';?>">
+                                    </li> 
+                                     <?}?>
+                                </ul>
+                                <? } ?>
                             </td>   
                                      <td class="project_progress">
                                          

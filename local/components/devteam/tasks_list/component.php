@@ -15,4 +15,12 @@ while ($ob = $res->GetNextElement()) {
     $arResult['ITEMS'][] = $arFields;
 }
 
+$rsUsers = CUser::GetList(($by="NAME"), ($order="ASCS"), array('ACTIVE'=>'Y'), 
+                          array('FIELDS'=> array('ID', 'NAME', 'LOGIN', 'LAST_NAME')) );    
+while($arUser = $rsUsers->Fetch()) { 
+    $arResult['USERS'][] = $arUser;
+}
+   
+
+
 $this->IncludeComponentTemplate();

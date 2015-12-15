@@ -14,7 +14,14 @@
  
         <link href="/css/custom.css" rel="stylesheet">
         <script src="/js/custom.js"></script>
-         
+ 
+        <script type="text/javascript" src="/js/select/select2.full.js"></script>
+        <link href="/css/select/select2.min.css" rel="stylesheet">
+          
+         <!-- daterangepicker -->
+        <script type="text/javascript" src="/js/moment.min2.js"></script>
+        <script type="text/javascript" src="/js/datepicker/daterangepicker.js"></script>
+        
         <script type="text/javascript" src="/js/notify/pnotify.core.js"></script> 
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -92,7 +99,7 @@
                                         <li>
                                             <a>
                                                 <span class="image">
-                                                    <img src="images/img.jpg" alt="Profile Image" />
+                                                    <img src="/images/user.png" alt="Profile Image" />
                                                 </span>
                                                 <span>
                                                     <span>John Smith</span>
@@ -106,7 +113,7 @@
                                         <li>
                                             <a>
                                                 <span class="image">
-                                                    <img src="images/img.jpg" alt="Profile Image" />
+                                                    <img src="/images/user.png" alt="Profile Image" />
                                                 </span>
                                                 <span>
                                                     <span>John Smith</span>
@@ -120,7 +127,7 @@
                                         <li>
                                             <a>
                                                 <span class="image">
-                                                    <img src="images/img.jpg" alt="Profile Image" />
+                                                    <img src="/images/user.png" alt="Profile Image" />
                                                 </span>
                                                 <span>
                                                     <span>John Smith</span>

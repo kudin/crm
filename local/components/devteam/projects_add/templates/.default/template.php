@@ -38,7 +38,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 <?
                                 foreach ($arResult['USERS'] as $user) {
                                     ?>
-                                    <option value='<?=$user['ID'];?>'>[<?=$user['ID'];?>] <?=$user['NAME'];?> <?=$user['LAST_NAME'];?>  (<?=$user['LOGIN'];?>) </option>
+                                    <option value='<?=$user['ID'];?>'><?=$user['NAME'];?> <?=$user['LAST_NAME'];?>  (<?=$user['LOGIN'];?>) </option>
                                     <?
                                 }
                                 ?>
@@ -52,7 +52,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 <? 
                                 foreach ($arResult['USERS'] as $user) {
                                     ?>
-                                    <option value='<?=$user['ID'];?>'>[<?=$user['ID'];?>] <?=$user['NAME'];?> <?=$user['LAST_NAME'];?>  (<?=$user['LOGIN'];?>) </option>
+                                    <option value='<?=$user['ID'];?>'><?=$user['NAME'];?> <?=$user['LAST_NAME'];?>  (<?=$user['LOGIN'];?>) </option>
                                     <?
                                 }
                                 ?>
