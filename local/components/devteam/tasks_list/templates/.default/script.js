@@ -2,10 +2,9 @@ $(function() {
     $(document).on('click', '.adv_filterbtn', function() {
         $('.tasks_advanced_filter').toggle();
     });
-     
-    $(".select2_multiple").select2({
-        maximumSelectionLength: 10, 
-        allowClear: true
+    
+    $(document).on('change', '#projects_list', function() {
+        location.href = "/tasks/" + $(this).val() + "/"; 
     }); 
     
 });

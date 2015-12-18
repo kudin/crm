@@ -913,6 +913,10 @@ a.btn-danger {
     color: #fff !important;
 }
 
+.btn-success{ 
+    border-color: #26b99a;
+}
+
 .btn {
     border-radius: 3px;
 }
@@ -6412,4 +6416,4 @@ ul.notifications {
 .x_content .f3{
     float: left;  
     margin-right: 10px;
-}
+} 

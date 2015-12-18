@@ -6,7 +6,7 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 $APPLICATION->SetTitle('Задачи');
  
-$APPLICATION->IncludeComponent('devteam:tasks_list');
+$APPLICATION->IncludeComponent('devteam:projects_list', 'list');
 
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php");
  
