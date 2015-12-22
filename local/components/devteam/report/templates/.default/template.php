@@ -13,8 +13,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                 <div class="clearfix"></div>
             </div> 
 
-            <div class="x_content">  
-                <div class="tasks_filter">  
+            <div class="x_content"> 
+
+
+                <div class="tasks_filter"> 
+
                     <div class="f1"><p>Проект</p></div>
                     <div class="f2"><select id="projects_list" class="form-control">
                             <?
@@ -25,7 +28,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                             }
                             ?>
                         </select>
-                    </div>  
+                    </div> 
+
+
                     <div class="f1"><p>Сортировать по:</p></div>
                     <div class="f2"><select id="tasks_sort_by" class="form-control">
                             <option>приоритету</option> 
@@ -37,14 +42,20 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                             <option>горящие</option>
                             <option>подходят сроки</option>
                             <option>начались</option>
-                            <option>ожидают</option>  
+                            <option>ожидают</option> 
+                            <option>с превышением</option>
                         </select></div>
- 
+
+
                     <button class="btn btn-default adv_filterbtn" type="button">Расширеный фильтр</button>
- 
+
+
+
                 </div> 
                 <div class="tasks_advanced_filter"> 
- 
+
+
+
                     <div class="f3">                 
                         <div class="checkbox">
                             <label>
@@ -56,16 +67,51 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 <input type="checkbox" value="" checked="checked"> Выполненные
                             </label>
                         </div> 
-                    </div>        
+                    </div>       
+ 
+                        <div class="f3">      
+
+                            <div class="f1"><p>Автор:</p></div>
+                            <div class="f2">  <select class="select2_multiple form-control" multiple="multiple" name='CUSTOMER[]'>
+                                    <?
+                                    foreach ($arResult['CUSTOMERS_IDS'] as $userId) {
+                                        $user = $arResult['USERS'][$userId];
+                                        ?>
+                                        <option value='<?= $user['ID']; ?>'><?= $user['NAME']; ?> <?= $user['LAST_NAME']; ?>  (<?= $user['LOGIN']; ?>) </option>
+                                    <? }
+                                    ?>
+                                </select>
+                            </div>   
+
+                        </div>   
+
+
+                        <div class="f3">      
+
+                            <div class="f1"><p>Исполнитель:</p></div>
+                            <div class="f2">
+                                <select class="select2_multiple form-control" multiple="multiple" name='CUSTOMER[]'>
+                                    <?
+                                    foreach ($arResult['PROGRAMERS_IDS'] as $userId) {
+                                        $user = $arResult['USERS'][$userId];
+                                        ?>
+                                        <option value='<?= $user['ID']; ?>'><?= $user['NAME']; ?> <?= $user['LAST_NAME']; ?>  (<?= $user['LOGIN']; ?>) </option>
+                                    <? }
+                                    ?>
+                                </select>
+                            </div>   
+
+                        </div>   
                 </div>    
-        <?if(count($arResult['TASKS'])) {?>
+                 
                 <table class="table table-striped responsive-utilities jambo_table bulk_action">
                     <thead>
                         <tr class="headings">
                             <th style="width: 20px;"><input type="checkbox" id="check-all" class="flat"></th>
                             <th class="column-title">Задача </th> 
                             <th class="column-title">Статус </th>
-                            <th class="column-title last" style="width: 100px;">Приоритет </th> 
+                            <th class="column-title">Приоритет </th>
+                            <th class="column-title no-link last"><span class="nobr">Action</span></th>
                             <th class="bulk-actions" colspan="4">
                                 <span class="antoo" style="color:#fff; font-weight:500;">Действия с задачами (<span class="action-cnt"></span>): <a href="#">Закрыть</a>, <a href="#">Удалить</a></span>
                             </th>
@@ -81,18 +127,20 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 <td>
                                     <a href='/tasks/<?= $arParams["PROJECT"] ?>/<?= $task['ID'] ?>/'><?= $task['NAME'] ?></a>
                                     <br>
-                                    <small>Без срока</small></td>  
+                                    <small>без срока</small></td>  
                                 <td><div class="progress progress_sm">
                                         <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
                                     </div>
                                     <small>Выполнена на 57%</small></td>
-                                <td class="last">5</td>
+                                <td class="a-right a-right ">5</td>
+                                <td class=" last"><a href='/tasks/<?= $arParams["PROJECT"] ?>/<?= $task['ID'] ?>/'>Просмотр</a>
                                 </td>
                             </tr> 
                         <? } ?>
                     </tbody> 
                 </table>
-<?}?>
+
+
                 <div class="row">
                     <div class="col-md-6">
                         <p><b>0%</b> выполнено 0 из 3 заданий</p >

@@ -1,21 +1,22 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
  
-if(!$arParams["PROJECT"]) {
-    ShowError('Не передан обязательный параметр');
-    return;
+foreach(array('ID', 'PROJECT') as $code) {
+    if(!$arParams[$code]) {
+        ShowError('Не передан обязательный параметр');
+        return;
+    }
 }
 CModule::IncludeModule('iblock');
 
 $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*");
-$arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
+$arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID, 'ID' => $arParams['PROJECT']);
 $userFilter = $USER->GetViewProjectsFilter();
 $arFilter = array_merge($userFilter, $arFilter);
 
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
  
-while ($ob = $res->GetNextElement()) {
-    $arFields = $ob->GetFields(); 
-    if($arParams["PROJECT"] == $arFields['ID']) {
+while ($ob = $res->GetNextElement()) {  
+    $arFields = $ob->GetFields();
         $arProps = $ob->GetProperties();
         $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
         $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'];  
@@ -25,22 +26,24 @@ while ($ob = $res->GetNextElement()) {
                                    array('FIELDS'=> array('ID', 'NAME', 'LOGIN', 'LAST_NAME')) );    
         while($arUser = $rsUsers->Fetch()) { 
             $arResult['USERS'][$arUser['ID']] = $arUser;
-        } 
-    } 
-    $arResult['PROJECTS'][$arFields['ID']] = $arFields;
+        }  
+    $arResult['PROJECT'] = $arFields;
 }
 
  
-$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*");
-$arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y', 'PROPERTY_PROJECT' => $arParams["PROJECT"]);
+$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", 'DETAIL_TEXT');
+$arFilter = Array(
+    "IBLOCK_ID" => TASKS_IBLOCK_ID,
+    'ACTIVE' => 'Y',  
+    'ID' => $arParams['ID']  );
 //$userFilter = $USER->GetViewTasksFilter();
 //$arFilter = array_merge($userFilter, $arFilter);
 
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
- 
+
 while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();  
-    $arResult['TASKS'][] = $arFields;
+    $arResult['TASK'] = $arFields;
 }
 
 $this->IncludeComponentTemplate();

@@ -3,23 +3,19 @@
 include 'constants.php';
 
 class CrmUser extends CUser {
-    
-    function hasRightsToWorkWithProjects() {
+
+    function hasRigthsToAddProject() {
          return parent::IsAdmin();
     }
     
-    function hasRigthsToAddProject() {
-        return $this->hasRightsToWorkWithProjects();
-    }
-    
     function hasRigthsToDeleteProject() {
-        return $this->hasRightsToWorkWithProjects();
+         return parent::IsAdmin();
     }
     
     function hasRigthsToEditProject() {
-        return $this->hasRightsToWorkWithProjects();
+         return parent::IsAdmin();
     }
-    
+
     /* Вернёт фильтр, который вытянет проекты, которые можно видеть пользователю
        то что возвращает этот метод нужно мержить к фильтру везде где тянем проект или проекты
     */
@@ -39,42 +35,57 @@ class CrmUser extends CUser {
 
 }
  
-AddEventHandler("iblock", "OnBeforeIBlockElementAdd",    Array("ProjectsRightsHandler", "OnBeforeIBlockElementAddHandler"));
-AddEventHandler("iblock", "OnBeforeIBlockElementDelete", Array("ProjectsRightsHandler", "OnBeforeIBlockElementDelete"));
-AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", Array("ProjectsRightsHandler", "OnBeforeIBlockElementUpdate"));
+AddEventHandler("iblock", "OnBeforeIBlockElementAdd",    Array("RightsHandler", "OnBeforeIBlockElementAdd"));
+AddEventHandler("iblock", "OnBeforeIBlockElementDelete", Array("RightsHandler", "OnBeforeIBlockElementDelete"));
+AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", Array("RightsHandler", "OnBeforeIBlockElementUpdate"));
 
-class ProjectsRightsHandler { 
+class RightsHandler { 
     
-    static $errorMessage = "У вас недостаточно прав на эту операцию";
+    static $noRightsMessage = "У вас недостаточно прав на эту операцию";
+    
+    function __callStatic($name, $arguments) {
+        switch ($name) {
+            case 'OnBeforeIBlockElementAdd':
+                $action = 'Add';
+                break;
+            case 'OnBeforeIBlockElementDelete': 
+                $action = 'Delete';
+                break;
+            case 'OnBeforeIBlockElementUpdate': 
+                $action = 'Edit';
+                break;
+            default:
+                return;
+                break;
+        }
+        
+        $arFields = $arguments[0]; 
+        if(!is_array($arFields)) {
+            CModule::IncludeModule('iblock');
+            $res = CIBlockElement::GetByID($arFields);
+            if($ar_res = $res->GetNext()){
+                $arFields = $ar_res;
+            } 
+        } 
+        
+        switch ($arFields["IBLOCK_ID"]) {
+            case PROJECTS_IBLOCK_ID:
+                $enitity = 'Project';
+                break;
+            default:
+                return;
+                break;
+        }
             
-    function OnBeforeIBlockElementAddHandler(&$arFields) { 
-        if($arFields["IBLOCK_ID"] == PROJECTS_IBLOCK_ID) {
-            global $USER, $APPLICATION;
-            if(!$USER->hasRigthsToAddProject()) { 
-                $APPLICATION->throwException(self::$errorMessage);
+        $method = 'hasRigthsTo' . $action . $enitity; 
+        global $USER, $APPLICATION;
+        if(method_exists($USER, $method)) {
+            if(!$USER->$method()) { 
+                $APPLICATION->throwException(self::$noRightsMessage);
                 return false;
             }
-        } 
-    } 
-    
-    function OnBeforeIBlockElementDelete(&$arFields) { 
-        if($arFields["IBLOCK_ID"] == PROJECTS_IBLOCK_ID) { 
-            global $USER, $APPLICATION;
-            if(!$USER->hasRigthsToDeleteProject()) { 
-                $APPLICATION->throwException(self::$errorMessage);
-                return false;
-            }
-        } 
-    } 
-     
-    function OnBeforeIBlockElementUpdate(&$arFields) { 
-        if($arFields["IBLOCK_ID"] == PROJECTS_IBLOCK_ID) {
-            global $USER, $APPLICATION;
-            if(!$USER->hasRigthsToEditProject()) { 
-                $APPLICATION->throwException(self::$errorMessage);
-                return false;
-            }
-        } 
+        }
+                
     } 
      
 }
@@ -85,4 +96,4 @@ function ChangeCUserToCrmUser() {
     $USER = new CrmUser();
 }
 
-CModule::AddAutoloadClasses("",array("ToolTip" => "/local/php_interface/tools/tooltip.php"));
+CModule::AddAutoloadClasses("", array("ToolTip" => "/local/php_interface/tools/tooltip.php"));

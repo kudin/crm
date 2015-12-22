@@ -9,5 +9,11 @@ $(function () {
         content_css: ['/css/tiny/style.css'],
         min_height: 250,
         height: 320
+    }); 
+    
+    $(document).on('click', '[data-add-files]', function(e) {
+       $(this).hide();
+       $('.hiddenfiles').show();
+       e.preventDefault(); 
     });
 });

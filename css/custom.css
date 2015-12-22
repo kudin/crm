@@ -1626,8 +1626,8 @@ td.details {
 }
 
 .paging_full_numbers {
-    width: 400px;
-    height: 22px;
+    width: 100%;
+    height: 32px;
     line-height: 22px;
 }
 
@@ -1792,7 +1792,8 @@ ul.to_do li {
     padding: 7px;
     margin-bottom: 5px;
     list-style: none;
-}
+    font-size: 15px;
+} 
 
 ul.to_do p {
     margin: 0;
@@ -2382,7 +2383,7 @@ button,
 }
 
 .attachment {
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 .attachment ul {
@@ -2454,12 +2455,29 @@ span.section {
   border-bottom: 1px solid #e5e5e5;
 } 
 
+.hiddenfiles label.form-control{
+    height: 40px; 
+}
+
+.hiddenfiles input[type=file]{
+    font-weight: normal;
+}
+
+.hiddenfiles{
+    display: none;
+}
+
 .form-control {
     border-radius: 0;
     line-height: 30px;
     width: 100%;
     resize: none;
 }
+
+.prioryselect{
+    width: 70px;
+}
+
 
 .form-horizontal .control-label {
     padding-top: 8px
@@ -6004,8 +6022,7 @@ header{width:100%;}
 .icon {
   display: inline-block;
   width: 20px;
-  height: 20px;
-  background-image: url("../../assets/img/icons.png");
+  height: 20px; 
   vertical-align: middle;
 }
 
@@ -6417,3 +6434,11 @@ ul.notifications {
     float: left;  
     margin-right: 10px;
 } 
+
+.antoo a{
+    color: white;
+}
+
+.table .progress_sm{
+    margin-bottom: 7px;
+}

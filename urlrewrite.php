@@ -8,6 +8,12 @@ $arUrlRewrite = array(
 		"PATH" => "/tasks/add.php",
 	), 
 	array(
+		"CONDITION" => "#^/tasks/([^/]+)/([^/]+)/.*?\$#",
+		"RULE" => "PROJECT=\$1&ID=\$2",
+		"ID" => "",
+		"PATH" => "/tasks/detail.php",
+	),
+	array(
 		"CONDITION" => "#^/tasks/([^/]+)/.*?\$#",
 		"RULE" => "ID=\$1",
 		"ID" => "",

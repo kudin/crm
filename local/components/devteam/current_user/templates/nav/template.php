@@ -12,7 +12,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
         <li><a href="/cabinet/profile/">Профиль</a>
         </li>
         <li>
-            <a href="/cabinet/config/"> 
+            <a href="/config/"> 
                 <span>Настройки</span>
             </a>
         </li> 

@@ -14,11 +14,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     <ul class="to_do">
                         <? foreach ($arResult['ITEMS'] as $project) { ?>
                             <li> 
-                                <div class="icheckbox_flat-green"><a href="<?= TASKS_LIST_URL . $project['ID'] . '/' ?>"><?= $project['NAME'] ?></a> 
+                                <div><a href="<?= TASKS_LIST_URL . $project['ID'] . '/' ?>"><?= $project['NAME'] ?></a> 
                             </li>
                         <? } ?>
-                    </ul>
-
+                    </ul> 
                 </div>
             <? } ?>
         </div>
