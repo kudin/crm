@@ -2396,14 +2396,13 @@ button,
 
 .attachment ul li {
     float: left;
-    width: 150px;
+    padding: 10px; margin-top: 1px; border-radius: 3px; min-width: 160px;
     margin-right: 10px;
     margin-bottom: 10px;
 }
 
 .attachment ul li img {
-    height: 150px;
-    border: 1px solid #ddd;
+    height: 110px;  
     padding: 5px;
     margin-bottom: 10px;
 }
@@ -2414,6 +2413,12 @@ button,
 
 .attachment .file-name {
     float: left;
+    font-size: 10px;  
+}
+
+.attachment .file-size{ 
+    float: left;
+    font-size: 10px;
 }
 
 .attachment .links {
@@ -6441,4 +6446,12 @@ ul.notifications {
 
 .table .progress_sm{
     margin-bottom: 7px;
+}
+
+.view-mail p{
+    margin: 0; 
+}
+
+.compose-btn{
+    margin-top: 20px;
 }

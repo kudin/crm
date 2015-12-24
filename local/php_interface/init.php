@@ -1,6 +1,7 @@
 <?php
 
 include 'constants.php';
+include 'tools/functions.php';
 
 class CrmUser extends CUser {
 

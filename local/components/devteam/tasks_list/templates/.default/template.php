@@ -39,12 +39,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                             <option>начались</option>
                             <option>ожидают</option>  
                         </select></div>
- 
+
                     <button class="btn btn-default adv_filterbtn" type="button">Расширеный фильтр</button>
- 
+
                 </div> 
                 <div class="tasks_advanced_filter"> 
- 
+
                     <div class="f3">                 
                         <div class="checkbox">
                             <label>
@@ -58,59 +58,57 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                         </div> 
                     </div>        
                 </div>    
-        <?if(count($arResult['TASKS'])) {?>
-                <table class="table table-striped responsive-utilities jambo_table bulk_action">
-                    <thead>
-                        <tr class="headings">
-                            <th style="width: 20px;"><input type="checkbox" id="check-all" class="flat"></th>
-                            <th class="column-title">Задача </th> 
-                            <th class="column-title">Статус </th>
-                            <th class="column-title last" style="width: 100px;">Приоритет </th> 
-                            <th class="bulk-actions" colspan="4">
-                                <span class="antoo" style="color:#fff; font-weight:500;">Действия с задачами (<span class="action-cnt"></span>): <a href="#">Закрыть</a>, <a href="#">Удалить</a></span>
-                            </th>
-                        </tr>
-                    </thead> 
-                    <tbody>
-                        <? foreach ($arResult['TASKS'] as $key => $task) {
-                            ?>
-                            <tr class="<?= $key % 2 ? 'even' : 'odd' ; ?> pointer">
-                                <td class="a-center ">
-                                    <input type="checkbox" class="flat" name="table_records">
-                                </td>
-                                <td>
-                                    <a href='/tasks/<?= $arParams["PROJECT"] ?>/<?= $task['ID'] ?>/'><?= $task['NAME'] ?></a>
-                                    <br>
-                                    <small>Без срока</small></td>  
-                                <td><div class="progress progress_sm">
-                                        <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
-                                    </div>
-                                    <small>Выполнена на 57%</small></td>
-                                <td class="last">5</td>
-                                </td>
-                            </tr> 
-                        <? } ?>
-                    </tbody> 
-                </table>
-<?}?>
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><b>0%</b> выполнено 0 из 3 заданий</p >
-                        <div class="progress progress_sm">
-                            <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
-                        </div>
-                        <a href="#">Показать выполненные</a> 
-                    </div> 
-
-                    <div class="col-md-6">
-                        <p><b>0%</b> 0 из 112 часов</p >
-                        <div class="progress progress_sm">
-                            <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 7%;" aria-valuenow="56"></div>
-                        </div> 
-                        <h3>0:00 ч.</h3>
+                <? if (count($arResult['TASKS'])) { ?>
+                    <table class="table table-striped responsive-utilities jambo_table bulk_action">
+                        <thead>
+                            <tr class="headings">
+                                <th style="width: 20px;"><input type="checkbox" id="check-all" class="flat"></th>
+                                <th class="column-title">Задача </th>  
+                                <th class="column-title">Статус </th>
+                                <th class="column-title last" style="width: 100px;">Приоритет </th> 
+                                <th class="bulk-actions" colspan="4">
+                                    <span class="antoo" style="color:#fff; font-weight:500;">Действия с задачами (<span class="action-cnt"></span>): <a href="#">Закрыть</a>, <a href="#">Удалить</a></span>
+                                </th>
+                            </tr>
+                        </thead> 
+                        <tbody>
+                            <? foreach ($arResult['TASKS'] as $key => $task) {
+                                ?>
+                                <tr class="<?= $key % 2 ? 'even' : 'odd'; ?> pointer">
+                                    <td class="a-center ">
+                                        <input type="checkbox" class="flat" name="table_records">
+                                    </td>
+                                    <td>
+                                        <a href='/tasks/<?= $arParams["PROJECT"] ?>/<?= $task['ID'] ?>/'><?= $task['NAME'] ?></a>
+                                        <br>
+                                        <small><?= $task['DATE_CREATE'] ?></small></td>   
+                                    <td><div class="progress progress_sm">
+                                            <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
+                                        </div>
+                                        <small>Выполнена на 57%</small></td>
+                                    <td class="last">5</td>
+                                    </td>
+                                </tr> 
+                            <? } ?>
+                        </tbody> 
+                    </table> 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><b>0%</b> выполнено 0 из 3 заданий</p >
+                            <div class="progress progress_sm">
+                                <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
+                            </div>
+                            <a href="#">Показать выполненные</a> 
+                        </div>  
+                        <div class="col-md-6">
+                            <p><b>0%</b> 0 из 112 часов</p >
+                            <div class="progress progress_sm">
+                                <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 7%;" aria-valuenow="56"></div>
+                            </div> 
+                            <h3>0:00 ч.</h3>
+                        </div>   
                     </div>  
-
-                </div>    
+                <? } ?>
             </div> 
         </div>
     </div>

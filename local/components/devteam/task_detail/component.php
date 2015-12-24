@@ -41,9 +41,15 @@ $arFilter = Array(
 
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 
-while ($ob = $res->GetNextElement()) {
-    $arFields = $ob->GetFields();  
-    $arResult['TASK'] = $arFields;
+if ($ob = $res->GetNextElement()) {
+    $arResult['TASK'] = $ob->GetFields();
+    $arResult['TASK']['PROPS'] = $ob->GetProperties();
+    if($arResult['TASK']['PROPS']['FILES']['VALUE']) { 
+        foreach($arResult['TASK']['PROPS']['FILES']['VALUE'] as $fileId) {
+            $files[] = CFile::GetFileArray($fileId);
+        }
+        $arResult['TASK']['PROPS']['FILES']['VALUE'] = $files;
+    }
 }
 
 $this->IncludeComponentTemplate();

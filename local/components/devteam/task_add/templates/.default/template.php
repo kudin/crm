@@ -18,7 +18,7 @@ if(!$arResult['PROGRAMERS_IDS']) {
                 <div class="clearfix"></div>
             </div>
             <div class="x_content"> 
-                <form class="form-horizontal form-label-left" data-parsley-validate="" id="demo-form2" method="POST"> 
+                <form class="form-horizontal form-label-left" data-parsley-validate="" id="demo-form2" method="POST" enctype="multipart/form-data"> 
                     <div class="form-group">
                         <label for="name" class="control-label col-md-3 col-sm-3 col-xs-12">Название задачи <span class="required">*</span>
                         </label>
@@ -51,9 +51,9 @@ if(!$arResult['PROGRAMERS_IDS']) {
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Файлы</label>
                     <a class="btn" data-add-files><i class="fa fa-plus"></i> Вложить файл </a>
                         <div class="col-md-4 col-sm-4 col-xs-12 hiddenfiles" > 
-                            <label class="form-control"><input type="file" name="file[]"></label> 
-                            <label class="form-control"><input type="file" name="file[]"></label> 
-                            <label class="form-control"><input type="file" name="file[]"></label> 
+                            <label class="form-control"><input type="file" name="attach[]"></label> 
+                            <label class="form-control"><input type="file" name="attach[]"></label> 
+                            <label class="form-control"><input type="file" name="attach[]"></label> 
                         </div> 
                     </div>  
                     <div class="ln_solid"></div>

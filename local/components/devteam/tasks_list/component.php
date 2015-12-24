@@ -4,7 +4,12 @@ if(!$arParams["PROJECT"]) {
     ShowError('Не передан обязательный параметр');
     return;
 }
+
 CModule::IncludeModule('iblock');
+
+if(!$arParams['DATE_FORMAT']) {
+    $arParams['DATE_FORMAT'] = 'j F Y';
+}
 
 $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*");
 $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
@@ -30,8 +35,7 @@ while ($ob = $res->GetNextElement()) {
     $arResult['PROJECTS'][$arFields['ID']] = $arFields;
 }
 
- 
-$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*");
+$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", "DATE_CREATE");
 $arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y', 'PROPERTY_PROJECT' => $arParams["PROJECT"]);
 //$userFilter = $USER->GetViewTasksFilter();
 //$arFilter = array_merge($userFilter, $arFilter);
@@ -39,7 +43,10 @@ $arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y', 'PROPERTY_PRO
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
  
 while ($ob = $res->GetNextElement()) {
-    $arFields = $ob->GetFields();  
+    $arFields = $ob->GetFields();
+    if (strlen($arFields["DATE_CREATE"]) > 0) {
+        $arFields["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($arFields["DATE_CREATE"], CSite::GetDateFormat()));
+    }
     $arResult['TASKS'][] = $arFields;
 }
 

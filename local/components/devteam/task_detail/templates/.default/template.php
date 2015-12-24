@@ -13,89 +13,46 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                 <div class="clearfix"></div>
             </div> 
 
-            <div class="x_content"> 
-
+            <div class="x_content">  
                 <div class="row">
-                    <div class="col-md-9">
-
-
+                    <div class="col-md-9"> 
                         <div class="inbox-body">  
                             <div class="view-mail"> 
-                                <?= $arResult['TASK']['~DETAIL_TEXT']; ?> 
+                                <?= $arResult['TASK']['~DETAIL_TEXT'];?> 
                             </div>
-                            <div class="attachment">
-                                <p>
-                                    <span><i class="fa fa-paperclip"></i> 3 прикреплённых файла </span>  
-                                </p>
-                                <ul>
-                                    <li>
-                                        <a class="atch-thumb" href="#">
-                                            <img alt="img" src="/images/1.png">
-                                        </a>
-
-                                        <div class="file-name">
-                                            image-name.jpg
-                                        </div>
-                                        <span>12KB</span>
-
-
-                                        <div class="links"> 
-                                            <a href="#">Download</a>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <a class="atch-thumb" href="#">
-                                            <img alt="img" src="/images/1.png">
-                                        </a>
-
-                                        <div class="file-name">
-                                            img_name.jpg
-                                        </div>
-                                        <span>40KB</span>
-
-                                        <div class="links"> 
-                                            <a href="#">Download</a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="atch-thumb" href="#">
-                                            <img alt="img" src="/images/1.png">
-                                        </a>
-
-                                        <div class="file-name">
-                                            img_name.jpg
-                                        </div>
-                                        <span>30KB</span>
-
-                                        <div class="links"> 
-                                            <a href="#">Download</a>
-                                        </div>
-                                    </li>
-
-                                </ul>
-                            </div>
+                            <?
+                            if ($arResult['TASK']['PROPS']['FILES']['VALUE']) {
+                                ?>
+                                <div class="attachment"> 
+                                    <ul>
+                                        <? foreach ($arResult['TASK']['PROPS']['FILES']['VALUE'] as $file) { ?>
+                                            <li>
+                                                <a class="atch-thumb" href="<?= $file['SRC'] ?>">
+                                                    <img alt="img" src="<?= $file['icon'] ?>">
+                                                </a>
+                                                <br>
+                                                <div class="file-name">
+                                                    <?= $file["ORIGINAL_NAME"]; ?>
+                                                </div>
+                                                <br>
+                                                <span class="file-size"><?= $file["FILE_SIZE"] ?></span> 
+                                            </li> 
+                                        <? } ?>
+                                    </ul>
+                                </div>
+                            <? } ?>
                             <div class="compose-btn pull-left">
                                 <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-reply"></i> Ответить</a>
                                 </button>
                             </div>
-                        </div>
-
-
-                    </div> 
-
+                        </div> 
+                    </div>
                     <div class="col-md-3">
 
-                    </div> 
-
-
+                    </div>  
                 </div>    
             </div> 
         </div>
     </div>
-
-
-
-
 
 </div>

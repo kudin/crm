@@ -60,20 +60,16 @@
                                 )
                         );?> </div> 
                     </div>
-                </div>
-
+                </div> 
                 <!-- top navigation -->
-                <div class="top_nav">
-
+                <div class="top_nav"> 
                     <div class="nav_menu">
                         <nav class="" role="navigation">
 <!--                            <div class="nav toggle">
                                 <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                            </div>-->
-
+                            </div>--> 
                          <ul class="nav navbar-nav navbar-right">
-                        <? $APPLICATION->IncludeComponent('devteam:current_user', 'nav'); ?>
-
+                         <? $APPLICATION->IncludeComponent('devteam:current_user', 'nav'); ?> 
                                 <li role="presentation" class="dropdown">
                                     <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                                         <i class="fa fa-envelope-o"></i>
@@ -107,35 +103,7 @@
                                                     Film festivals used to be do-or-die moments for movie makers. They were where... 
                                                 </span>
                                             </a>
-                                        </li>
-                                        <li>
-                                            <a>
-                                                <span class="image">
-                                                    <img src="/images/user.png" alt="Profile Image" />
-                                                </span>
-                                                <span>
-                                                    <span>John Smith</span>
-                                                    <span class="time">3 mins ago</span>
-                                                </span>
-                                                <span class="message">
-                                                    Film festivals used to be do-or-die moments for movie makers. They were where... 
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a>
-                                                <span class="image">
-                                                    <img src="/images/user.png" alt="Profile Image" />
-                                                </span>
-                                                <span>
-                                                    <span>John Smith</span>
-                                                    <span class="time">3 mins ago</span>
-                                                </span>
-                                                <span class="message">
-                                                    Film festivals used to be do-or-die moments for movie makers. They were where... 
-                                                </span>
-                                            </a>
-                                        </li>
+                                        </li> 
                                         <li>
                                             <div class="text-center">
                                                 <a> 

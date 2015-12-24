@@ -10,12 +10,20 @@ CModule::IncludeModule('iblock');
 if($_REQUEST['addtask']) {
     $el = new CIBlockElement;
     $name = trim($_REQUEST['name']);
-    $description = trim($_REQUEST['description']); 
+    $description = trim($_REQUEST['description']);  
+    foreach ($_FILES['attach'] as $code => $values) { 
+        foreach ($values as $key => $value) { 
+            if($_FILES['attach']["tmp_name"][$key]) {
+                $arFiles[$key][$code] = $value;
+            } 
+        } 
+    }
     $arProjectArray = Array(
         "PROPERTY_VALUES" => array( 
             'PROGRAMMER' => $_REQUEST['PROGRAMMER'],
-            'PROJECT' => $arParams["PROJECT"] 
-        ), 
+            'PROJECT' => $arParams["PROJECT"],
+            'FILES' => $arFiles
+        ),
         "MODIFIED_BY" => $USER->GetID(),
         "IBLOCK_SECTION_ID" => false,
         "IBLOCK_ID" => TASKS_IBLOCK_ID,

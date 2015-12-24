@@ -6,10 +6,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
     <div class="col-md-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2><?= $arResult['PROJECTS'][$arParams["PROJECT"]]['NAME']; ?></h2> 
-                <ul class="nav navbar-right panel_toolbox"> 
-                    <li><a href="add/"><i class="fa fa-plus"></i> Поставить новую задачу</a></li> 
-                </ul>
+                <h2>Отчёт</h2>  
                 <div class="clearfix"></div>
             </div> 
 
