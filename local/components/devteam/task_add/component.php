@@ -2,8 +2,13 @@
  
 if(!$arParams["PROJECT"]) {
     ShowError('Не передан обязательный параметр');
-    die();
+    return;
 }
+
+if(!$USER->hasRightsToViewProject($arParams["PROJECT"])){
+    ShowError('У Вас нет прав на просмотр этого проекта');
+    return;
+} 
 
 CModule::IncludeModule('iblock');
 
@@ -29,7 +34,7 @@ if($_REQUEST['addtask']) {
         "IBLOCK_ID" => TASKS_IBLOCK_ID,
         "NAME" => $name,
         "DETAIL_TEXT" => $description,
-    );
+    ); 
     if ($el->Add($arProjectArray)) {
         ToolTip::Add('Задача "' . $name . '" добавлена');
         LocalRedirect(TASKS_LIST_URL . $arParams["PROJECT"] . '/'); 
@@ -62,7 +67,7 @@ if ($ob = $res->GetNextElement()) {
      
     $this->IncludeComponentTemplate();
 } else { 
-        ShowError('Такой проект не найден или доступ к нему запрещён'); 
+    ShowError('Такой проект не найден или доступ к нему запрещён'); 
 }
 
 

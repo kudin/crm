@@ -8,7 +8,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
             <div class="x_title">
                 <h2><?= $arResult['TASK']['NAME']; ?></h2> 
                 <ul class="nav navbar-right panel_toolbox"> 
-                    <li><a href="/tasks/20/"><i class="fa fa-arrow-left"></i> К списку задач</a></li> 
+                    <li><a href="/tasks/<?=$arResult['PROJECT']['ID'];?>/"><i class="fa fa-arrow-left"></i> К списку задач</a></li> 
                 </ul>
                 <div class="clearfix"></div>
             </div> 
@@ -43,7 +43,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                             <? } ?>
                             <div class="compose-btn pull-left">
                                 <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-reply"></i> Ответить</a>
-                                </button>
                             </div>
                         </div> 
                     </div>

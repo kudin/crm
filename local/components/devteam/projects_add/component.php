@@ -17,12 +17,14 @@ if ($_REQUEST['add']) {
         "PROPERTY_VALUES" => array(
             'CUSTOMER' => $_REQUEST['CUSTOMER'],
             'PROGRAMMER' => $_REQUEST['PROGRAMMER'],
+            'URL' => trim($_REQUEST['url'])
         ),
         "MODIFIED_BY" => $USER->GetID(),
         "IBLOCK_SECTION_ID" => false,
         "IBLOCK_ID" => PROJECTS_IBLOCK_ID,
         "NAME" => $name,
-        "DETAIL_TEXT" => $description,
+        "PREVIEW_TEXT" => $description,
+        "DETAIL_PICTURE" => $_FILES['logo'], 
     );
     if ($el->Add($arProjectArray)) {
         ToolTip::Add('Проект "' . $name . '" добавлен');

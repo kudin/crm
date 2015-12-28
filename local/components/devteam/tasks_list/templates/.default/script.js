@@ -7,6 +7,34 @@ $(function() {
         location.href = "/tasks/" + $(this).val() + "/"; 
     }); 
 
+    $(document).on('click', '[data-mass-delete]', function(event) {
+        if (confirm("Вы действительно хотите удалить выбранные задачи?")) {
+            var ids = [];
+            $('#tasks_list tbody input[type=checkbox]:checked').each(function() {
+                id = $(this).val();
+                ids.push(id); 
+            });
+            $.ajax({ 
+                url: '/api/',
+                dataType: 'json',
+                data: {action: "deleteTasks", id: ids}, 
+                success: function(data) {
+                    if(data.error != undefined) {
+                        new PNotify({title :'Ошибка',
+                                    text: data.error,
+                                    type: 'error' });
+                    } else {
+                        $('#tasks_list tbody input[type=checkbox]:checked').each(function() { 
+                            $('#task' + id).animate({opacity: 0.0 }, 600, function () { $(this).remove(); });
+                        });
+                    }
+                }
+            });
+        } 
+        event.preventDefault();
+    });
+
+    /* icheck */
  
     $('input.flat').iCheck({
         checkboxClass: 'icheckbox_flat-green',
@@ -45,23 +73,21 @@ $(function() {
     });
 
     function countChecked() {
-            if (check_state == 'check_all') {
-                $(".bulk_action input[name='table_records']").iCheck('check');
-            }
-            if (check_state == 'uncheck_all') {
-                $(".bulk_action input[name='table_records']").iCheck('uncheck');
-            }
-            var n = $(".bulk_action input[name='table_records']:checked").length;
-            if (n > 0) {
-                $('.column-title').hide();
-                $('.bulk-actions').show();
-                $('.action-cnt').html(n);
-            } else {
-                $('.column-title').show();
-                $('.bulk-actions').hide();
-            }
+        if (check_state == 'check_all') {
+            $(".bulk_action input[name='table_records']").iCheck('check');
         }
-
-
-
+        if (check_state == 'uncheck_all') {
+            $(".bulk_action input[name='table_records']").iCheck('uncheck');
+        }
+        var n = $(".bulk_action input[name='table_records']:checked").length;
+        if (n > 0) {
+            $('.column-title').hide();
+            $('.bulk-actions').show();
+            $('.action-cnt').html(n);
+        } else {
+            $('.column-title').show();
+            $('.bulk-actions').hide();
+        }
+    } 
+    
 });

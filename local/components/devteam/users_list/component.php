@@ -9,5 +9,5 @@ while($arUser = $rsUsers->Fetch()) {
     } 
     $arResult['USERS'][] = $arUser;
 }
-   
+
 $this->IncludeComponentTemplate();

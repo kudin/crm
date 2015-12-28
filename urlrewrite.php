@@ -19,6 +19,10 @@ $arUrlRewrite = array(
 		"ID" => "",
 		"PATH" => "/tasks/list.php",
 	),
+	array(
+		"CONDITION" => "#^/projects/([^/]+)/.*?\$#",
+		"RULE" => "ID=\$1",
+		"ID" => "",
+		"PATH" => "/projects/detail.php",
+	),
 );
-
-?>

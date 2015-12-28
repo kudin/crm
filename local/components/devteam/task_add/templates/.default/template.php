@@ -20,14 +20,14 @@ if(!$arResult['PROGRAMERS_IDS']) {
             <div class="x_content"> 
                 <form class="form-horizontal form-label-left" data-parsley-validate="" id="demo-form2" method="POST" enctype="multipart/form-data"> 
                     <div class="form-group">
-                        <label for="name" class="control-label col-md-3 col-sm-3 col-xs-12">Название задачи <span class="required">*</span>
+                        <label for="name" class="control-label col-md-2 col-sm-2 col-xs-12">Название задачи <span class="required">*</span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="text" name="name" class="form-control col-md-7 col-xs-12" required="required" id="name">
                         </div> 
                     </div>
                     <div class="form-group">
-                        <label for="last-name" class="control-label col-md-3 col-sm-3 col-xs-12">Ответственный <span class="required">*</span>
+                        <label for="last-name" class="control-label col-md-2 col-sm-2 col-xs-12">Ответственный <span class="required">*</span>
                         </label> 
                         <div class="col-md-4 col-sm-4 col-xs-12"> 
                             <select class=" form-control"  name='PROGRAMMER'>
@@ -42,13 +42,13 @@ if(!$arResult['PROGRAMERS_IDS']) {
                         </div>  
                     </div> 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Описание </label>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="description">Описание </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <textarea class="tiny" name="description"></textarea>
                         </div> 
                     </div> 
                     <div class="form-group"> 
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Файлы</label>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Файлы</label>
                     <a class="btn" data-add-files><i class="fa fa-plus"></i> Вложить файл </a>
                         <div class="col-md-4 col-sm-4 col-xs-12 hiddenfiles" > 
                             <label class="form-control"><input type="file" name="attach[]"></label> 
@@ -58,7 +58,7 @@ if(!$arResult['PROGRAMERS_IDS']) {
                     </div>  
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3"> 
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-2"> 
                             <button class="btn btn-success" type="submit" name="addtask" value="Y">Создать задачу</button>
                         </div>
                     </div> 

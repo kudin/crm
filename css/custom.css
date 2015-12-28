@@ -630,7 +630,7 @@ a:focus {
 
 .top_nav .navbar-right {
     margin: 0;
-    width: 70%;
+    width: 320px;
     float: right;
 }
 
@@ -835,7 +835,7 @@ li.current-page a {
     float: left;
     margin: 0;
     padding-top: 16px;
-    width: 70px;
+    width: 330px;
 }
 
 .toggle a {
@@ -2460,11 +2460,11 @@ span.section {
   border-bottom: 1px solid #e5e5e5;
 } 
 
-.hiddenfiles label.form-control{
-    height: 40px; 
+.hiddenfiles label.form-control, .addfile{
+    height: 40px;
 }
 
-.hiddenfiles input[type=file]{
+input[type=file]{
     font-weight: normal;
 }
 
@@ -3368,10 +3368,11 @@ select.parsley-error {
 }
 /* *********  /calender dropdown  **************************** */
 /* *********  form textarea  **************************** */
-textarea {
+textarea { 
     padding: 10px;
     vertical-align: top;
-    width: 200px;
+    width: 200px; 
+    
 }
 textarea:focus {
     outline-style: solid;
@@ -6454,4 +6455,12 @@ ul.notifications {
 
 .compose-btn{
     margin-top: 20px;
+}
+
+.big-avatars img.avatar {
+    width: 48px; height: 48px;
+}
+.big-avatars {
+    padding-top: 7px!important; 
+    padding-bottom: 3px!important; 
 }

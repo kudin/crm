@@ -13,25 +13,26 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
             <?if(count($arResult['ITEMS'])) {?>
             <div class="x_content">  
-                <table class="table table-striped projects">
+                <table class="table table-striped projects" id="projects_list">
                     <thead>
                         <tr> 
-                            <th style="width: 20%">Проект</th>
+                            <th style="width: 20%;">Проект</th> 
                             <th>Заказчик</th>
                             <th>Исполнитель</th> 
                             <th></th> 
-                            <th style="width: 20%"></th>
+                            <th style="width: 140px;"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?foreach($arResult['ITEMS'] as $project) {?>
-                        <tr id="project<?=$project['ID']?>"> 
+                        <tr id="project<?=$project['ID']?>">  
                             <td class="project_name">
-                                <a href='<?=$project['DETAIL_PAGE_URL']?>'><?=$project['NAME']?></a>
+                                <a href='/tasks/<?=$project['ID']?>/'><?=$project['NAME']?></a>
                                 <br>
-                                <small>Описание проекта</small>
-                            </td>
-                            <td>
+                                <small><?=$project['PREVIEW_TEXT'];?></small>
+                                <?if($project['DETAIL_PICTURE']){?><img src="<?=$project['DETAIL_PICTURE']['src']?>"><?}?>
+                            </td>   
+                            <td class="big-avatars">
                                 <?if($project['PROPERTIES']['CUSTOMER']['VALUE']) {?> 
                                 <ul class="list-inline">
                                     <?foreach($project['PROPERTIES']['CUSTOMER']['VALUE'] as $userId) {?>
@@ -42,7 +43,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 </ul>
                                 <? } ?>
                             </td>
-                            <td> 
+                            <td class="big-avatars"> 
                                <?if($project['PROPERTIES']['PROGRAMMER']['VALUE']) {?> 
                                 <ul class="list-inline">
                                     <?foreach($project['PROPERTIES']['PROGRAMMER']['VALUE'] as $userId) {?>
@@ -53,16 +54,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 </ul>
                                 <? } ?>
                             </td>   
-                                     <td class="project_progress">
+                               <td class="project_progress">
                                          
                                 <div class="progress progress_sm">
                                     <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
                                 </div>
                                 <small><b>Задачи 0%</b> выполнено 0 из 3</small>
                             </td>  
-                            <td>  
-                                <a class="btn btn-info btn-xs" href="<?=$project['DETAIL_PAGE_URL']?>edit/"><i class="fa fa-pencil"></i> Изменить </a>
-                                <a class="btn btn-danger btn-xs" href="#" data-deleteproject='<?=$project['ID']?>'><i class="fa fa-trash-o"></i> Удалить </a>
+                            <td> 
+                                <a href="#" data-deleteproject='<?=$project['ID']?>'><i class="fa fa-trash-o"></i> Удалить проект</a> 
                             </td>
                         </tr> 
                         <?}?>

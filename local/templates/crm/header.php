@@ -28,7 +28,7 @@
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]--> 
+        <![endif]-->
         <?$APPLICATION->ShowHead(); ?>
     </head> 
     <body class="nav-sm"> 
@@ -64,10 +64,7 @@
                 <!-- top navigation -->
                 <div class="top_nav"> 
                     <div class="nav_menu">
-                        <nav class="" role="navigation">
-<!--                            <div class="nav toggle">
-                                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                            </div>--> 
+                        <nav class="" role="navigation">  
                          <ul class="nav navbar-nav navbar-right">
                          <? $APPLICATION->IncludeComponent('devteam:current_user', 'nav'); ?> 
                                 <li role="presentation" class="dropdown">
@@ -115,6 +112,14 @@
                                 </li>
 
                             </ul> 
+                                 <div class="nav toggle">
+                                <div class="input-group" style="left: 20px; margin-bottom: 0px;">
+                                    <input type="text" class="form-control" placeholder="Задача, комментарий, проект...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button">Найти</button>
+                                    </span>
+                                </div>
+                              </div> 
                         </nav>
                     </div> 
                 </div>

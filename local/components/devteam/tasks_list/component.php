@@ -5,6 +5,11 @@ if(!$arParams["PROJECT"]) {
     return;
 }
 
+if(!$USER->hasRightsToViewProject($arParams["PROJECT"])){
+    ShowError('У Вас нет прав на просмотр этого проекта');
+    return;
+}
+
 CModule::IncludeModule('iblock');
 
 if(!$arParams['DATE_FORMAT']) {
@@ -17,7 +22,7 @@ $userFilter = $USER->GetViewProjectsFilter();
 $arFilter = array_merge($userFilter, $arFilter);
 
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
- 
+
 while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields(); 
     if($arParams["PROJECT"] == $arFields['ID']) {
@@ -37,8 +42,8 @@ while ($ob = $res->GetNextElement()) {
 
 $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", "DATE_CREATE");
 $arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y', 'PROPERTY_PROJECT' => $arParams["PROJECT"]);
-//$userFilter = $USER->GetViewTasksFilter();
-//$arFilter = array_merge($userFilter, $arFilter);
+$userFilter = $USER->GetViewTasksFilter();
+$arFilter = array_merge($userFilter, $arFilter);
 
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
  

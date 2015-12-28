@@ -6,6 +6,12 @@ foreach(array('ID', 'PROJECT') as $code) {
         return;
     }
 }
+
+if(!$USER->hasRightsToViewTask($arParams["ID"])){
+    ShowError('У Вас нет прав на просмотр этой задачи');
+    return;
+}
+
 CModule::IncludeModule('iblock');
 
 $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*");
@@ -15,7 +21,7 @@ $arFilter = array_merge($userFilter, $arFilter);
 
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
  
-while ($ob = $res->GetNextElement()) {  
+if ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();
         $arProps = $ob->GetProperties();
         $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
@@ -28,17 +34,18 @@ while ($ob = $res->GetNextElement()) {
             $arResult['USERS'][$arUser['ID']] = $arUser;
         }  
     $arResult['PROJECT'] = $arFields;
-}
-
+} else { 
+    ShowError('Проект не найден');
+    return;
+} 
  
 $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", 'DETAIL_TEXT');
 $arFilter = Array(
     "IBLOCK_ID" => TASKS_IBLOCK_ID,
     'ACTIVE' => 'Y',  
-    'ID' => $arParams['ID']  );
-//$userFilter = $USER->GetViewTasksFilter();
-//$arFilter = array_merge($userFilter, $arFilter);
-
+    'ID' => $arParams['ID']);
+$userFilter = $USER->GetViewTasksFilter();
+$arFilter = array_merge($userFilter, $arFilter); 
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 
 if ($ob = $res->GetNextElement()) {
@@ -50,6 +57,9 @@ if ($ob = $res->GetNextElement()) {
         }
         $arResult['TASK']['PROPS']['FILES']['VALUE'] = $files;
     }
+} else {
+    ShowError('Ошибка доступа к задаче');
+    return;
 }
 
 $this->IncludeComponentTemplate();

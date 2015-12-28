@@ -2,10 +2,11 @@
 
 CModule::IncludeModule('iblock');
 
-$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_PROGRAMMER", 'PROPERTY_CUSTOMER');
+$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", 
+                  "PROPERTY_PROGRAMMER", 'PROPERTY_CUSTOMER',
+                  'DETAIL_PICTURE', 'PREVIEW_TEXT');
 $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
-
 $userFilter = $USER->GetViewProjectsFilter();
 $arFilter = array_merge($userFilter, $arFilter);
  
@@ -19,7 +20,10 @@ while ($ob = $res->GetNextElement()) {
         if(is_array($arProps[$code]['VALUE'])) {
             $arUsersId = array_merge($arUsersId, $arProps[$code]['VALUE']); 
         }
-    } 
+    }
+    if($arFields['DETAIL_PICTURE']) {
+        $arFields['DETAIL_PICTURE'] = CFile::ResizeImageGet($arFields['DETAIL_PICTURE'], array('width'=>200, 'height'=>50), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);                
+    }
     $arResult['ITEMS'][] = $arFields;
 }
 
