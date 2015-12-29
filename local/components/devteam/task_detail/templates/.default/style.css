@@ -1,0 +1,34 @@
+.x_content {
+    margin-bottom: 10px;
+    padding-bottom: 16px;
+}
+
+.bootom_border { 
+    border-bottom: 2px solid #e6e9ed;
+}
+
+.task_status p{
+    margin: 0;
+}
+
+.task_status .date{
+    color: #adabab; 
+}
+
+.comment{
+    margin-bottom: 20px;
+}
+
+.taskcontrol {
+    padding-top: 15px;
+}
+
+.taskcontrol .btn{
+     margin: 0px 10px 10px 0;
+}
+
+.status .label {
+   padding-top: 3px;
+   margin-left: 5px;
+   font-size: 100%;
+}

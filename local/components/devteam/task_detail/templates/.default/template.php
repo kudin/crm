@@ -3,22 +3,23 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
     die();
 ?>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-9">
         <div class="x_panel">
             <div class="x_title">
-                <h2><?= $arResult['TASK']['NAME']; ?></h2> 
+                <h2><?= $arResult['TASK']['NAME']; ?>
+                    <div class="priorb prior<?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?>"><?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?></div>
+                </h2> 
                 <ul class="nav navbar-right panel_toolbox"> 
-                    <li><a href="/tasks/<?=$arResult['PROJECT']['ID'];?>/"><i class="fa fa-arrow-left"></i> К списку задач</a></li> 
+                    <li><a href="/tasks/<?= $arResult['PROJECT']['ID']; ?>/"><i class="fa fa-arrow-left"></i> К списку задач</a></li> 
                 </ul>
-                <div class="clearfix"></div>
-            </div> 
-
-            <div class="x_content">  
-                <div class="row">
+                <div class="clearfix"></div> 
+            </div>
+            <div class="x_content bootom_border">  
+                <div class="row"> 
                     <div class="col-md-9"> 
-                        <div class="inbox-body">  
+                        <div class="inbox-body">   
                             <div class="view-mail"> 
-                                <?= $arResult['TASK']['~DETAIL_TEXT'];?> 
+                                <?= $arResult['TASK']['~DETAIL_TEXT']; ?> 
                             </div>
                             <?
                             if ($arResult['TASK']['PROPS']['FILES']['VALUE']) {
@@ -40,18 +41,72 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                         <? } ?>
                                     </ul>
                                 </div>
-                            <? } ?>
-                            <div class="compose-btn pull-left">
-                                <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-reply"></i> Ответить</a>
-                            </div>
+                            <? } ?> 
+                            <div class="taskcontrol">   
+                                <a class="btn btn-app">
+                                    <i class="fa fa-play"></i> Начать
+                                </a>
+                                <a class="btn btn-app">
+                                    <i class="fa fa-pause"></i> Пауза
+                                </a> 
+                                <a class="btn btn-app">
+                                    <i class="fa fa-flag"></i> Завершить
+                                </a>  
+                                
+                                <button class="btn btn-success" type="button">Принять</button>
+                                <button class="btn btn-danger" type="button">Отклонить</button>
+                                 
+                            </div> 
+                        </div>  
+                    </div>  
+                </div>    
+            </div>
+            <div class="x_content">  
+                <div class="row"> 
+                    <? if (count($arResult['COMMENTS'])) { ?>                    
+                        <div class="col-md-12"> 
+                            <h4>Комментарии:</h4>
                         </div> 
-                    </div>
-                    <div class="col-md-3">
-
+                    <? } ?>   
+                    <? foreach ($arResult['COMMENTS'] as $comment) { ?> 
+                        <div class="col-md-12 comment">  
+                            <strong class="name"><?= $arResult['USERS'][$comment['CREATED_BY']]['NAME']; ?></strong>
+                            <span class="date"><?= $comment['DATE_CREATE']; ?></span> 
+                            <div><?= $comment['~PREVIEW_TEXT']; ?></div> 
+                        </div>  
+                    <? } ?> 
+                    <div class="col-md-12"> <?
+                        if ($arResult['ERROR']) {
+                            ShowMessage($arResult['ERROR']);
+                        }
+                        ?>
+                        <form action="<?= $APPLICATION->GetCurPage(); ?>" method="POST" enctype="multipart/form-data"> 
+                            <h4>Новый комментарий</h4> 
+                            <textarea class="tiny" name="comment"></textarea> 
+                            <div class="compose-btn pull-right">
+                                <input type="submit" class="btn btn-sm btn-success" value="Отправить" name="add_comment"> 
+                            </div>
+                        </form>
                     </div>  
                 </div>    
             </div> 
+
+        </div>  
+    </div> 
+    <div class="col-md-3">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Информация</h2>  
+                <div class="clearfix"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"> 
+                    <p class="date">Создана: <?= $arResult['TASK']['DATE_CREATE'] ?></p>
+                    <p>Постановщик: <?= $arResult['USERS'][$arResult['PROJECT']['CREATED_BY']]['NAME']; ?></p> 
+                    <p>Исполнитель: <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['NAME']; ?></p> 
+                    <p class="status">Статус: <span class="label label-success">В работе</span></p> 
+                </div>  
+            </div>    
         </div>
     </div>
-
 </div>

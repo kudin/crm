@@ -1,5 +1,14 @@
 <?php
 
+function selectLinks($text) {
+    $pattern = array("'[\w\+]+://[A-z0-9\.\?\+\-/_=&%#:;]+[\w/=]+'si", 
+                     "'([^/])(www\.[A-z0-9\.\?\+\-/_=&%#:;]+[\w/=]+)'si");
+    $replace = array('<a href="$0" target="_blank" rel="nofollow">$0</a>', 
+                     '$1<a href="http://$2" target="_blank" rel="nofollow">$2</a>');
+    $text = preg_replace($pattern, $replace, $text);
+    return $text;
+}
+
 function formatBytes($bytes, $precision = 2) {
     $units = array('B', 'KB', 'MB', 'GB', 'TB');
     $bytes = max($bytes, 0);

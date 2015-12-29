@@ -28,15 +28,9 @@ while ($ob = $res->GetNextElement()) {
     if($arParams["PROJECT"] == $arFields['ID']) {
         $arProps = $ob->GetProperties();
         $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
-        $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'];  
-        $rsUsers = CUser::GetList(($by="NAME"), ($order="ASCS"), 
-                                   array('ACTIVE'=>'Y',
-                                         'ID' => implode(' | ', array_unique(array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS'])))), 
-                                   array('FIELDS'=> array('ID', 'NAME', 'LOGIN', 'LAST_NAME')) );    
-        while($arUser = $rsUsers->Fetch()) { 
-            $arResult['USERS'][$arUser['ID']] = $arUser;
-        } 
-    } 
+        $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE']; 
+        $arResult['USERS'] = BitrixHelper::getUsersArrByIds(array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS']));
+    }
     $arResult['PROJECTS'][$arFields['ID']] = $arFields;
 }
 
@@ -46,13 +40,14 @@ $userFilter = $USER->GetViewTasksFilter();
 $arFilter = array_merge($userFilter, $arFilter);
 
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
- 
+
 while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();
     if (strlen($arFields["DATE_CREATE"]) > 0) {
         $arFields["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($arFields["DATE_CREATE"], CSite::GetDateFormat()));
     }
+    $arFields['PROPERTIES'] = $ob->GetProperties();
     $arResult['TASKS'][] = $arFields;
 }
-
+ 
 $this->IncludeComponentTemplate();

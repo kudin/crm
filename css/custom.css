@@ -2391,18 +2391,21 @@ button,
     list-style: none;
     padding-left: 0;
     display: inline-block;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .attachment ul li {
     float: left;
-    padding: 10px; margin-top: 1px; border-radius: 3px; min-width: 160px;
+    padding: 10px; 
+    margin-top: 1px; 
+    border-radius: 3px;
+    min-width: 80px;
     margin-right: 10px;
     margin-bottom: 10px;
 }
 
 .attachment ul li img {
-    height: 110px;  
+    height: 80px;  
     padding: 5px;
     margin-bottom: 10px;
 }
@@ -4516,6 +4519,10 @@ ul.user_data li .progress {
     margin: 0;
 }
 
+.project_name img {
+    margin-top: 4px;
+}
+  
 .profile_title {
     background: #F5F7FA;
     border: 0;
@@ -6454,7 +6461,7 @@ ul.notifications {
 }
 
 .compose-btn{
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .big-avatars img.avatar {
@@ -6463,4 +6470,53 @@ ul.notifications {
 .big-avatars {
     padding-top: 7px!important; 
     padding-bottom: 3px!important; 
+}
+
+
+ 
+.priorb {
+    background-color: #ffcb00;
+    border-radius: 2px;
+    color: #fff !important;
+    display: inline-block; 
+    height: 20px; 
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 20px;
+    text-decoration: none;
+    margin: -5px 4px -2px;
+    padding-top: 1px;
+    padding-left: 0px;
+}
+ 
+.prior0 {
+    background-color: #e6e6e6 !important;
+}
+.prior1 {
+    background-color: #a0bcd4 !important;
+}
+.prior2 {
+    background-color: #7dc5d3 !important;
+}
+.prior3 {
+    background-color: #5ebcac !important;
+}
+.prior4 {
+    background-color: #b8ca00 !important;
+}
+.prior5 {
+    background-color: #ffcb00 !important;
+}
+.prior6 {
+    background-color: #ffa300 !important;
+}
+.prior7 {
+    background-color: #ff7300 !important;
+}
+.prior8 {
+    background-color: #ff4b00 !important;
+}
+.prior9 {
+    background-color: #f21700 !important;
 }

@@ -1,0 +1,20 @@
+#name {
+    width: 93%;
+    border-right-width: 0;
+}
+
+#priory { 
+    padding-left: 2px; padding-right: 2px;
+    border-left-width: 0;
+    width: 7%;
+    color: white; 
+    font-weight: bold;
+    text-align: center;
+}
+ 
+#priory option { 
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}

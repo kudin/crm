@@ -30,7 +30,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <a href='/tasks/<?=$project['ID']?>/'><?=$project['NAME']?></a>
                                 <br>
                                 <small><?=$project['PREVIEW_TEXT'];?></small>
-                                <?if($project['DETAIL_PICTURE']){?><img src="<?=$project['DETAIL_PICTURE']['src']?>"><?}?>
+                                <? if($project['DETAIL_PICTURE']) { 
+                                    ?><a href='/tasks/<?=$project['ID']?>/'><img src="<?=$project['DETAIL_PICTURE']['src']?>"></a><? 
+                                } ?>
                             </td>   
                             <td class="big-avatars">
                                 <?if($project['PROPERTIES']['CUSTOMER']['VALUE']) {?> 
@@ -54,8 +56,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 </ul>
                                 <? } ?>
                             </td>   
-                               <td class="project_progress">
-                                         
+                            <td class="project_progress"> 
                                 <div class="progress progress_sm">
                                     <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
                                 </div>
@@ -65,7 +66,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <a href="#" data-deleteproject='<?=$project['ID']?>'><i class="fa fa-trash-o"></i> Удалить проект</a> 
                             </td>
                         </tr> 
-                        <?}?>
+                        <? } ?>
                     </tbody>
                 </table> 
             </div>

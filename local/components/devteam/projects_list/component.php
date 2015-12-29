@@ -22,24 +22,12 @@ while ($ob = $res->GetNextElement()) {
         }
     }
     if($arFields['DETAIL_PICTURE']) {
-        $arFields['DETAIL_PICTURE'] = CFile::ResizeImageGet($arFields['DETAIL_PICTURE'], array('width'=>200, 'height'=>50), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);                
+        $arFields['DETAIL_PICTURE'] = CFile::ResizeImageGet($arFields['DETAIL_PICTURE'], array('width'=>200, 'height'=>60), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);                
     }
     $arResult['ITEMS'][] = $arFields;
 }
 
 $arUsersId = array_unique($arUsersId);
-
-if($arUsersId) { 
-    $rsUsers = CUser::GetList(($by="NAME"), ($order="ASCS"), 
-                              array('ACTIVE'=>'Y' , 
-                                    'ID' => implode(' | ', $arUsersId) ), 
-                              array('FIELDS'=> array('ID', 'NAME', 'LOGIN', 'LAST_NAME', 'EMAIL', 'PERSONAL_PHOTO')) );    
-    while($arUser = $rsUsers->Fetch()) { 
-        if($arUser['PERSONAL_PHOTO']) {
-            $arUser['PERSONAL_PHOTO'] = CFile::ResizeImageGet($arUser['PERSONAL_PHOTO'], array('width'=>100, 'height'=>100), BX_RESIZE_IMAGE_PROPORTIONAL, true);       
-        } 
-        $arResult['USERS'][$arUser['ID']] = $arUser;
-    } 
-}
+$arResult['USERS'] = BitrixHelper::getUsersArrByIds($arUsersId);
 
 $this->IncludeComponentTemplate();

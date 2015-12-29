@@ -87,8 +87,9 @@ die();
                                     <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
                                 </div>
                                 <small>Выполнена на 57%</small></td>
-                            <td class="last">5</td>
-                            </td>
+                            <td class="last">
+                             <div class="priorb prior<?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>"><?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?></div>
+                            </td> 
                         </tr> 
                     <? } ?>
                 </tbody> 

@@ -16,4 +16,8 @@ $(function () {
        $('.hiddenfiles').show();
        e.preventDefault(); 
     });
+    
+    $('#priory').change(function() {
+        $('#priory').attr('class', 'form-control prior' + $('#priory').val());
+    });
 });

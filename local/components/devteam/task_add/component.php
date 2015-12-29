@@ -23,11 +23,18 @@ if($_REQUEST['addtask']) {
             } 
         } 
     }
+    
+    $priority = intval($_REQUEST['priority']);
+    if(!in_array($priority, range(0, MAX_PRIORITY))) {
+        $priority = DEFAULT_PRIORITY;
+    }
+
     $arProjectArray = Array(
         "PROPERTY_VALUES" => array( 
             'PROGRAMMER' => $_REQUEST['PROGRAMMER'],
             'PROJECT' => $arParams["PROJECT"],
-            'FILES' => $arFiles
+            'FILES' => $arFiles,
+            'PRIORITY' => $priority
         ),
         "MODIFIED_BY" => $USER->GetID(),
         "IBLOCK_SECTION_ID" => false,
@@ -54,17 +61,10 @@ if ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();  
     $arProps = $ob->GetProperties();
     $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
-    $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'];  
-    $rsUsers = CUser::GetList(($by="NAME"), ($order="ASCS"), 
-                               array('ACTIVE'=>'Y',
-                                     'ID' => implode(' | ', array_unique(array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS'])))), 
-                               array('FIELDS'=> array('ID', 'NAME', 'LOGIN', 'LAST_NAME')) );    
-    while($arUser = $rsUsers->Fetch()) { 
-        $arResult['USERS'][$arUser['ID']] = $arUser;
-    }
- 
+    $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'];   
+    $arResult['USERS'] = BitrixHelper::getUsersArrByIds(array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS']));
     $arResult['PROJECT'] = $arFields;
-     
+
     $this->IncludeComponentTemplate();
 } else { 
     ShowError('Такой проект не найден или доступ к нему запрещён'); 

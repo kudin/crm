@@ -14,7 +14,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     <ul class="to_do">
                         <? foreach ($arResult['ITEMS'] as $project) { ?>
                             <li> 
-                                <div><a href="<?= TASKS_LIST_URL . $project['ID'] . '/' ?>"><?= $project['NAME'] ?></a> 
+                                <div>
+                                    <?if($project['DETAIL_PICTURE']){ ?>
+                                    <a href='/tasks/<?=$project['ID']?>/'><img src="<?=$project['DETAIL_PICTURE']['src']?>"></a><? } else { ?>
+                                    <a href="<?= TASKS_LIST_URL . $project['ID'] . '/' ?>"><?= $project['NAME'] ?></a><? } ?>
+                                </div> 
                             </li>
                         <? } ?>
                     </ul> 
