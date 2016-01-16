@@ -34,7 +34,7 @@ if($_REQUEST['addtask']) {
             'PROGRAMMER' => $_REQUEST['PROGRAMMER'],
             'PROJECT' => $arParams["PROJECT"],
             'FILES' => $arFiles,
-            'PRIORITY' => $priority
+            'PRIORITY' => $priority,
         ),
         "MODIFIED_BY" => $USER->GetID(),
         "IBLOCK_SECTION_ID" => false,

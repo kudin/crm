@@ -28,9 +28,9 @@ $arFilter = array_merge($userFilter, $arFilter);
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect); 
 if ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();
-    $arProps = $ob->GetProperties();
+    $arProps = $ob->GetProperties(); 
     $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
-    $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE']; 
+    $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'];
     $arResult['PROJECT'] = $arFields;
 } else { 
     ShowError('Проект не найден');
@@ -60,6 +60,7 @@ if ($ob = $res->GetNextElement()) {
     if (strlen($arResult['TASK']["DATE_CREATE"]) > 0) {
         $arResult['TASK']["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($arResult['TASK']["DATE_CREATE"], CSite::GetDateFormat()));
     }
+    $arResult['STATUS_TEXT'] = StatusHelper::getStr($arResult['TASK']['PROPS']['STATUS']['VALUE']);
 } else {
     ShowError('Ошибка доступа к задаче');
     return;
@@ -67,46 +68,31 @@ if ($ob = $res->GetNextElement()) {
 
 
 /* comments */
- 
-function reCalculateCommentsCnt($itemID) {
-      $res = CIBlockElement::GetList(
-            array(), 
-            array("PROPERTY_TASK" => $itemID, "IBLOCK_ID" => COMMENTS_IBLOCK_ID, "ACTIVE" => "Y"),
-            false,
-            false,
-            array('ID', 'IBLOCK_ID'));
-      
-      while ($ar_fields = $res->GetNext()) {
-          $n++; // ай пока что через пень-колоду 
-      } 
-      CIBlockElement::SetPropertyValuesEx($itemID, false, array('COMMNETS_CNT' => $n)); 
-}
- 
-if ($_REQUEST['add_comment']) {  
+
+if ($_REQUEST['add_comment']) {
     $_REQUEST['commment'] = strip_tags($_REQUEST['commment']); 
     if (!$_REQUEST['comment']) {
         $arResult['ERROR'] = 'Не введён комментарий';
     } 
-    if (!$arResult['ERROR']) { 
-        $el = new CIBlockElement; 
-        $arLoadProductArray = Array(
-            "MODIFIED_BY" => $USER->GetID(),
-            "IBLOCK_SECTION_ID" => false,
-            "IBLOCK_ID" => COMMENTS_IBLOCK_ID,
-            "DATE_ACTIVE_FROM" => ConvertTimeStamp(false, 'FULL'),
-            "PROPERTY_VALUES" => array('TASK' => $arParams['ID']),
-            "NAME" => TruncateText(strip_tags($_REQUEST['comment']), 200),
-            "ACTIVE" => "Y",
-            "PREVIEW_TEXT" => TruncateText($_REQUEST['comment'], 10000)
-        ); 
-        if ($PRODUCT_ID = $el->Add($arLoadProductArray)) { 
-            reCalculateCommentsCnt($arParams['ID']);
-            LocalRedirect(TASKS_LIST_URL . $arParams['PROJECT'] . '/' . $arParams['ID'] . '/'); // от двойной отправки
+    if (!$arResult['ERROR']) {
+        $el = new CIBlockElement;
+        if ($PRODUCT_ID = $el->Add(
+            array("MODIFIED_BY" => $USER->GetID(),
+                  "IBLOCK_SECTION_ID" => false,
+                  "IBLOCK_ID" => COMMENTS_IBLOCK_ID,
+                  "DATE_ACTIVE_FROM" => ConvertTimeStamp(false, 'FULL'),
+                  "PROPERTY_VALUES" => array('TASK' => $arParams['ID']),
+                  "NAME" => TruncateText(strip_tags($_REQUEST['comment']), 180),
+                  "ACTIVE" => "Y",
+                  "PREVIEW_TEXT" => TruncateText($_REQUEST['comment'], COMMENT_MAX_LENGHT)))) {
+            LocalRedirect(TASKS_LIST_URL . $arParams['PROJECT'] . '/' . $arParams['ID'] . '/');
         } else {
             $arResult['ERROR'] = $el->LAST_ERROR;
         }
     }
-} 
+}
+
+$created_by = array();
 $res = CIBlockElement::GetList(
     array("DATE_ACTIVE_FROM" => "DESC"), 
     array("PROPERTY_TASK" => $arParams['ID'], 
@@ -118,11 +104,22 @@ $res = CIBlockElement::GetList(
 while ($ar_fields = $res->GetNext()) {  
     $created_by[] = $ar_fields['CREATED_BY'];
     $arResult['COMMENTS'][] = $ar_fields;
-} 
+}
+
 
 /* users */
 
 $usersIds = array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS'], $created_by);
-$arResult['USERS'] = BitrixHelper::getUsersArrByIds($usersIds);
+$arResult['USERS'] = BitrixHelper::getUsersArrByIds($usersIds);  
+
+
+/* rights */
+
+if(in_array($USER->GetID(), $arResult['CUSTOMERS_IDS'])) {
+    $arResult['IS_CUSTOMER'] = true;
+}
+if(in_array($USER->GetID(), $arResult['PROGRAMERS_IDS'])) {
+    $arResult['IS_PROGRAMMER'] = true;
+}
 
 $this->IncludeComponentTemplate();

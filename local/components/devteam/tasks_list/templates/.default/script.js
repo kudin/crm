@@ -4,7 +4,12 @@ $(function() {
     });
     
     $(document).on('change', '#projects_list', function() {
-        location.href = "/tasks/" + $(this).val() + "/"; 
+        id = $(this).val();
+        if(id == 0) {
+            location.href = "/tasks/";
+        } else {
+            location.href = "/tasks/" + id + "/"; 
+        } 
     }); 
 
     $(document).on('click', '[data-mass-delete]', function(event) {

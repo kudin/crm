@@ -3,7 +3,8 @@ include 'constants.php';
 include 'tools/functions.php';
 
 CModule::AddAutoloadClasses("", array("ToolTip" => "/local/php_interface/tools/classes/tooltip.php", 
-                                      "BitrixHelper" => "/local/php_interface/tools/classes/bitrixhelper.php"));
+                                      "BitrixHelper" => "/local/php_interface/tools/classes/bitrixhelper.php",
+                                      "StatusHelper" => "/local/php_interface/tools/classes/statushelper.php"));
 
 class CrmUser extends CUser {
 

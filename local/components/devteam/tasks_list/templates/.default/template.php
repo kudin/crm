@@ -1,23 +1,52 @@
-<?php
-if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
-die();
+<?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 <div class="row">
 <div class="col-md-12">
 <div class="x_panel">
     <div class="x_title">
-        <h2><?= $arResult['PROJECTS'][$arParams["PROJECT"]]['NAME']; ?></h2> 
-        <ul class="nav navbar-right panel_toolbox"> 
-            <li><a href="add/"><i class="fa fa-plus"></i> Поставить новую задачу</a></li> 
-        </ul>
-        <div class="clearfix"></div>
-    </div> 
+        <? if($arParams["PROJECT"]) { ?>
+            <h2><?= $arResult['PROJECTS'][$arParams["PROJECT"]]['NAME']; ?></h2>
+            <ul class="nav navbar-right panel_toolbox"> 
+                <li><a href="add/"><i class="fa fa-plus"></i> Поставить новую задачу</a></li> 
+            </ul> 
+        <? } else {
+            ?>
+            <h2>Задачи по всем проектам</h2>
+            <ul class="nav navbar-right panel_toolbox"> 
+                <li><a href="#" data-target=".bs-example-modal-sm" data-toggle="modal"><i class="fa fa-plus"></i> Поставить новую задачу</a></li> 
+            </ul>  
+            <div aria-hidden="true" role="dialog" tabindex="-1" class="modal fade bs-example-modal-sm" style="display: none;">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content"> 
+                            <div class="modal-header"> 
+                                <h4 id="myModalLabel2" class="modal-title">Поставить задачу в проекте:</h4>
+                            </div>
+                            <div class="modal-body">  
+                                <? 
+                                foreach ($arResult['PROJECTS'] as $project) {
+                                    ?>
+                                <div class="proj"><a href="/tasks/<?= $project['ID'] ?>/add/"><?= $project['NAME'] ?></a></div>
+                                    <?
+                                }
+                                ?> 
+                            </div>
+                            <div class="modal-footer">
+                                <button data-dismiss="modal" class="btn btn-default" type="button">Отмена</button> 
+                            </div>
 
+                        </div>
+                    </div>
+                </div>
+            <?
+        } ?>
+        <div class="clearfix"></div>
+    </div>
     <div class="x_content">  
         <div class="tasks_filter">  
             <div class="f1"><p>Проект</p></div>
             <div class="f2"><select id="projects_list" class="form-control">
-                    <?
+                    <option value="0">Все</option>
+                    <? 
                     foreach ($arResult['PROJECTS'] as $project) {
                         ?>
                         <option <? if ($arParams["PROJECT"] == $project['ID']) { ?> selected="selected" <? } ?> value="<?= $project['ID'] ?>"><?= $project['NAME'] ?></option>  
@@ -27,9 +56,10 @@ die();
                 </select>
             </div>  
             <div class="f1"><p>Сортировать по:</p></div>
-            <div class="f2"><select id="tasks_sort_by" class="form-control">
-                    <option>приоритету</option> 
-                    <option>статусу</option> 
+            <div class="f2">
+                <select id="tasks_sort_by" class="form-control">
+                    <option value="date">Дате создания</option> 
+                    <option value="priority">Приоритету</option>
                 </select>
             </div>  
             <div class="f1"><p>Показать: </p></div>
@@ -38,10 +68,8 @@ die();
                     <option>подходят сроки</option>
                     <option>начались</option>
                     <option>ожидают</option>  
-                </select></div>
-
-            <button class="btn btn-default adv_filterbtn" type="button">Расширеный фильтр</button>
-
+                </select></div> 
+            <button class="btn btn-default adv_filterbtn" type="button">Расширеный фильтр</button> 
         </div> 
         <div class="tasks_advanced_filter"> 
 
@@ -94,6 +122,7 @@ die();
                     <? } ?>
                 </tbody> 
             </table> 
+            <?=$arResult["NAV_STRING"];?>
             <div class="row">
                 <div class="col-md-6">
                     <p><b>0%</b> выполнено 0 из 3 заданий</p >

@@ -42,20 +42,31 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                     </ul>
                                 </div>
                             <? } ?> 
-                            <div class="taskcontrol">   
+                            <div class="taskcontrol"> 
+                                <?if($arResult['IS_PROGRAMMER']) { ?>
+                                
                                 <a class="btn btn-app">
                                     <i class="fa fa-play"></i> Начать
                                 </a>
+                                
                                 <a class="btn btn-app">
                                     <i class="fa fa-pause"></i> Пауза
                                 </a> 
+                                
                                 <a class="btn btn-app">
                                     <i class="fa fa-flag"></i> Завершить
                                 </a>  
                                 
+                                <? } ?>
+                                <? if($arResult['IS_CUSTOMER']) {
+                                ?>
+                                
                                 <button class="btn btn-success" type="button">Принять</button>
                                 <button class="btn btn-danger" type="button">Отклонить</button>
                                  
+                                <?
+                                } 
+                                ?>
                             </div> 
                         </div>  
                     </div>  
@@ -81,7 +92,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                         }
                         ?>
                         <form action="<?= $APPLICATION->GetCurPage(); ?>" method="POST" enctype="multipart/form-data"> 
-                            <h4>Новый комментарий</h4> 
+                            <h4>Новый комментарий</h4>
                             <textarea class="tiny" name="comment"></textarea> 
                             <div class="compose-btn pull-right">
                                 <input type="submit" class="btn btn-sm btn-success" value="Отправить" name="add_comment"> 
@@ -104,7 +115,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     <p class="date">Создана: <?= $arResult['TASK']['DATE_CREATE'] ?></p>
                     <p>Постановщик: <?= $arResult['USERS'][$arResult['PROJECT']['CREATED_BY']]['NAME']; ?></p> 
                     <p>Исполнитель: <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['NAME']; ?></p> 
-                    <p class="status">Статус: <span class="label label-success">В работе</span></p> 
+                    <p class="status">Статус: <span class="label label-success"><?=$arResult['STATUS_TEXT'];?></span></p> 
                 </div>  
             </div>    
         </div>

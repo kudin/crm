@@ -31,7 +31,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <br>
                                 <small><?=$project['PREVIEW_TEXT'];?></small>
                                 <? if($project['DETAIL_PICTURE']) { 
-                                    ?><a href='/tasks/<?=$project['ID']?>/'><img src="<?=$project['DETAIL_PICTURE']['src']?>"></a><? 
+                                    ?><div style="clear: both;"></div><a href='/tasks/<?=$project['ID']?>/'><img src="<?=$project['DETAIL_PICTURE']['src']?>"></a><? 
                                 } ?>
                             </td>   
                             <td class="big-avatars">
