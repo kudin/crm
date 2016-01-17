@@ -18,7 +18,7 @@
         <script type="text/javascript" src="/js/select/select2.full.js"></script>
         <link href="/css/select/select2.min.css" rel="stylesheet">
           
-         <!-- daterangepicker -->
+        <!-- daterangepicker -->
         <script type="text/javascript" src="/js/moment.min2.js"></script>
         <script type="text/javascript" src="/js/datepicker/daterangepicker.js"></script>
         
@@ -33,7 +33,6 @@
     </head> 
     <body class="nav-sm"> 
         <div class="container body">
-        <?//$APPLICATION->ShowPanel();?> 
             <div class="main_container"> 
                 <div class="col-md-3 left_col">
                     <div class="left_col scroll-view"> 

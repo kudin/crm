@@ -36,19 +36,6 @@ switch ($action) {
             echo json_encode(array('ok'));
         }
         break;
-    case 'changeStatus':
-        $status = intval($_REQUEST['status']);
-        if(in_array($status, array(STATUS_LIST_WORK, STATUS_LIST_PAUSE, STATUS_LIST_COMPLETE))) { 
-            if($USER->iAmAProgrammerInTask($id)) {
-                CIBlockElement::SetPropertyValuesEx($id, TASKS_IBLOCK_ID, array('STATUS' => $status));
-            }
-        }
-        if(in_array($status, array(STATUS_LIST_ACCEPT, STATUS_LIST_REJECT))) {
-            if($USER->iAmACustomerInTask($id)) {
-                CIBlockElement::SetPropertyValuesEx($id, TASKS_IBLOCK_ID, array('STATUS' => $status));
-            }
-        }
-        break;
     default:
         die(json_encode(array('error' => 'передан неверный параметр')));
         break;

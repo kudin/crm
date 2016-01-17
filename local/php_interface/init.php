@@ -40,6 +40,9 @@ class CrmUser extends CUser {
     }    
     
     public function hasRigthsToEditTask($arFields) {
+        if(parent::IsAdmin()) {
+            return true;
+        } 
         
     }
 

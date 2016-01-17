@@ -16,29 +16,21 @@
                 <li><a href="#" data-target=".bs-example-modal-sm" data-toggle="modal"><i class="fa fa-plus"></i> Поставить новую задачу</a></li> 
             </ul>  
             <div aria-hidden="true" role="dialog" tabindex="-1" class="modal fade bs-example-modal-sm" style="display: none;">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content"> 
-                            <div class="modal-header"> 
-                                <h4 id="myModalLabel2" class="modal-title">Поставить задачу в проекте:</h4>
-                            </div>
-                            <div class="modal-body">  
-                                <? 
-                                foreach ($arResult['PROJECTS'] as $project) {
-                                    ?>
-                                <div class="proj"><a href="/tasks/<?= $project['ID'] ?>/add/"><?= $project['NAME'] ?></a></div>
-                                    <?
-                                }
-                                ?> 
-                            </div>
-                            <div class="modal-footer">
-                                <button data-dismiss="modal" class="btn btn-default" type="button">Отмена</button> 
-                            </div>
-
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content"> 
+                        <div class="modal-header"><h4 id="myModalLabel2" class="modal-title">Поставить задачу в проекте:</h4></div>
+                        <div class="modal-body"><?
+                            foreach ($arResult['PROJECTS'] as $project) { ?>
+                                <div class="proj"><a href="<?=TASKS_LIST_URL;?><?= $project['ID'] ?>/add/"><?= $project['NAME'] ?></a></div>
+                            <? } ?> 
                         </div>
+                        <div class="modal-footer">
+                            <button data-dismiss="modal" class="btn btn-default" type="button">Отмена</button> 
+                        </div> 
                     </div>
                 </div>
-            <?
-        } ?>
+            </div>
+        <? } ?>
         <div class="clearfix"></div>
     </div>
     <div class="x_content">  
@@ -108,15 +100,20 @@
                                 <input type="checkbox" value="<?=$task['ID']?>" class="flat" name="table_records">
                             </td>
                             <td>
-                                <a href='/tasks/<?= $arParams["PROJECT"] ?>/<?= $task['ID'] ?>/'><?= $task['NAME'] ?></a>
+                                <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'><?= $task['NAME'] ?></a>
                                 <br>
-                                <small><?= $task['DATE_CREATE'] ?></small></td>   
-                            <td><div class="progress progress_sm">
+                                <small><?= $task['DATE_CREATE'] ?></small>
+                            </td>   
+                            <td><?
+                                if(0) { ?>
+                                <div class="progress progress_sm">
                                     <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
                                 </div>
-                                <small>Выполнена на 57%</small></td>
+                                <? } ?>
+                                <p><?=$task['STATUS_TEXT'];?></p>
+                            </td>
                             <td class="last">
-                             <div class="priorb prior<?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>"><?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?></div>
+                                <div class="priorb prior<?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>"><?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?></div>
                             </td> 
                         </tr> 
                     <? } ?>

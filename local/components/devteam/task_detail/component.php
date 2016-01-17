@@ -60,7 +60,8 @@ if ($ob = $res->GetNextElement()) {
     if (strlen($arResult['TASK']["DATE_CREATE"]) > 0) {
         $arResult['TASK']["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($arResult['TASK']["DATE_CREATE"], CSite::GetDateFormat()));
     }
-    $arResult['STATUS_TEXT'] = StatusHelper::getStr($arResult['TASK']['PROPS']['STATUS']['VALUE']);
+    $arResult['STATUS'] = $arResult['TASK']['PROPS']['STATUS']["VALUE_ENUM_ID"]; 
+    $arResult['STATUS_TEXT'] = StatusHelper::getStr($arResult['STATUS']);
 } else {
     ShowError('Ошибка доступа к задаче');
     return;
@@ -115,11 +116,52 @@ $arResult['USERS'] = BitrixHelper::getUsersArrByIds($usersIds);
 
 /* rights */
 
-if(in_array($USER->GetID(), $arResult['CUSTOMERS_IDS'])) {
-    $arResult['IS_CUSTOMER'] = true;
-}
 if(in_array($USER->GetID(), $arResult['PROGRAMERS_IDS'])) {
     $arResult['IS_PROGRAMMER'] = true;
+} else { // если программист ставит задачу сам себе
+    if(in_array($USER->GetID(), $arResult['CUSTOMERS_IDS'])) {
+        $arResult['IS_CUSTOMER'] = true;
+    }
 }
+            
+
+/* actions */
+
+if($action = $_GET['action']) {
+    if($arResult['IS_PROGRAMMER']) {
+        switch ($action) {
+            case 'start':
+                if(($arResult['STATUS'] == false) && ($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS'])) {
+                    $newStatus = STATUS_LIST_WORK;
+                } 
+                if(in_array($arResult['STATUS'], array(STATUS_LIST_CALC_AGRED, STATUS_LIST_PAUSE, STATUS_LIST_COMPLETE))) {
+                    $newStatus = STATUS_LIST_WORK;
+                } 
+                break; 
+            case 'stop':
+                if($arResult['STATUS'] == STATUS_LIST_WORK) {
+                    $newStatus = STATUS_LIST_PAUSE;
+                }
+                break;
+            case 'complete':
+                if(in_array($arResult['STATUS'], array(STATUS_LIST_WORK, STATUS_LIST_PAUSE))) {
+                    $newStatus = STATUS_LIST_COMPLETE;
+                } 
+                break;
+            default:
+                break;
+        }
+    } elseif($arResult['IS_CUSTOMER']) {
+        switch ($action) { 
+            default:
+                break;
+        } 
+    }
+    if($newStatus) {
+        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus));
+    }
+    LocalRedirect($APPLICATION->GetCurDir());
+} 
+
 
 $this->IncludeComponentTemplate();
