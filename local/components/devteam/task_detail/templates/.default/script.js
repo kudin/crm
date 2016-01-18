@@ -1,4 +1,12 @@
 $(function() { 
+    
+    $('.showPanel').on('click', function(){
+        id = $(this).data('id');
+        $('#' + id).show();
+        $(this).hide();
+        return false;
+    });
+
     tinymce.init({
         menubar: false,
         statusbar: false,

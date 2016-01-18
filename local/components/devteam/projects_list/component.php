@@ -6,9 +6,9 @@ $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL",
                   "PROPERTY_PROGRAMMER", 'PROPERTY_CUSTOMER',
                   'DETAIL_PICTURE', 'PREVIEW_TEXT');
 $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
-$res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 $userFilter = $USER->GetViewProjectsFilter();
 $arFilter = array_merge($userFilter, $arFilter);
+$res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 
 $arUsersId = array();
 

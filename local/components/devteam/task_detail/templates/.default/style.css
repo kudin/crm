@@ -23,6 +23,10 @@
     padding-top: 15px;
 }
 
+.taskcontrol p{
+    font-weight: bold;
+}
+
 .taskcontrol .btn{
      margin: 0px 10px 10px 0;
 }
@@ -46,4 +50,35 @@
 }
 .calcblock input[type=submit] { 
     float: left;
+}
+
+.commentcalc {
+    float: right;
+    height: 50px; 
+    width: 200px;
+}
+
+.commentcalc input[type=text] {
+    width: 74px;
+    padding-left: 10px;
+    padding-right: 5px;
+    margin-right: 10px;
+    float:left;
+}
+.commentcalc .btn-success {
+    float:left;
+}
+
+.commnetcalcpanel{
+    display: none;
+}
+ 
+.commentcalc .btn {
+    padding-bottom: 1px;
+    padding-top: 1px;
+}
+
+.commnetcalcpanel .btn{
+    padding-bottom: 6px;
+    padding-top: 6px;
 }

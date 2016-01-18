@@ -95,16 +95,19 @@ if ($_REQUEST['add_comment']) {
 
 $created_by = array();
 $res = CIBlockElement::GetList(
-    array("DATE_ACTIVE_FROM" => "DESC"), 
+    array("DATE_ACTIVE_FROM" => "ASC"), 
     array("PROPERTY_TASK" => $arParams['ID'], 
           "IBLOCK_ID" => COMMENTS_IBLOCK_ID, 
           "ACTIVE" => "Y"), 
     false,
     false,  
-    array('DATE_ACTIVE_FROM', 'PREVIEW_TEXT', 'CREATED_BY', 'ID', 'IBLOCK_ID', 'DATE_CREATE')); 
+    array('DATE_ACTIVE_FROM', 'PREVIEW_TEXT', 'CREATED_BY', 
+          'ID', 'IBLOCK_ID', 'DATE_CREATE', 'PROPERTY_STATUS', 'PROPERTY_CALC')); 
 while ($ar_fields = $res->GetNext()) {  
     $created_by[] = $ar_fields['CREATED_BY'];
-    $arResult['COMMENTS'][] = $ar_fields;
+    $ar_fields['STATUS'] = $ar_fields["PROPERTY_STATUS_ENUM_ID"];
+    $arComments[$ar_fields['ID']] = $ar_fields['STATUS'];
+    $arResult['COMMENTS'][] = $ar_fields; 
 }
 
 
@@ -126,10 +129,20 @@ if(in_array($USER->GetID(), $arResult['PROGRAMERS_IDS'])) {
             
 
 /* actions */
-
+            
 if($action = $_REQUEST['action']) {
     if($arResult['IS_PROGRAMMER']) {
-        switch ($action) {
+        switch ($action) { 
+            /* comments */
+            case 'calccomment': 
+                $commentId = intval($_REQUEST["commentId"]);
+                $time = formatTime($_REQUEST["timeComment"]);
+                if(in_array($commentId, array_keys($arComments)) && $time && ($arComments[$commentId] == false)) {  
+                    CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('CALC' => $time, 'STATUS' => STATUS_COMMENT_CALCED)); 
+                }  
+                break; 
+                
+            /* tasks */
             case 'closeTask':
                 if(($arResult['STATUS'] == STATUS_LIST_COMPLETE) && ($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS'])) {
                     $newStatus = STATUS_LIST_ACCEPT;
@@ -139,8 +152,21 @@ if($action = $_REQUEST['action']) {
                 if(($arResult['STATUS'] == STATUS_LIST_AGR_CALCED) && ($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS'])) {
                     $newStatus = STATUS_LIST_WORK;
                 } 
-                if(in_array($arResult['STATUS'], array(STATUS_LIST_CALC_AGRED, STATUS_LIST_PAUSE, STATUS_LIST_COMPLETE))) {
+                if(in_array($arResult['STATUS'], array(STATUS_LIST_CALC_AGRED, STATUS_LIST_PAUSE, STATUS_LIST_COMPLETE, STATUS_LIST_REJECT))) {
                     $newStatus = STATUS_LIST_WORK;
+                }
+                if($newStatus == STATUS_LIST_WORK) { 
+                    $res = CIBlockElement::GetList(array(), 
+                                                   array("IBLOCK_ID" => TASKS_IBLOCK_ID,
+                                                         'ACTIVE' => 'Y',  
+                                                         '!ID' => $arParams['ID'],
+                                                         "PROPERTY_PROGRAMMER" => CUser::GetID(),
+                                                         "PROPERTY_PROJECT" => $arParams['PROJECT'],
+                                                         "PROPERTY_STATUS" => STATUS_LIST_WORK),
+                                                   false, false, array('ID')); 
+                    while($taskArr = $res->Fetch()) {
+                        CIBlockElement::SetPropertyValuesEx($taskArr['ID'], TASKS_IBLOCK_ID, array('STATUS' => STATUS_LIST_PAUSE)); 
+                    } 
                 }
                 break; 
             case 'stop':
@@ -149,12 +175,12 @@ if($action = $_REQUEST['action']) {
                 }
                 break;
             case 'complete':
-                if(in_array($arResult['STATUS'], array(STATUS_LIST_WORK, STATUS_LIST_PAUSE))) {
+                if(in_array($arResult['STATUS'], array(STATUS_LIST_WORK, STATUS_LIST_PAUSE, STATUS_LIST_REJECT))) {
                     $newStatus = STATUS_LIST_COMPLETE;
                 } 
                 break;
             case 'docalc':  
-                if($arResult['STATUS'] == false) { 
+                if($arResult['STATUS'] == false || $arResult['STATUS'] == STATUS_LIST_CALC_REJECT) { 
                     if($time = formatTime($_REQUEST['time'])) { 
                         CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC' => $time));
                         $newStatus = STATUS_LIST_AGR_CALCED;
@@ -168,6 +194,42 @@ if($action = $_REQUEST['action']) {
         }
     } elseif($arResult['IS_CUSTOMER']) {
         switch ($action) { 
+            
+            case 'commentStatus':
+                $commentId = intval($_REQUEST["commentId"]);
+                if($_REQUEST['reject']) {
+                    $commentStatus = STATUS_COMMENT_REJECT;
+                } elseif($_REQUEST['accept']) {
+                    $commentStatus = STATUS_COMMENT_CONFIRM;
+                } 
+                if($commentStatus && 
+                    in_array($commentId, array_keys($arComments)) && 
+                    $arComments[$commentId] == STATUS_COMMENT_CALCED) {  
+                        CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('STATUS' => $commentStatus)); 
+                }
+                break;
+            
+            /* tasks */
+            case 'calcAgr':
+                if($arResult['STATUS'] == STATUS_LIST_AGR_CALCED) {
+                    $newStatus = STATUS_LIST_CALC_AGRED;
+                } 
+                break;
+            case 'calcReject': 
+                if($arResult['STATUS'] == STATUS_LIST_AGR_CALCED) {
+                    $newStatus = STATUS_LIST_CALC_REJECT;
+                } 
+                break;
+            case 'rejectTask':
+                if($arResult['STATUS'] == STATUS_LIST_COMPLETE) { 
+                    $newStatus = STATUS_LIST_REJECT;
+                }
+                break;
+            case 'closeTask':
+                if($arResult['STATUS'] == STATUS_LIST_COMPLETE) { 
+                    $newStatus = STATUS_LIST_ACCEPT;
+                }
+                break;
             default:
                 break;
         } 
@@ -176,7 +238,7 @@ if($action = $_REQUEST['action']) {
         CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus));
     }
     LocalRedirect($APPLICATION->GetCurDir());
-} 
+}  
 
 
 $this->IncludeComponentTemplate();

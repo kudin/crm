@@ -37,8 +37,9 @@
         <div class="tasks_filter">  
             <div class="f1"><p>Проект</p></div>
             <div class="f2"><select id="projects_list" class="form-control">
-                    <option value="0">Все</option>
-                    <? 
+                    <? if(count($arResult['PROJECTS']) > 1) { ?>
+                        <option value="0">Все</option>
+                    <? } 
                     foreach ($arResult['PROJECTS'] as $project) {
                         ?>
                         <option <? if ($arParams["PROJECT"] == $project['ID']) { ?> selected="selected" <? } ?> value="<?= $project['ID'] ?>"><?= $project['NAME'] ?></option>  
@@ -69,7 +70,7 @@
                                  'calcreject' => StatusHelper::getStr(STATUS_LIST_CALC_REJECT),
                                  'calcagred' => 'Запущено в работу (оценка принята)',
                                  'work' => StatusHelper::getStr(STATUS_LIST_WORK),
-                                 'pause' => 'В Паузе',
+                                 'pause' => 'В паузе',
                                  'complete' => 'Готово (не закрытые)',
                                  'reject' => 'Задача отклонена',
                                  false,
@@ -135,7 +136,13 @@
                     <div class="progress progress_sm">
                         <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
                     </div>
-                    <a href="#">Показать выполненные</a> 
+                    <?if($arResult['FILTER'] != 'end') {?>
+                        <a href="?filter=end">Показать выполненные</a>
+                    <? } else {
+                        ?>
+                        <a href="?filter=open">Показать открытые</a>
+                        <?
+                    }?>
                 </div>  
                 <div class="col-md-6">
                     <p><b>0%</b> 0 из 112 часов</p >
@@ -145,7 +152,13 @@
                     <h3>0:00 ч.</h3>
                 </div>   
             </div>  
-        <? } ?>
+        <? } else {
+            if(!in_array($arResult['FILTER'], array('all', 'open'))) { ?>
+                <div class="row"><div class="col-md-6" style="padding-top: 10px;">
+                <p>Результат фильтрации не вернул ни одной задачи. <a href="?filter=open">Сбросить фильтр</a></p>
+                </div></div>
+            <? }  
+        }?>
     </div> 
 </div>
 </div>

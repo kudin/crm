@@ -28,12 +28,16 @@ class CrmUser extends CUser {
     public function hasRigthsToAddTask($arFields) {
         if(parent::IsAdmin()) {
             return true;
-        } 
-        return $this->iAmACustomerInProject($arFields["PROPERTY_VALUES"]["PROJECT"]);  
+        }  
+        return $this->iAmACustomerInProject($arFields["PROPERTY_VALUES"]["PROJECT"]) || 
+               $this->iAmAProgrammerInProject($arFields["PROPERTY_VALUES"]["PROJECT"]);
     }
     
     public function hasRigthsToDeleteTask($arFields) {
         if(parent::IsAdmin()) {
+            return true;
+        }
+        if($this->iAmAProgrammerInTask($arFields['ID'])) {
             return true;
         } 
         return false;

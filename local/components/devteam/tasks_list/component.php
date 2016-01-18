@@ -25,6 +25,7 @@ $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
 $userFilter = $USER->GetViewProjectsFilter();
 $arFilter = array_merge($userFilter, $arFilter);
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
+$res->NavStart();
 while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields(); 
     if($arParams["PROJECT"] == $arFields['ID']) {
@@ -32,6 +33,9 @@ while ($ob = $res->GetNextElement()) {
         $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
         $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE']; 
         $arResult['USERS'] = BitrixHelper::getUsersArrByIds(array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS']));
+    } 
+    if(!$arParams["PROJECT"] && $res->NavRecordCount == 1) {
+        LocalRedirect(TASKS_LIST_URL . $arFields['ID'] . '/');
     }
     $arResult['PROJECTS'][$arFields['ID']] = $arFields;
 }
