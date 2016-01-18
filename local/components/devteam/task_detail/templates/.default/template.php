@@ -72,10 +72,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                             ?>
                                             <form method="POST">
                                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group calcblock">
-                                                    <input type="text" name="time" placeholder="Оценка в часах" class="form-control "> 
+                                                    <input type="text" autocomplete="off" name="time" placeholder="Оценка в часах" class="form-control "> 
                                                     <button type="submit" class="btn btn-success" name="docalc"><i class="fa fa-clock-o"></i> Оценить</button>
                                                     <input type="hidden" name="action" value="docalc">
-                                                </div>  
+                                                </div>
                                             </form>
                                             <?
                                             break;
@@ -181,32 +181,34 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 if($arResult['IS_PROGRAMMER']) {
                                     switch ($comment['STATUS']) {
                                         case false: 
-                                        ?>
-                                            <a href="#" class="showPanel" data-id="<?=$comment['ID']?>"><i class="fa fa-clock-o"></i> Оценить</a>
-                                            <div class="commnetcalcpanel" id="<?=$comment['ID']?>">
-                                                <form method="POST">
-                                                    <input type="text" class="form-control" placeholder="часы" name="timeComment"> 
-                                                    <button class="btn btn-success" type="submit"><i class="fa fa-clock-o"></i> Оценить</button>
-                                                    <input type="hidden" value="calccomment" name="action">
-                                                    <input type="hidden" value="<?=$comment['ID']?>" name="commentId">
-                                                </form>
-                                            </div> 
-                                            <?
+                                            if($arResult['USER_ID'] != $comment['CREATED_BY']) {
+                                                ?>
+                                                <a href="#" class="showPanel" data-id="<?=$comment['ID']?>"><i class="fa fa-clock-o"></i> Оценить</a>
+                                                <div class="commnetcalcpanel" id="<?=$comment['ID']?>">
+                                                    <form method="POST">
+                                                        <input type="text" class="form-control" placeholder="часы" name="timeComment" autocomplete="off"> 
+                                                        <button class="btn btn-success" type="submit"><i class="fa fa-clock-o"></i> Оценить</button>
+                                                        <input type="hidden" value="calccomment" name="action">
+                                                        <input type="hidden" value="<?=$comment['ID']?>" name="commentId">
+                                                    </form>
+                                                </div> 
+                                                <?
+                                                }
                                             break; 
                                         case STATUS_COMMENT_CALCED:
                                             ?>
-                                            <p>Оценён в <?=$comment['PROPERTY_CALC_VALUE']?> ч.</p>    
+                                            <span class="label label-info">Оценён в <?=$comment['PROPERTY_CALC_VALUE']?> ч.</span>
                                             <?
                                             break;
                                         case STATUS_COMMENT_REJECT:
                                             ?>
-                                            <p>Отменён</p>
+                                            <span class="label label-danger">Отменён</span>
                                             <?
                                             break;
                                         case STATUS_COMMENT_CONFIRM:
                                             ?>
-                                            <p>В работе (<?=$comment['PROPERTY_CALC_VALUE']?> ч.)</p> 
-                                            <?
+                                            <span class="label label-success">В работе (<?=$comment['PROPERTY_CALC_VALUE'];?> ч.)</span> 
+                                             <?
                                             break;
                                         default:
                                             break;
@@ -218,10 +220,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                             break;
                                         case STATUS_COMMENT_CALCED:
                                             ?>
-                                            <p>Оценён в <?=$comment['PROPERTY_CALC_VALUE']?> ч.</p>
+                                            <span class="label label-info">Оценён в <?=$comment['PROPERTY_CALC_VALUE']?> ч.</span>
                                             <form method="POST">
-                                                <input type="submit" class="btn btn-success" name="accept" value="Принять">
-                                                <input type="submit" class="btn btn-danger" name="reject" value="Отклонить">
+                                                <input type="submit" class="btn btn-success smallbtn" name="accept" value="Принять">
+                                                <input type="submit" class="btn btn-danger smallbtn" name="reject" value="Отклонить">
                                                 <input type="hidden" value="<?=$comment['ID']?>" name="commentId">
                                                 <input type="hidden" name="action" value="commentStatus">
                                             </form>
@@ -229,12 +231,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                             break;
                                         case STATUS_COMMENT_REJECT:
                                             ?>
-                                            <p>Отменён</p>
+                                            <span class="label label-danger">Отменён</span>
                                             <?
                                             break;
                                         case STATUS_COMMENT_CONFIRM:
                                             ?>
-                                            <p>В работе (<?=$comment['PROPERTY_CALC_VALUE'];?> ч.)</p> 
+                                            <span class="label label-success">В работе (<?=$comment['PROPERTY_CALC_VALUE'];?> ч.)</span> 
                                             <? 
                                             break;
                                         default:
@@ -281,19 +283,19 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     <? 
                     if($arResult['TASK']['PROPS']['CALC']['VALUE']) { ?>
                         <p>Оценка: <?=$arResult['TASK']['PROPS']['CALC']['VALUE'];?> ч.</p>
-                        <? 
-                        $summ = $arResult['TASK']['PROPS']['CALC']['VALUE'];
+                        <?  
                     } 
                     foreach ($arResult['COMMENTS'] as $comment) {
                         if($comment['STATUS'] != STATUS_COMMENT_CONFIRM) {
                             continue;
                         }
-                        $summ += $comment['PROPERTY_CALC_VALUE'];
                         ?>
                         <p>+<?=$comment['PROPERTY_CALC_VALUE'];?> ч. <a href="#comment<?=$comment['ID']?>">Комментарий #<?=$comment['ID']?></a></p>
                         <?
-                    } ?>
-                    <? if($summ != $arResult['TASK']['PROPS']['CALC']['VALUE']) { ?> Всего: <?=$summ;?> ч. <?}?>
+                    }
+                    if($arResult['TASK']['PROPS']['CALC_COMMENTS']['VALUE']) { ?>
+                        <p>Всего: <?=$arResult['TASK']['PROPS']['CALC_COMMENTS']['VALUE'] + $arResult['TASK']['PROPS']['CALC']['VALUE'];?> ч. </p>
+                    <? } ?>
                 </div>  
             </div>    
         </div>

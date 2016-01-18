@@ -5,10 +5,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     <div class="col-md-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Проекты</h2> 
+                <h2>Проекты</h2>
+                <?if($arResult['HAS_RIGHTS_TO_ADD_PROJECT']) {?>
                 <ul class="nav navbar-right panel_toolbox"> 
                     <li><a href="add/"><i class="fa fa-plus"></i> Добавить проект</a></li> 
                 </ul>
+                <?}?>
                 <div class="clearfix"></div>
             </div>
             <?if(count($arResult['ITEMS'])) {?>
@@ -43,7 +45,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                     <li>
                                         <img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] ? $arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] : '/images/user.png';?>">
                                     </li> 
-                                     <?}?>
+                                    <?}?>
                                 </ul>
                                 <? } ?>
                             </td>
@@ -54,7 +56,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                     <li>
                                         <img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] ? $arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] : '/images/user.png';?>">
                                     </li> 
-                                     <?}?>
+                                    <?}?>
                                 </ul>
                                 <? } ?>
                             </td>  
@@ -65,7 +67,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         </tr> 
                         <? } ?>
                     </tbody>
-                </table> 
+                </table>
+                <?=$arResult["NAV_STRING"];?>
             </div>
             <? } ?>
         </div>

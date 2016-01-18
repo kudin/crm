@@ -7,14 +7,14 @@ foreach(array('ID', 'PROJECT') as $code) {
     }
 }
 
-if(!$USER->hasRightsToViewTask($arParams["ID"])){
+if(!$USER->hasRightsToViewTask($arParams["ID"])) {
     ShowError('У Вас нет прав на просмотр этой задачи');
     return;
 }
  
 if(!$arParams['DATE_FORMAT']) {
-    $arParams['DATE_FORMAT'] = 'j F в H:m';
-}
+    $arParams['DATE_FORMAT'] = 'j F в H:i';
+} 
 
 CModule::IncludeModule('iblock');
 
@@ -106,7 +106,10 @@ $res = CIBlockElement::GetList(
 while ($ar_fields = $res->GetNext()) {  
     $created_by[] = $ar_fields['CREATED_BY'];
     $ar_fields['STATUS'] = $ar_fields["PROPERTY_STATUS_ENUM_ID"];
-    $arComments[$ar_fields['ID']] = $ar_fields['STATUS'];
+    $arComments[$ar_fields['ID']] = $ar_fields['STATUS']; 
+    if (strlen($ar_fields["DATE_CREATE"]) > 0) {
+        $ar_fields["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($ar_fields["DATE_CREATE"], CSite::GetDateFormat()));
+    }
     $arResult['COMMENTS'][] = $ar_fields; 
 }
 
@@ -119,10 +122,11 @@ $arResult['USERS'] = BitrixHelper::getUsersArrByIds($usersIds);
 
 /* rights */
 
-if(in_array($USER->GetID(), $arResult['PROGRAMERS_IDS'])) {
+$arResult['USER_ID'] = $USER->GetID();
+if(in_array($arResult['USER_ID'], $arResult['PROGRAMERS_IDS'])) {
     $arResult['IS_PROGRAMMER'] = true;
-} else { // если программист ставит задачу сам себе
-    if(in_array($USER->GetID(), $arResult['CUSTOMERS_IDS'])) {
+} else {
+    if(in_array($arResult['USER_ID'], $arResult['CUSTOMERS_IDS'])) {
         $arResult['IS_CUSTOMER'] = true;
     }
 }
@@ -137,11 +141,14 @@ if($action = $_REQUEST['action']) {
             case 'calccomment': 
                 $commentId = intval($_REQUEST["commentId"]);
                 $time = formatTime($_REQUEST["timeComment"]);
-                if(in_array($commentId, array_keys($arComments)) && $time && ($arComments[$commentId] == false)) {  
-                    CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('CALC' => $time, 'STATUS' => STATUS_COMMENT_CALCED)); 
-                }  
+                if(in_array($commentId, array_keys($arComments)) && 
+                        $time && 
+                        ($arComments[$commentId] == false)) {  
+                    CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('CALC' => $time, 
+                                                                                              'STATUS' => STATUS_COMMENT_CALCED)); 
+                }
                 break; 
-                
+
             /* tasks */
             case 'closeTask':
                 if(($arResult['STATUS'] == STATUS_LIST_COMPLETE) && ($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS'])) {
@@ -193,8 +200,8 @@ if($action = $_REQUEST['action']) {
                 break;
         }
     } elseif($arResult['IS_CUSTOMER']) {
-        switch ($action) { 
-            
+        switch ($action) {
+            /* comments */
             case 'commentStatus':
                 $commentId = intval($_REQUEST["commentId"]);
                 if($_REQUEST['reject']) {
@@ -204,8 +211,18 @@ if($action = $_REQUEST['action']) {
                 } 
                 if($commentStatus && 
                     in_array($commentId, array_keys($arComments)) && 
-                    $arComments[$commentId] == STATUS_COMMENT_CALCED) {  
-                        CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('STATUS' => $commentStatus)); 
+                    $arComments[$commentId] == STATUS_COMMENT_CALCED) {
+                        CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('STATUS' => $commentStatus));
+                        if($commentStatus == STATUS_COMMENT_CONFIRM) {
+                            $summ = 0;
+                            foreach ($arResult['COMMENTS'] as $comment) {
+                                if(($comment['STATUS'] != STATUS_COMMENT_CONFIRM) && ($comment['ID'] != $commentId)) {
+                                    continue;
+                                }
+                                $summ += $comment['PROPERTY_CALC_VALUE']; 
+                            }
+                            CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC_COMMENTS' => $summ));
+                        }
                 }
                 break;
             

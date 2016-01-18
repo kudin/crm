@@ -36,7 +36,7 @@
     <div class="x_content">  
         <div class="tasks_filter">  
             <div class="f1"><p>Проект</p></div>
-            <div class="f2"><select id="projects_list" class="form-control">
+            <div class="f2"><select id="projects_list" class="form-control" <? if(count($arResult['PROJECTS']) == 1) { ?> disabled="disabled" <? } ?>>
                     <? if(count($arResult['PROJECTS']) > 1) { ?>
                         <option value="0">Все</option>
                     <? } 
@@ -79,7 +79,7 @@
                                  'long' => 'Большие ( >16ч. )'
                                  ) as $code => $value) { 
                     if(!$value) {
-                        ?><option disabled="">--------------------</option>
+                        ?><option disabled=""><?=str_repeat('-', 20);?></option>
                     <? } else { ?>
                         <option <?if($code == $arResult['FILTER']) { ?> selected="selected" <? } ?> value="<?=$code;?>"><?=$value;?></option> 
                     <? }  
@@ -93,7 +93,7 @@
             <table class="table table-striped responsive-utilities jambo_table bulk_action" id="tasks_list">
                 <thead>
                     <tr class="headings">
-                        <th style="width: 20px;"><input type="checkbox" id="check-all" class="flat"></th>
+                        <th style="width: 20px;"></th>
                         <th class="column-title">Задача </th>  
                         <th class="column-title">Статус </th>
                         <th class="column-title">Оценка, часы </th>
@@ -103,7 +103,7 @@
                             <a href="#" data-mass-close>Закрыть</a>, <a href="#" data-mass-delete>Удалить</a></span>
                         </th>
                     </tr>
-                </thead> 
+                </thead>
                 <tbody>
                 <? foreach ($arResult['TASKS'] as $key => $task) { ?>
                     <tr class="pointer" id="task<?=$task['ID']?>">
@@ -119,7 +119,10 @@
                             <p><?=$task['STATUS_TEXT'];?></p>
                         </td>
                         <td><? if($task['PROPERTIES']['CALC']['VALUE']) { ?>
-                            <?= $task['PROPERTIES']['CALC']['VALUE'] ?>
+                            <span title="Оценка задачи"><?= $task['PROPERTIES']['CALC']['VALUE'] ?></span>
+                            <? if($task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?> 
+                                + <span title="Оценка комментариев"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE'];?></span> = <span title="Суммарная оценка"><?= $task['PROPERTIES']['CALC']['VALUE'] + $task['PROPERTIES']['CALC_COMMENTS']['VALUE']?></span>
+                            <? } ?>
                         <? } ?>
                         </td>
                         <td class="last">
