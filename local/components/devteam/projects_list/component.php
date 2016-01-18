@@ -9,7 +9,7 @@ $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 $userFilter = $USER->GetViewProjectsFilter();
 $arFilter = array_merge($userFilter, $arFilter);
- 
+
 $arUsersId = array();
 
 while ($ob = $res->GetNextElement()) {
@@ -29,5 +29,5 @@ while ($ob = $res->GetNextElement()) {
 
 $arUsersId = array_unique($arUsersId);
 $arResult['USERS'] = BitrixHelper::getUsersArrByIds($arUsersId);
-
+$arResult['HAS_RIGHTS_TO_DELETE_PROJECT'] = $USER->hasRigthsToDeleteProject();
 $this->IncludeComponentTemplate();

@@ -50,8 +50,11 @@
             <div class="f1"><p>Сортировать по:</p></div>
             <div class="f2">
                 <select id="tasks_sort_by" class="form-control">
-                    <? foreach(array('date' => 'Дате создания', 'priority' => 'Приоритету') as $code => $value) { ?> 
-                    <option <?if($code == $arResult['SORT']) { ?> selected="selected" <? } ?> value="<?=$code;?>"><?=$value;?></option> 
+                    <? foreach(array('date' => 'Дате создания',
+                                     'priority' => 'Приоритету',
+                                     'calc' => 'Оценке'
+                                     ) as $code => $value) { ?> 
+                        <option <?if($code == $arResult['SORT']) { ?> selected="selected" <? } ?> value="<?=$code;?>"><?=$value;?></option> 
                     <? } ?> 
                 </select> 
             </div>  
@@ -60,7 +63,7 @@
                 <? foreach(array('all' => 'Все',  
                                  'open' => 'Открытые', 
                                  'end' => 'Закрытые',
-                                 '',
+                                 false,
                                  'nocalc' => 'Ожидают оценки',
                                  'agrcalced' => StatusHelper::getStr(STATUS_LIST_AGR_CALCED),
                                  'calcreject' => StatusHelper::getStr(STATUS_LIST_CALC_REJECT),
@@ -68,10 +71,13 @@
                                  'work' => StatusHelper::getStr(STATUS_LIST_WORK),
                                  'pause' => 'В Паузе',
                                  'complete' => 'Готово (не закрытые)',
-                                 'reject' => 'Задача отклонена'
-
+                                 'reject' => 'Задача отклонена',
+                                 false,
+                                 'short' => 'Короткие ( <4ч. )',
+                                 'norm' => 'Средние ( 4-16ч. )',
+                                 'long' => 'Большие ( >16ч. )'
                                  ) as $code => $value) { 
-                    if(!$code) { 
+                    if(!$value) {
                         ?><option disabled="">--------------------</option>
                     <? } else { ?>
                         <option <?if($code == $arResult['FILTER']) { ?> selected="selected" <? } ?> value="<?=$code;?>"><?=$value;?></option> 

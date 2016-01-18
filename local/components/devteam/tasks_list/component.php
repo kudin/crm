@@ -48,7 +48,8 @@ if(!$arParams["PROJECT"]) {
 /* tasks */
 
 $sorts = array('date' => array('ID' => 'DESC'), 
-               'priority' => array('PROPERTY_PRIORITY' => 'DESC'));
+               'priority' => array('PROPERTY_PRIORITY' => 'DESC'),
+               'calc' => array('PROPERTY_CALC' => 'DESC'));
 $defaultSort = 'date';
 if($sort = $_REQUEST['sort']) { 
     if(in_array($sort, array_keys($sorts))) {
@@ -70,9 +71,11 @@ $filters = array('all' => array(),
                  'work' => array('PROPERTY_STATUS' => STATUS_LIST_WORK),
                  'pause' => array('PROPERTY_STATUS' => STATUS_LIST_PAUSE),
                  'complete' => array('PROPERTY_STATUS' => STATUS_LIST_COMPLETE),
-                 'reject' =>  array('PROPERTY_STATUS' => STATUS_LIST_REJECT),
+                 'reject' => array('PROPERTY_STATUS' => STATUS_LIST_REJECT),
+                 'short' => array('<=PROPERTY_CALC' => 4), 
+                 'norm' => array('>PROPERTY_CALC' => 4, '<PROPERTY_CALC' => 16),
+                 'long' => array('>=PROPERTY_CALC' => 16),
     );
-
 $defaultFilter = 'open';
 if($filter = $_REQUEST['filter']) { 
     if(in_array($filter, array_keys($filters))) {

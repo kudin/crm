@@ -58,8 +58,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 </ul>
                                 <? } ?>
                             </td>  
-                            <td> 
-                                <a href="#" data-deleteproject='<?=$project['ID']?>'><i class="fa fa-trash-o"></i> Удалить проект</a> 
+                            <td><? if($arResult['HAS_RIGHTS_TO_DELETE_PROJECT']) { ?>
+                                    <a href="#" data-deleteproject='<?=$project['ID']?>'><i class="fa fa-trash-o"></i> Удалить проект</a> 
+                                <? } ?>
                             </td>
                         </tr> 
                         <? } ?>
