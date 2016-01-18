@@ -38,3 +38,13 @@ function getFileIcon($file) {
     } 
     return $icon;
 }
+
+function formatTime($time) { 
+    $time = trim($time);
+    $time = str_replace(array(',', ' '), array('.', ''), $time);
+    $time = floatval($time);
+    if(!$time || $time > MAX_TASK_TIME) {
+        $time = false;
+    }
+    return $time;
+}

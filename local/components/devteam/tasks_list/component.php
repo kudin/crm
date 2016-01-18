@@ -1,6 +1,6 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
-if($arParams["PROJECT"] && !$USER->hasRightsToViewProject($arParams["PROJECT"])){
+if($arParams["PROJECT"] && !$USER->hasRightsToViewProject($arParams["PROJECT"])) {
     ShowError('У Вас нет прав на просмотр этого проекта');
     return;
 }
@@ -16,6 +16,9 @@ if($arParams["COUNT"] <= 0) {
 }
 
 CModule::IncludeModule('iblock');
+
+
+/* projects */
 
 $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*");
 $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
@@ -41,16 +44,55 @@ if(!$arParams["PROJECT"]) {
     }
 } 
 
-$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", "DATE_CREATE");
-$arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y');
-if($arParams["PROJECT"]) {
-    $arFilter['PROPERTY_PROJECT'] = $arParams["PROJECT"];
-} else {
-    $arFilter['PROPERTY_PROJECT'] = $projects;
+
+/* tasks */
+
+$sorts = array('date' => array('ID' => 'DESC'), 
+               'priority' => array('PROPERTY_PRIORITY' => 'DESC'));
+$defaultSort = 'date';
+if($sort = $_REQUEST['sort']) { 
+    if(in_array($sort, array_keys($sorts))) {
+        $_SESSION['LIST_SORT'] = $sort;
+    }
 } 
-$userFilter = $USER->GetViewTasksFilter();
-$arFilter = array_merge($userFilter, $arFilter);
-$res = CIBlockElement::GetList(Array('ID' => 'DESC'), $arFilter, false, array('nPageSize' => $arParams['COUNT']), $arSelect);
+if(!$_SESSION['LIST_SORT']) {
+    $_SESSION['LIST_SORT'] = $defaultSort;
+} 
+$arResult['SORT'] = $_SESSION['LIST_SORT'];
+
+$filters = array('all' => array(), 
+                 'open' => array('!PROPERTY_STATUS' => STATUS_LIST_ACCEPT),
+                 'end' =>  array('PROPERTY_STATUS' => STATUS_LIST_ACCEPT),
+                 'nocalc' => array('PROPERTY_STATUS' => false),
+                 'agrcalced' => array('PROPERTY_STATUS' => STATUS_LIST_AGR_CALCED),
+                 'calcreject' => array('PROPERTY_STATUS' => STATUS_LIST_CALC_REJECT),
+                 'calcagred' => array('PROPERTY_STATUS' => STATUS_LIST_CALC_AGRED),
+                 'work' => array('PROPERTY_STATUS' => STATUS_LIST_WORK),
+                 'pause' => array('PROPERTY_STATUS' => STATUS_LIST_PAUSE),
+                 'complete' => array('PROPERTY_STATUS' => STATUS_LIST_COMPLETE),
+                 'reject' =>  array('PROPERTY_STATUS' => STATUS_LIST_REJECT),
+    );
+
+$defaultFilter = 'open';
+if($filter = $_REQUEST['filter']) { 
+    if(in_array($filter, array_keys($filters))) {
+        $_SESSION['LIST_FILTER'] = $filter;
+    }
+}
+if(!$_SESSION['LIST_FILTER']) {
+    $_SESSION['LIST_FILTER'] = $defaultFilter;
+}
+$arResult['FILTER'] = $_SESSION['LIST_FILTER'];
+
+$arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y'); 
+$arFilter = array_merge($arFilter, $filters[$_SESSION['LIST_FILTER']]);  
+$arFilter['PROPERTY_PROJECT'] = $arParams["PROJECT"] ? $arParams["PROJECT"] : $projects; 
+$arFilter = array_merge($USER->GetViewTasksFilter(), $arFilter); 
+$res = CIBlockElement::GetList($sorts[$_SESSION['LIST_SORT']], 
+                               $arFilter, 
+                               false, 
+                               array('nPageSize' => $arParams['COUNT']), 
+                               array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", "DATE_CREATE"));
 while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();
     if (strlen($arFields["DATE_CREATE"]) > 0) {

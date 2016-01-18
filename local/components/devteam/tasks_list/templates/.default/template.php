@@ -50,34 +50,38 @@
             <div class="f1"><p>Сортировать по:</p></div>
             <div class="f2">
                 <select id="tasks_sort_by" class="form-control">
-                    <option value="date">Дате создания</option> 
-                    <option value="priority">Приоритету</option>
-                </select>
+                    <? foreach(array('date' => 'Дате создания', 'priority' => 'Приоритету') as $code => $value) { ?> 
+                    <option <?if($code == $arResult['SORT']) { ?> selected="selected" <? } ?> value="<?=$code;?>"><?=$value;?></option> 
+                    <? } ?> 
+                </select> 
             </div>  
             <div class="f1"><p>Показать: </p></div>
             <div class="f2"><select id="tasks_show" class="form-control"> 
-                    <option>горящие</option>
-                    <option>подходят сроки</option>
-                    <option>начались</option>
-                    <option>ожидают</option>  
-                </select></div> 
-            <button class="btn btn-default adv_filterbtn" type="button">Расширеный фильтр</button> 
-        </div> 
-        <div class="tasks_advanced_filter"> 
+                <? foreach(array('all' => 'Все',  
+                                 'open' => 'Открытые', 
+                                 'end' => 'Закрытые',
+                                 '',
+                                 'nocalc' => 'Ожидают оценки',
+                                 'agrcalced' => StatusHelper::getStr(STATUS_LIST_AGR_CALCED),
+                                 'calcreject' => StatusHelper::getStr(STATUS_LIST_CALC_REJECT),
+                                 'calcagred' => 'Запущено в работу (оценка принята)',
+                                 'work' => StatusHelper::getStr(STATUS_LIST_WORK),
+                                 'pause' => 'В Паузе',
+                                 'complete' => 'Готово (не закрытые)',
+                                 'reject' => 'Задача отклонена'
 
-            <div class="f3">                 
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="" checked="checked"> Открытые
-                    </label>
-                </div>       
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="" checked="checked"> Выполненные
-                    </label>
-                </div> 
-            </div>        
-        </div>    
+                                 ) as $code => $value) { 
+                    if(!$code) { 
+                        ?><option disabled="">--------------------</option>
+                    <? } else { ?>
+                        <option <?if($code == $arResult['FILTER']) { ?> selected="selected" <? } ?> value="<?=$code;?>"><?=$value;?></option> 
+                    <? }  
+                } ?> 
+            </select></div> 
+            <? if(!in_array($arResult['FILTER'], array('all', 'open'))) { ?>
+            <button class="btn btn-default" type="button" id="reset_list_filter">Сбросить фильтр</button>
+            <? } ?>
+        </div>     
         <? if (count($arResult['TASKS'])) { ?>
             <table class="table table-striped responsive-utilities jambo_table bulk_action" id="tasks_list">
                 <thead>
@@ -85,38 +89,37 @@
                         <th style="width: 20px;"><input type="checkbox" id="check-all" class="flat"></th>
                         <th class="column-title">Задача </th>  
                         <th class="column-title">Статус </th>
+                        <th class="column-title">Оценка, часы </th>
                         <th class="column-title last" style="width: 100px;">Приоритет </th> 
                         <th class="bulk-actions" colspan="4">
                             <span class="antoo" style="color:#fff; font-weight:500;">Действия с задачами (<span class="action-cnt"></span>):
-                                <a href="#" data-mass-close>Закрыть</a>, <a href="#" data-mass-delete>Удалить</a></span>
+                            <a href="#" data-mass-close>Закрыть</a>, <a href="#" data-mass-delete>Удалить</a></span>
                         </th>
                     </tr>
                 </thead> 
                 <tbody>
-                    <? foreach ($arResult['TASKS'] as $key => $task) {
-                        ?>
-                        <tr class="pointer" id="task<?=$task['ID']?>">
-                            <td class="a-center ">
-                                <input type="checkbox" value="<?=$task['ID']?>" class="flat" name="table_records">
-                            </td>
-                            <td>
-                                <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'><?= $task['NAME'] ?></a>
-                                <br>
-                                <small><?= $task['DATE_CREATE'] ?></small>
-                            </td>   
-                            <td><?
-                                if(0) { ?>
-                                <div class="progress progress_sm">
-                                    <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
-                                </div>
-                                <? } ?>
-                                <p><?=$task['STATUS_TEXT'];?></p>
-                            </td>
-                            <td class="last">
-                                <div class="priorb prior<?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>"><?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?></div>
-                            </td> 
-                        </tr> 
-                    <? } ?>
+                <? foreach ($arResult['TASKS'] as $key => $task) { ?>
+                    <tr class="pointer" id="task<?=$task['ID']?>">
+                        <td class="a-center">
+                            <input type="checkbox" value="<?=$task['ID']?>" class="flat" name="table_records">
+                        </td>
+                        <td>
+                            <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'><?= $task['NAME'] ?></a>
+                            <br>
+                            <small><?= $task['DATE_CREATE'] ?></small>
+                        </td>   
+                        <td>
+                            <p><?=$task['STATUS_TEXT'];?></p>
+                        </td>
+                        <td><? if($task['PROPERTIES']['CALC']['VALUE']) { ?>
+                            <?= $task['PROPERTIES']['CALC']['VALUE'] ?>
+                        <? } ?>
+                        </td>
+                        <td class="last">
+                            <div class="priorb prior<?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>"><?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?></div>
+                        </td> 
+                    </tr> 
+                <? } ?>
                 </tbody> 
             </table> 
             <?=$arResult["NAV_STRING"];?>

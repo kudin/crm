@@ -2405,7 +2405,7 @@ button,
 }
 
 .attachment ul li img {
-    height: 80px;  
+    height: 100px;  
     padding: 5px;
     margin-bottom: 10px;
 }
@@ -6431,16 +6431,8 @@ ul.notifications {
     margin-left: 20px;
 }
 
-.tasks_advanced_filter{
-    border-top: 2px solid #ddd;
-    display: none;
-    height: 90px;
-    background: rgb(247, 247, 247) none repeat scroll 0% 0%; 
-    padding: 10px 10px 10px 20px; 
-}
-
-.tasks_advanced_filter .select2-selection{
-    min-width: 200px;
+.tasks_filter{
+    height: 54px;
 }
 
 .x_content .f3{

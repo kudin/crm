@@ -28,11 +28,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                     foreach ($arResult['TASK']['PROPS']['FILES']['VALUE'] as $file) { ?>
                                         <li>
                                             <a class="atch-thumb" href="<?= $file['SRC'] ?>">
-                                                <img alt="img" src="<?= $file['icon'] ?>">
+                                                <img title="<?=$file['ORIGINAL_NAME']?>" src="<?= $file['icon'] ?>">
                                             </a>
                                             <br>
                                             <div class="file-name">
-                                                <?= $file["ORIGINAL_NAME"]; ?>
+                                                <a title="<?=$file['ORIGINAL_NAME']?>" href="<?= $file['SRC'] ?>"><?= $file["TRUNCATED_NAME"]; ?></a>
                                             </div>
                                             <br>
                                             <span class="file-size"><?= $file["FILE_SIZE"] ?></span> 
@@ -44,39 +44,71 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                             <div class="taskcontrol"> 
                                 <?  
                                 if($arResult['IS_PROGRAMMER']) {
-                                    switch (true) {
-                                        case ($arResult['STATUS'] == false) && ($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS']): 
-                                            ?> 
-                                            <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Начать</a>
+                                    switch ($arResult['STATUS']) {
+                                        case STATUS_LIST_ACCEPT:
+                                            ?>
+                                            <p>Задача закрыта</p>
                                             <?
+                                            break;
+                                        case false:
+                                            ?>
+                                            <form method="POST">
+                                                <div class="col-md-6 col-sm-6 col-xs-12 form-group calcblock">
+                                                    <input type="text" name="time" placeholder="Оценка в часах" class="form-control "> 
+                                                    <button type="submit" class="btn btn-success" name="docalc"><i class="fa fa-clock-o"></i> Оценить</button>
+                                                    <input type="hidden" name="action" value="docalc">
+                                                </div>  
+                                            </form>
+                                            <?
+                                            break;
+                                        case STATUS_LIST_AGR_CALCED:
+                                            ?> 
+                                            <p>Задача оценена в <?=$arResult['TASK']['PROPS']['CALC']['VALUE']?> ч.</p>
+                                            <?
+                                            if($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS']) { ?>
+                                                <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Начать</a>
+                                            <?
+                                            }
                                             break; 
-                                        case $arResult['STATUS'] == STATUS_LIST_WORK:
+                                        case STATUS_LIST_WORK:
                                             ?>
                                             <a class="btn btn-app" href="?action=stop"><i class="fa fa-pause"></i> Пауза</a>  
                                             <a class="btn btn-app" href="?action=complete"><i class="fa fa-flag"></i> Завершить</a>  
                                             <?
                                             break;
-                                        case $arResult['STATUS'] == STATUS_LIST_PAUSE:
+                                        case STATUS_LIST_PAUSE:
                                             ?>
                                             <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Продолжить</a>
                                             <?
                                             break;
-                                        case $arResult['STATUS'] == STATUS_LIST_COMPLETE:
+                                        case STATUS_LIST_COMPLETE:
                                             ?>
                                             <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Возобновить</a>
-                                            <?
+                                            <? if($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS']) { ?>
+                                                <a href="?action=closeTask" class="btn btn-success" type="button">Закрыть задачу</a>
+                                            <? }
                                             break;
                                         default:
                                             break;
                                     }
                                 }
                                 if($arResult['IS_CUSTOMER']) {
-                                    if($arResult['STATUS'] == STATUS_LIST_COMPLETE) {
-                                        ?> 
-                                        <button class="btn btn-success" type="button">Принять</button>
-                                        <button class="btn btn-danger" type="button">Отклонить</button> 
-                                        <? 
-                                    }
+                                    switch ($arResult['STATUS']) {
+                                        case STATUS_LIST_COMPLETE:
+                                            ?> 
+                                            <a href="?action=closeTask" class="btn btn-success" type="button">Принять задачу</a>
+                                            <button class="btn btn-danger" type="button">Отклонить задачу</button> 
+                                            <? 
+                                            break; 
+                                        case STATUS_LIST_AGR_CALCED:
+                                            ?> 
+                                            <button class="btn btn-success" type="button">Принять оценку</button>
+                                            <button class="btn btn-danger" type="button">Отклонить оценку</button> 
+                                            <?    
+                                            break;
+                                        default:
+                                            break;
+                                    } 
                                 } 
                                 ?>
                             </div> 
@@ -123,10 +155,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                 <div class="clearfix"></div>
             </div>
             <div class="row">
-                <div class="col-md-12"> 
+                <div class="col-md-12">  
+                    <p>Проект: <a href="<?=TASKS_LIST_URL?><?= $arResult['PROJECT']['ID']; ?>/"><?=$arResult['PROJECT']['NAME']?></a></p>
                     <p class="date">Создана: <?= $arResult['TASK']['DATE_CREATE'] ?></p>
                     <p>Постановщик: <?= $arResult['USERS'][$arResult['PROJECT']['CREATED_BY']]['NAME']; ?> <?= $arResult['USERS'][$arResult['PROJECT']['CREATED_BY']]['LAST_NAME']; ?></p> 
                     <p>Исполнитель: <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['NAME']; ?> <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['LAST_NAME']; ?></p> 
+                    <? if($arResult['TASK']['PROPS']['CALC']['VALUE']) { ?>
+                        <p>Оценка: <?=$arResult['TASK']['PROPS']['CALC']['VALUE'];?> ч.</p>
+                    <? } ?>
                     <p class="status">Статус: <span class="label label-success"><?=$arResult['STATUS_TEXT'];?></span></p> 
                 </div>  
             </div>    

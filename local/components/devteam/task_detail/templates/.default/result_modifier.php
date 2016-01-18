@@ -5,7 +5,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
 
 foreach ($arResult['TASK']['PROPS']['FILES']['VALUE'] as &$file) {
     $file['icon'] = getFileIcon($file);
-    $file['ORIGINAL_NAME'] = TruncateText($file['ORIGINAL_NAME'], 50);
+    $file['TRUNCATED_NAME'] = TruncateText($file['ORIGINAL_NAME'], 20);
     $file["FILE_SIZE"] = formatBytes($file["FILE_SIZE"]);
 }
 

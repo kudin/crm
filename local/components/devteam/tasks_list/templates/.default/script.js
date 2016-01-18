@@ -1,8 +1,18 @@
-$(function() {
-    $(document).on('click', '.adv_filterbtn', function() {
-        $('.tasks_advanced_filter').toggle();
+$(function() { 
+    $(document).on('click', '#reset_list_filter', function() {
+        location.href = "?filter=open";
+    });
+  
+    $(document).on('change', '#tasks_sort_by', function() {
+        var sort = $(this).val();
+        location.href = "?sort=" + sort;
     });
     
+    $(document).on('change', '#tasks_show', function() {
+        var filter = $(this).val();
+        location.href = "?filter=" + filter;
+    });
+     
     $(document).on('change', '#projects_list', function() {
         id = $(this).val();
         if(id == 0) {

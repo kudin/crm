@@ -13,7 +13,7 @@ if(!$USER->hasRightsToViewTask($arParams["ID"])){
 }
  
 if(!$arParams['DATE_FORMAT']) {
-    $arParams['DATE_FORMAT'] = 'j F в H:m:s';
+    $arParams['DATE_FORMAT'] = 'j F в H:m';
 }
 
 CModule::IncludeModule('iblock');
@@ -127,16 +127,21 @@ if(in_array($USER->GetID(), $arResult['PROGRAMERS_IDS'])) {
 
 /* actions */
 
-if($action = $_GET['action']) {
+if($action = $_REQUEST['action']) {
     if($arResult['IS_PROGRAMMER']) {
         switch ($action) {
+            case 'closeTask':
+                if(($arResult['STATUS'] == STATUS_LIST_COMPLETE) && ($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS'])) {
+                    $newStatus = STATUS_LIST_ACCEPT;
+                }
+                break;
             case 'start':
-                if(($arResult['STATUS'] == false) && ($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS'])) {
+                if(($arResult['STATUS'] == STATUS_LIST_AGR_CALCED) && ($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS'])) {
                     $newStatus = STATUS_LIST_WORK;
                 } 
                 if(in_array($arResult['STATUS'], array(STATUS_LIST_CALC_AGRED, STATUS_LIST_PAUSE, STATUS_LIST_COMPLETE))) {
                     $newStatus = STATUS_LIST_WORK;
-                } 
+                }
                 break; 
             case 'stop':
                 if($arResult['STATUS'] == STATUS_LIST_WORK) {
@@ -147,6 +152,16 @@ if($action = $_GET['action']) {
                 if(in_array($arResult['STATUS'], array(STATUS_LIST_WORK, STATUS_LIST_PAUSE))) {
                     $newStatus = STATUS_LIST_COMPLETE;
                 } 
+                break;
+            case 'docalc':  
+                if($arResult['STATUS'] == false) { 
+                    if($time = formatTime($_REQUEST['time'])) { 
+                        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC' => $time));
+                        $newStatus = STATUS_LIST_AGR_CALCED;
+                    } else {
+                        ToolTip::Add('Введено некорректное значение оценки');
+                    }
+                }
                 break;
             default:
                 break;
