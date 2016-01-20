@@ -21,8 +21,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <th style="width: 20%;">Проект</th> 
                             <th>Лого</th> 
                             <th>Заказчик</th>
-                            <th>Исполнитель</th> 
-                            <th style="width: 140px;"></th>
+                            <th>Исполнитель</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,10 +59,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 </ul>
                                 <? } ?>
                             </td>  
-                            <td><? if($arResult['HAS_RIGHTS_TO_DELETE_PROJECT']) { ?>
-                                    <a href="#" data-deleteproject='<?=$project['ID']?>'><i class="fa fa-trash-o"></i> Удалить проект</a> 
-                                <? } ?>
-                            </td>
                         </tr> 
                         <? } ?>
                     </tbody>

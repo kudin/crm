@@ -1,12 +1,5 @@
 <?
-$aMenuLinks = Array(
-	Array(
-		"Проекты", 
-		"/projects/", 
-		Array(), 
-		Array("CLASS"=>"fa-rocket"), 
-		"" 
-	),
+$aMenuLinks = Array( 
 	Array(
 		"Задачи", 
 		"/tasks/", 
@@ -15,7 +8,14 @@ $aMenuLinks = Array(
 		"" 
 	),
 	Array(
-		"Сотрудники", 
+		"Проекты", 
+		"/projects/", 
+		Array(), 
+		Array("CLASS"=>"fa-rocket"), 
+		"" 
+	),
+	Array(
+		"Пользователи", 
 		"/users/", 
 		Array(), 
 		Array("CLASS"=>"fa-users"), 

@@ -37,7 +37,7 @@
                 <div class="col-md-3 left_col">
                     <div class="left_col scroll-view"> 
                         <div class="navbar nav_title" style="border: 0;">
-                            <a href="/index.php" class="site_title"><div class="fa fa-paw"></div> <div class="sitename">devteam CRM</div></a>
+                            <a href="/index.php" class="site_title"><div class="fa fa-paw"></div></a>
                         </div>
                         <div class="clearfix"></div> 
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu"> 

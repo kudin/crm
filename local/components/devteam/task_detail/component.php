@@ -230,12 +230,12 @@ if($action = $_REQUEST['action']) {
             case 'calcAgr':
                 if($arResult['STATUS'] == STATUS_LIST_AGR_CALCED) {
                     $newStatus = STATUS_LIST_CALC_AGRED;
-                } 
+                }
                 break;
             case 'calcReject': 
                 if($arResult['STATUS'] == STATUS_LIST_AGR_CALCED) {
                     $newStatus = STATUS_LIST_CALC_REJECT;
-                } 
+                }
                 break;
             case 'rejectTask':
                 if($arResult['STATUS'] == STATUS_LIST_COMPLETE) { 

@@ -80,3 +80,20 @@
     padding-bottom: 1px;
     padding-top: 1px;
 }
+
+.x_content{
+    color: #3a4f64;
+}
+
+.comment_text{
+    margin-top: 3px;
+}
+
+.comment p{
+    margin-bottom: 0px;
+}
+
+.comment .avatar {
+    margin-right: 10px; 
+    margin-bottom: 10px;
+}

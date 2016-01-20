@@ -93,12 +93,13 @@
             <table class="table table-striped responsive-utilities jambo_table bulk_action" id="tasks_list">
                 <thead>
                     <tr class="headings">
-                        <th style="width: 20px;"></th>
+                        <th style="width: 20px;"></th> 
+                        <th class="column-title" style="width: 20px;"># </th>  
                         <th class="column-title">Задача </th>  
                         <th class="column-title">Статус </th>
                         <th class="column-title">Оценка, часы </th>
                         <th class="column-title last" style="width: 100px;">Приоритет </th> 
-                        <th class="bulk-actions" colspan="4">
+                        <th class="bulk-actions" colspan="5">
                             <span class="antoo" style="color:#fff; font-weight:500;">Действия с задачами (<span class="action-cnt"></span>):
                             <a href="#" data-mass-close>Закрыть</a>, <a href="#" data-mass-delete>Удалить</a></span>
                         </th>
@@ -110,6 +111,9 @@
                         <td class="a-center">
                             <input type="checkbox" value="<?=$task['ID']?>" class="flat" name="table_records">
                         </td>
+                        <td style="width: 20px;">
+                            <?=$task['ID'];?>
+                        </td>    
                         <td>
                             <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'><?= $task['NAME'] ?></a>
                             <br>

@@ -13,12 +13,7 @@ if(!is_array($id)) {
 
 CModule::IncludeModule('iblock');
 
-switch ($action) {
-    case 'deleteProject': 
-        if(crmEntitiesHelper::isProject($id)) {
-            CIBlockElement::Delete($id); // всё нормально, вся проверка прав на удаление есть в обработчиках
-        } 
-        break;
+switch ($action) { 
     case 'deleteTasks':
         if(!is_array($id)) {
             $id = array($id);

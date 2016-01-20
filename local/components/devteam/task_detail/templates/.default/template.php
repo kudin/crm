@@ -47,7 +47,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                     switch ($arResult['STATUS']) {
                                         case STATUS_LIST_CALC_AGRED:
                                             ?> 
-                                            <p>Задача запущена в работу</p> 
+                                            <p>В очереди на выполнение</p> 
                                             <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Начать</a>
                                             <? 
                                             break;
@@ -125,7 +125,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                     switch ($arResult['STATUS']) { 
                                         case STATUS_LIST_CALC_AGRED:
                                             ?>
-                                            <p>Задача запущена в работу</p>
+                                            <p>В очереди на выполнение</p>
                                             <?
                                             break;
                                         case STATUS_LIST_CALC_REJECT:
@@ -175,6 +175,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     <? }
                     foreach ($arResult['COMMENTS'] as $comment) { ?> 
                         <div class="col-md-12 comment">
+                            <img class="avatar" src="<?=$arResult['USERS'][$comment['CREATED_BY']]['PERSONAL_PHOTO']['src'];?>">
                             <div class="commentcalc">
                                 <a name="comment<?=$comment['ID']?>"></a>
                                 <? 
@@ -246,7 +247,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                             </div>
                             <strong class="name"><?= $arResult['USERS'][$comment['CREATED_BY']]['NAME']; ?> <?= $arResult['USERS'][$comment['CREATED_BY']]['LAST_NAME']; ?></strong>
                             <span class="date"><?= $comment['DATE_CREATE']; ?></span> 
-                            <div><?= $comment['~PREVIEW_TEXT']; ?></div> 
+                            <div class="comment_text"><?= $comment['~PREVIEW_TEXT']; ?></div> 
                         </div> 
                     <? } ?> 
                     <div class="col-md-12">

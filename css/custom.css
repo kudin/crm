@@ -1,5 +1,5 @@
 body.nav-sm .container.body .left_col {
-    width: 70px;
+    width: 80px;
     padding: 0;
     position: fixed;
     height: 100%;
@@ -8,12 +8,12 @@ body.nav-sm .container.body .left_col {
 
 body.nav-sm .container.body .right_col {
     padding: 10px 20px;
-    margin-left: 70px;
+    margin-left: 80px;
     z-index: 2;
 }
 .right_col{min-height: 800px;}
 body.nav-sm .navbar.nav_title {
-    width: 70px;
+    width: 80px;
 }
 
 body.nav-sm .navbar.nav_title a span {
@@ -34,7 +34,7 @@ body.nav-sm .navbar.nav_title a i {
 body.nav-sm .main_container .top_nav {
     padding: 0 !important;
     display: block;
-    margin-left: 70px;
+    margin-left: 80px;
     z-index: 2;
 }
 
@@ -781,7 +781,7 @@ li.current-page a {
     display: block;
     height: 55px;
     margin: 0;
-    padding-left: 10px;
+    padding-left: 17px;
 }
 
 .site_title:hover,
@@ -4462,8 +4462,8 @@ ul.messages li,
 
 ul.messages li img.avatar,
 img.avatar {
-    height: 32px;
-    width: 32px;
+    height: 52px;
+    width: 52px;
     float: left;
     display: inline-block;
     -webkit-border-radius: 2px;
@@ -6455,10 +6455,7 @@ ul.notifications {
 .compose-btn{
     margin-top: 10px;
 }
-
-.big-avatars img.avatar {
-    width: 48px; height: 48px;
-}
+ 
 .big-avatars {
     padding-top: 7px!important; 
     padding-bottom: 3px!important; 
