@@ -9,14 +9,26 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                 <h2><?= $arResult['TASK']['NAME']; ?>
                     <div class="priorb prior<?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?>"><?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?></div>
                 </h2> 
-                <ul class="nav navbar-right panel_toolbox"> 
+                <ul class="nav navbar-right panel_toolbox">
+                    <?if($arResult['CAN_EDIT']) {?>    
+                        <li><a href="#" class="edit_task"><i class="fa fa-edit"></i> Редактировать</a></li> 
+                    <? } ?>
                     <li><a href="<?=TASKS_LIST_URL?><?= $arResult['PROJECT']['ID']; ?>/"><i class="fa fa-arrow-left"></i> К списку задач</a></li> 
                 </ul>
                 <div class="clearfix"></div> 
             </div>
-            <div class="x_content bootom_border">  
-                <div class="row"> 
-                    <div class="col-md-9"> 
+            <div class="x_content bootom_border ">  
+                <div class="row">  
+                    <div class="col-md-12">
+                        <form class="edit_task_form" action="<?= $APPLICATION->GetCurPage(); ?>" method="POST" enctype="multipart/form-data">  
+                            <textarea name="new_task"><?= $arResult['TASK']['~DETAIL_TEXT'] ? $arResult['TASK']['~DETAIL_TEXT'] : $arResult['TASK']['NAME']; ?></textarea> 
+                            <div class="compose-btn pull-right">
+                                <button  class="btn btn-sm btn-danger edit_cancel" value="" >Отмена</button>
+                                <input type="submit" class="btn btn-sm btn-success" value="Изменить" name="edit_complete"> 
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12 task_content" >  
                         <div class="inbox-body">   
                             <div class="view-mail"> 
                                 <?= $arResult['TASK']['~DETAIL_TEXT'] ? $arResult['TASK']['~DETAIL_TEXT'] : $arResult['TASK']['NAME']; ?> 
@@ -167,7 +179,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                 </div>    
             </div>
             <div class="x_content">  
-                <div class="row"> 
+                <div class="row">  
                     <? if (count($arResult['COMMENTS'])) { ?>                    
                         <div class="col-md-12"> 
                             <h4>Комментарии:</h4>
@@ -182,19 +194,17 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 if($arResult['IS_PROGRAMMER']) {
                                     switch ($comment['STATUS']) {
                                         case false: 
-                                            if($arResult['USER_ID'] != $comment['CREATED_BY']) {
-                                                ?>
-                                                <a href="#" class="showPanel" data-id="<?=$comment['ID']?>"><i class="fa fa-clock-o"></i> Оценить</a>
-                                                <div class="commnetcalcpanel" id="<?=$comment['ID']?>">
-                                                    <form method="POST">
-                                                        <input type="text" class="form-control" placeholder="часы" name="timeComment" autocomplete="off"> 
-                                                        <button class="btn btn-success" type="submit"><i class="fa fa-clock-o"></i> Оценить</button>
-                                                        <input type="hidden" value="calccomment" name="action">
-                                                        <input type="hidden" value="<?=$comment['ID']?>" name="commentId">
-                                                    </form>
-                                                </div> 
-                                                <?
-                                                }
+                                            ?>
+                                            <a href="#" class="showPanel" data-id="<?=$comment['ID']?>"><i class="fa fa-clock-o"></i> Оценить</a>
+                                            <div class="commnetcalcpanel" id="<?=$comment['ID']?>">
+                                                <form method="POST">
+                                                    <input type="text" class="form-control" placeholder="часы" name="timeComment" autocomplete="off"> 
+                                                    <button class="btn btn-success" type="submit"><i class="fa fa-clock-o"></i> Оценить</button>
+                                                    <input type="hidden" value="calccomment" name="action">
+                                                    <input type="hidden" value="<?=$comment['ID']?>" name="commentId">
+                                                </form>
+                                            </div> 
+                                            <? 
                                             break; 
                                         case STATUS_COMMENT_CALCED:
                                             ?>
@@ -246,7 +256,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 }?> 
                             </div>
                             <strong class="name"><?= $arResult['USERS'][$comment['CREATED_BY']]['NAME']; ?> <?= $arResult['USERS'][$comment['CREATED_BY']]['LAST_NAME']; ?></strong>
-                            <span class="date"><?= $comment['DATE_CREATE']; ?></span> 
+                    <span class="date"><?= $comment['DATE_CREATE']; ?></span> <?if($comment['CREATED_BY'] == $arResult['USER_ID']) { ?><a href="#"><i class="fa fa-edit"></i></a><? } ?>
                             <div class="comment_text"><?= $comment['~PREVIEW_TEXT']; ?></div> 
                         </div> 
                     <? } ?> 

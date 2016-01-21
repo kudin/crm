@@ -40,7 +40,7 @@ if ($ob = $res->GetNextElement()) {
 
 /* tasks */
 
-$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", 'DETAIL_TEXT', "DATE_CREATE");
+$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", 'DETAIL_TEXT', "DATE_CREATE", "CREATED_BY");
 $arFilter = Array(
     "IBLOCK_ID" => TASKS_IBLOCK_ID,
     'ACTIVE' => 'Y',  
@@ -130,8 +130,9 @@ if(in_array($arResult['USER_ID'], $arResult['PROGRAMERS_IDS'])) {
         $arResult['IS_CUSTOMER'] = true;
     }
 }
-            
-
+if($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY'] || $USER->IsAdmin()) {
+    $arResult['CAN_EDIT'] = true; 
+}
 /* actions */
             
 if($action = $_REQUEST['action']) {
@@ -256,6 +257,16 @@ if($action = $_REQUEST['action']) {
     }
     LocalRedirect($APPLICATION->GetCurDir());
 }  
+
+
+/* edit task */
+
+$new_task = $_REQUEST["new_task"];
+    if($arResult['CAN_EDIT'] && isset($new_task)) {
+    $el = new CIBlockElement;  
+    $res = $el->Update($arParams['ID'], array("DETAIL_TEXT" => $new_task));
+    LocalRedirect($APPLICATION->GetCurDir());
+}
 
 
 $this->IncludeComponentTemplate();

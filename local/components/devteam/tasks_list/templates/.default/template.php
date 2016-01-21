@@ -93,8 +93,7 @@
             <table class="table table-striped responsive-utilities jambo_table bulk_action" id="tasks_list">
                 <thead>
                     <tr class="headings">
-                        <th style="width: 20px;"></th> 
-                        <th class="column-title" style="width: 20px;"># </th>  
+                        <th style="width: 20px;"></th>
                         <th class="column-title">Задача </th>  
                         <th class="column-title">Статус </th>
                         <th class="column-title">Оценка, часы </th>
@@ -110,12 +109,9 @@
                     <tr class="pointer" id="task<?=$task['ID']?>">
                         <td class="a-center">
                             <input type="checkbox" value="<?=$task['ID']?>" class="flat" name="table_records">
-                        </td>
-                        <td style="width: 20px;">
-                            <?=$task['ID'];?>
-                        </td>    
+                        </td>  
                         <td>
-                            <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'><?= $task['NAME'] ?></a>
+                            <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'>#<?=$task['ID'];?> <?= $task['NAME'] ?></a>
                             <br>
                             <small><?= $task['DATE_CREATE'] ?></small>
                         </td>   

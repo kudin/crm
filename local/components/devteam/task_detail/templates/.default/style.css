@@ -59,7 +59,7 @@
     min-height: 45px; 
     width: 200px;
 }
-
+ 
 .commentcalc input[type=text] {
     width: 74px;
     padding-left: 10px;
@@ -87,6 +87,7 @@
 
 .comment_text{
     margin-top: 3px;
+    margin-left: 62px;
 }
 
 .comment p{
@@ -96,4 +97,8 @@
 .comment .avatar {
     margin-right: 10px; 
     margin-bottom: 10px;
+}
+
+.edit_task_form {
+    display: none;
 }
