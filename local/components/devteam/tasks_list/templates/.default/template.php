@@ -47,18 +47,7 @@
                     }
                     ?>
                 </select>
-            </div>  
-            <div class="f1"><p>Сортировать по:</p></div>
-            <div class="f2">
-                <select id="tasks_sort_by" class="form-control">
-                    <? foreach(array('date' => 'Дате создания',
-                                     'priority' => 'Приоритету',
-                                     'calc' => 'Оценке'
-                                     ) as $code => $value) { ?> 
-                        <option <?if($code == $arResult['SORT']) { ?> selected="selected" <? } ?> value="<?=$code;?>"><?=$value;?></option> 
-                    <? } ?> 
-                </select> 
-            </div>  
+            </div>
             <div class="f1"><p>Показать: </p></div>
             <div class="f2"><select id="tasks_show" class="form-control"> 
                 <? foreach(array('all' => 'Все',  
@@ -89,16 +78,45 @@
             <button class="btn btn-default" type="button" id="reset_list_filter">Сбросить фильтр</button>
             <? } ?>
         </div>     
-        <? if (count($arResult['TASKS'])) { ?>
+        <? if (count($arResult['TASKS'])) {
+            
+            function drawHeadTh($name, $sort, $order) {  
+                $names = array('priority' => 'Приоритет',
+                               'calc' => 'Оценка, часы',
+                               'date' => 'Дата создания',
+                               'name' => 'Задача');
+                if(!in_array($name, array_keys($names))) {
+                    return;
+                }  
+                $newOrder = 'desc';
+                if($sort == $name) { 
+                    ?><i class="fa fa-sort-<?=$name == 'name' ? 'alpha' : 'amount';?>-<?=$order;?>"></i><?  
+                    $newOrder = ($order == 'asc' ? 'desc' : 'asc');
+                }
+                ?>
+                    <a href="?sort=<?=$name;?>&order=<?=$newOrder;?>"><?=$names[$name];?></a>
+                <?
+            }
+            
+            ?>
             <table class="table table-striped responsive-utilities jambo_table bulk_action" id="tasks_list">
                 <thead>
                     <tr class="headings">
                         <th style="width: 20px;"></th>
-                        <th class="column-title">Задача </th>  
+                        <th class="column-title">
+                            <?drawHeadTh('name', $arResult['SORT'], $arResult['SORT_ORDER']);?>
+                        </th>  
                         <th class="column-title">Статус </th>
-                        <th class="column-title">Оценка, часы </th>
-                        <th class="column-title last" style="width: 100px;">Приоритет </th> 
-                        <th class="bulk-actions" colspan="5">
+                        <th class="column-title">
+                            <?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?>
+                        </th>
+                        <th class="column-title">
+                            <?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?>
+                        </th>
+                        <th class="column-title last" style="width: 120px;">
+                            <?drawHeadTh('priority', $arResult['SORT'], $arResult['SORT_ORDER']);?>
+                        </th>
+                        <th class="bulk-actions" colspan="6">
                             <span class="antoo" style="color:#fff; font-weight:500;">Действия с задачами (<span class="action-cnt"></span>):
                             <a href="#" data-mass-close>Закрыть</a>, <a href="#" data-mass-delete>Удалить</a></span>
                         </th>
@@ -117,14 +135,17 @@
                         </td>   
                         <td>
                             <p><?=$task['STATUS_TEXT'];?></p>
-                        </td>
+                        </td>   
                         <td><? if($task['PROPERTIES']['CALC']['VALUE']) { ?>
                             <span title="Оценка задачи"><?= $task['PROPERTIES']['CALC']['VALUE'] ?></span>
                             <? if($task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?> 
                                 + <span title="Оценка комментариев"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE'];?></span> = <span title="Суммарная оценка"><?= $task['PROPERTIES']['CALC']['VALUE'] + $task['PROPERTIES']['CALC_COMMENTS']['VALUE']?></span>
                             <? } ?>
                         <? } ?>
-                        </td>
+                        </td> 
+                        <td>
+                            <?= $task['DATE_CREATE'] ?>
+                        </td> 
                         <td class="last">
                             <div class="priorb prior<?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>"><?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?></div>
                         </td> 

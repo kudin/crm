@@ -51,10 +51,21 @@ if(!$arParams["PROJECT"]) {
 
 /* tasks */
 
-$sorts = array('date' => array('ID' => 'DESC'), 
-               'priority' => array('PROPERTY_PRIORITY' => 'DESC'),
-               'calc' => array('PROPERTY_CALC' => 'DESC'));
-$defaultSort = 'date';
+if($sortOrder = $_REQUEST['order']) {
+    if(in_array($sortOrder, array('asc', 'desc'))) {
+        $_SESSION['LIST_SORT_ORDER'] = $sortOrder;
+    }
+}
+if(!$_SESSION['LIST_SORT_ORDER']) {
+    $_SESSION['LIST_SORT_ORDER'] = 'desc';
+}
+$arResult['SORT_ORDER'] = $_SESSION['LIST_SORT_ORDER'];
+
+$sorts = array('date' => 'ID',
+               'name' => 'NAME',
+               'priority' => 'PROPERTY_PRIORITY',
+               'calc' => 'PROPERTY_CALC' );
+$defaultSort = 'date'; 
 if($sort = $_REQUEST['sort']) { 
     if(in_array($sort, array_keys($sorts))) {
         $_SESSION['LIST_SORT'] = $sort;
@@ -95,9 +106,9 @@ $arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y');
 $arFilter = array_merge($arFilter, $filters[$_SESSION['LIST_FILTER']]);  
 $arFilter['PROPERTY_PROJECT'] = $arParams["PROJECT"] ? $arParams["PROJECT"] : $projects; 
 $arFilter = array_merge($USER->GetViewTasksFilter(), $arFilter); 
-$res = CIBlockElement::GetList($sorts[$_SESSION['LIST_SORT']], 
-                               $arFilter, 
-                               false, 
+$res = CIBlockElement::GetList(array($sorts[$_SESSION['LIST_SORT']] => $_SESSION['LIST_SORT_ORDER']), 
+                               $arFilter,
+                               false,
                                array('nPageSize' => $arParams['COUNT']), 
                                array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", "DATE_CREATE"));
 while ($ob = $res->GetNextElement()) {

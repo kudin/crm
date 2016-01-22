@@ -1,4 +1,9 @@
 .modal-body .proj{
-    margin-bottom: 4px; padding-bottom: 4px;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
     font-size: 15px;
+}
+
+#tasks_list .headings a {
+    color: #ecf0f1;
 }
