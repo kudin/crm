@@ -41,4 +41,4 @@ $(function() {
         min_height: 160,
         height: 220
     });
-});
+}); 

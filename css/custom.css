@@ -6508,4 +6508,20 @@ ul.notifications {
 }
 .prior9 {
     background-color: #f21700 !important;
+}  
+
+#priory { 
+    padding-left: 2px; padding-right: 2px;
+    border-left-width: 0;
+    width: 7%;
+    color: white; 
+    font-weight: bold;
+    text-align: center;
+}
+ 
+#priory option { 
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
 }

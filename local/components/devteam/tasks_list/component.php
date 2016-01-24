@@ -102,10 +102,10 @@ if(!$_SESSION['LIST_FILTER']) {
 }
 $arResult['FILTER'] = $_SESSION['LIST_FILTER'];
 
-$arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y'); 
-$arFilter = array_merge($arFilter, $filters[$_SESSION['LIST_FILTER']]);  
+$arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y');  
 $arFilter['PROPERTY_PROJECT'] = $arParams["PROJECT"] ? $arParams["PROJECT"] : $projects; 
-$arFilter = array_merge($USER->GetViewTasksFilter(), $arFilter); 
+$statisticFilter = $arFilter = array_merge($USER->GetViewTasksFilter(), $arFilter);
+$arFilter = array_merge($arFilter, $filters[$_SESSION['LIST_FILTER']]); 
 $res = CIBlockElement::GetList(array($sorts[$_SESSION['LIST_SORT']] => $_SESSION['LIST_SORT_ORDER']), 
                                $arFilter,
                                false,
@@ -122,5 +122,23 @@ while ($ob = $res->GetNextElement()) {
     $arResult['TASKS'][] = $arFields;
 }
 $arResult["NAV_STRING"] = $res->GetPageNavString();
- 
+
+
+/* statistic */
+
+$arResult['ALL_TASK_TIME'] = $arResult['TASK_CNT'] = $arResult['ACCEPTED_TASK_TIME'] = $arResult['ACCEPTED_TASK_CNT'] = 0;
+$statisticFilter['!PROPERTY_STATUS'] = STATUS_LIST_REJECT;
+$res = CIBlockElement::GetList(array(), $statisticFilter, false, array(), array("ID", "PROPERTY_CALC", "PROPERTY_STATUS", "IBLOCK_ID"));
+while ($item = $res->Fetch()) {
+    if($item["PROPERTY_STATUS_ENUM_ID"] == STATUS_LIST_ACCEPT) { 
+        $arResult['ACCEPTED_TASK_TIME'] += $item["PROPERTY_CALC_VALUE"];
+        $arResult['ACCEPTED_TASK_CNT'] += 1; 
+    }
+    $arResult['ALL_TASK_TIME'] += $item["PROPERTY_CALC_VALUE"];
+    $arResult['TASK_CNT'] += 1;
+}
+$arResult['PERCENTS_CNT'] = intval(($arResult['ACCEPTED_TASK_CNT'] / $arResult['TASK_CNT']) * 100);
+$arResult['PERCENTS_TIME'] = intval(($arResult['ACCEPTED_TASK_TIME'] / $arResult['ALL_TASK_TIME']) * 100);
+
+
 $this->IncludeComponentTemplate();

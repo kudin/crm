@@ -156,9 +156,9 @@
             <?=$arResult["NAV_STRING"];?>
             <div class="row">
                 <div class="col-md-6">
-                    <p><b>0%</b> выполнено 0 из 3 заданий</p >
+                    <p><b><?=$arResult['PERCENTS_CNT'];?>%</b> выполнено <?=$arResult['ACCEPTED_TASK_CNT'];?> из <?=$arResult['TASK_CNT'];?> заданий</p >
                     <div class="progress progress_sm">
-                        <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 57%;" aria-valuenow="56"></div>
+                        <div role="progressbar" class="progress-bar bg-green" style="width: <?=$arResult['PERCENTS_CNT'];?>%;"></div>
                     </div>
                     <?if($arResult['FILTER'] != 'end') {?>
                         <a href="?filter=end">Показать выполненные</a>
@@ -169,20 +169,24 @@
                     }?>
                 </div>  
                 <div class="col-md-6">
-                    <p><b>0%</b> 0 из 112 часов</p >
+                    <p><b><?=$arResult['PERCENTS_TIME'];?>%</b> <?=$arResult['ACCEPTED_TASK_TIME'];?> из <?=$arResult['ALL_TASK_TIME'];?> часов</p >
                     <div class="progress progress_sm">
-                        <div data-transitiongoal="57" role="progressbar" class="progress-bar bg-green" style="width: 7%;" aria-valuenow="56"></div>
+                        <div role="progressbar" class="progress-bar bg-green" style="width: <?=$arResult['PERCENTS_TIME'];?>%;"></div>
                     </div> 
-                    <h3>0:00 ч.</h3>
+                    <h3><?=$arResult['ACCEPTED_TASK_TIME'];?> ч.</h3>
                 </div>   
             </div>  
-        <? } else {
-            if(!in_array($arResult['FILTER'], array('all', 'open'))) { ?>
-                <div class="row"><div class="col-md-6" style="padding-top: 10px;">
-                <p>Результат фильтрации не вернул ни одной задачи. <a href="?filter=open">Сбросить фильтр</a></p>
-                </div></div>
-            <? }  
-        }?>
+        <? } else { ?>
+            <div class="row">
+                <? if(!in_array($arResult['FILTER'], array('all', 'open')) && $arResult['TASK_CNT']) { ?>
+                    <div class="col-md-6 bottomtext"><p>Результат фильтрации не вернул ни одной задачи. <a href="?filter=open">Сбросить фильтр</a></p></div>
+                <? } elseif($arResult['FILTER'] == 'open' && $arResult['TASK_CNT']) { ?> 
+                    <div class="col-md-6 bottomtext"><p>Открытых задач нет. <a href="?filter=all">Показать все задачи</a></p></div>
+                <? } else { ?>
+                    <div class="col-md-6 bottomtext"><p>Задач нет. <a href="add/">Создать первую задачу</a></p></div>
+                <? } ?>
+           </div>
+        <? } ?>
     </div> 
 </div>
 </div>
