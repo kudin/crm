@@ -141,19 +141,28 @@ if(!in_array($arResult['STATUS'], array(STATUS_LIST_ACCEPT, STATUS_LIST_COMPLETE
 if($action = $_REQUEST['action']) {
     if($arResult['IS_PROGRAMMER']) {
         switch ($action) { 
+
             /* comments */
+            
             case 'calccomment': 
                 $commentId = intval($_REQUEST["commentId"]);
                 $time = formatTime($_REQUEST["timeComment"]);
+                if($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY']) {
+                    $commentStatus = STATUS_COMMENT_CONFIRM;
+                    $recalcTime = true;
+                } else {
+                    $commentStatus = STATUS_COMMENT_CALCED;
+                }
                 if(in_array($commentId, array_keys($arComments)) && 
                         $time && 
                         ($arComments[$commentId] == false)) {  
                     CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('CALC' => $time, 
-                                                                                              'STATUS' => STATUS_COMMENT_CALCED)); 
+                                                                                              'STATUS' => $commentStatus)); 
                 }
                 break; 
 
             /* tasks */
+                
             case 'closeTask':
                 if(($arResult['STATUS'] == STATUS_LIST_COMPLETE) && ($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS'])) {
                     $newStatus = STATUS_LIST_ACCEPT;
@@ -193,7 +202,8 @@ if($action = $_REQUEST['action']) {
             case 'docalc':  
                 if($arResult['STATUS'] == false || $arResult['STATUS'] == STATUS_LIST_CALC_REJECT) { 
                     if($time = formatTime($_REQUEST['time'])) { 
-                        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC' => $time));
+                        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC' => $time)); 
+                        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC_COMMENTS' => $time));
                         $newStatus = STATUS_LIST_AGR_CALCED;
                     } else {
                         ToolTip::Add('Введено некорректное значение оценки');
@@ -205,7 +215,9 @@ if($action = $_REQUEST['action']) {
         }
     } elseif($arResult['IS_CUSTOMER']) {
         switch ($action) {
+            
             /* comments */
+            
             case 'commentStatus':
                 $commentId = intval($_REQUEST["commentId"]);
                 if($_REQUEST['reject']) {
@@ -217,20 +229,11 @@ if($action = $_REQUEST['action']) {
                     in_array($commentId, array_keys($arComments)) && 
                     $arComments[$commentId] == STATUS_COMMENT_CALCED) {
                         CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('STATUS' => $commentStatus));
-                        if($commentStatus == STATUS_COMMENT_CONFIRM) {
-                            $summ = 0;
-                            foreach ($arResult['COMMENTS'] as $comment) {
-                                if(($comment['STATUS'] != STATUS_COMMENT_CONFIRM) && ($comment['ID'] != $commentId)) {
-                                    continue;
-                                }
-                                $summ += $comment['PROPERTY_CALC_VALUE']; 
-                            }
-                            CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC_COMMENTS' => $summ));
-                        }
                 }
                 break;
             
             /* tasks */
+                
             case 'calcAgr':
                 if($arResult['STATUS'] == STATUS_LIST_AGR_CALCED) {
                     $newStatus = STATUS_LIST_CALC_AGRED;
@@ -255,9 +258,23 @@ if($action = $_REQUEST['action']) {
                 break;
         } 
     }
+    
     if($newStatus) {
         CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus));
     }
+    
+    if ($recalcTime) {
+        $summ = 0;
+        foreach ($arResult['COMMENTS'] as $comment) { 
+            if ($comment['STATUS'] != STATUS_COMMENT_CONFIRM) {
+                continue;
+            }
+            $summ += $comment['PROPERTY_CALC_VALUE']; 
+        } 
+        $summ += $arResult['TASK']['PROPS']['CALC']['VALUE'] + $time; 
+        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC_COMMENTS' => $summ)); 
+    }
+    
     LocalRedirect($APPLICATION->GetCurDir());
 }  
 

@@ -196,11 +196,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     <p>Постановщик: <?= $arResult['USERS'][$arResult['PROJECT']['CREATED_BY']]['NAME']; ?> <?= $arResult['USERS'][$arResult['PROJECT']['CREATED_BY']]['LAST_NAME']; ?></p> 
                     <p>Исполнитель: <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['NAME']; ?> <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['LAST_NAME']; ?></p> 
                     <p class="status">Статус: <span class="label label-success"><?=$arResult['STATUS_TEXT'];?></span></p> 
-                    <? 
+                    <?
                     if($arResult['TASK']['PROPS']['CALC']['VALUE']) { ?>
                         <p>Оценка: <?=$arResult['TASK']['PROPS']['CALC']['VALUE'];?> ч.</p>
                         <?  
-                    } 
+                    }
                     foreach ($arResult['COMMENTS'] as $comment) {
                         if($comment['STATUS'] != STATUS_COMMENT_CONFIRM) {
                             continue;
@@ -208,9 +208,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                         ?>
                         <p>+<?=$comment['PROPERTY_CALC_VALUE'];?> ч. <a href="#comment<?=$comment['ID']?>">Комментарий #<?=$comment['ID']?></a></p>
                         <?
-                    }
-                    if($arResult['TASK']['PROPS']['CALC_COMMENTS']['VALUE']) { ?>
-                        <p>Всего: <?=$arResult['TASK']['PROPS']['CALC_COMMENTS']['VALUE'] + $arResult['TASK']['PROPS']['CALC']['VALUE'];?> ч. </p>
+                    } 
+                    if($arResult['TASK']['PROPS']['CALC_COMMENTS']['VALUE'] &&
+                            $arResult['TASK']['PROPS']['CALC']['VALUE'] != $arResult['TASK']['PROPS']['CALC_COMMENTS']['VALUE']) { ?>
+                        <p>Всего: <?=$arResult['TASK']['PROPS']['CALC_COMMENTS']['VALUE'];?> ч. </p>
                     <? } ?>
                 </div>  
             </div>

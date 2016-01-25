@@ -136,10 +136,12 @@
                         <td>
                             <p><?=$task['STATUS_TEXT'];?></p>
                         </td>   
-                        <td><? if($task['PROPERTIES']['CALC']['VALUE']) { ?>
+                        <td><?
+                        if($task['PROPERTIES']['CALC']['VALUE']) { ?>
                             <span title="Оценка задачи"><?= $task['PROPERTIES']['CALC']['VALUE'] ?></span>
-                            <? if($task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?> 
-                                + <span title="Оценка комментариев"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE'];?></span> = <span title="Суммарная оценка"><?= $task['PROPERTIES']['CALC']['VALUE'] + $task['PROPERTIES']['CALC_COMMENTS']['VALUE']?></span>
+                            <? if($task['PROPERTIES']['CALC_COMMENTS']['VALUE'] && 
+                                    $task['PROPERTIES']['CALC']['VALUE'] != $task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?> 
+                                + <span title="Оценка комментариев"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE'] - $task['PROPERTIES']['CALC']['VALUE'];?></span> = <span title="Суммарная оценка"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE']?></span>
                             <? } ?>
                         <? } ?>
                         </td> 
