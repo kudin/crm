@@ -8,9 +8,3 @@ foreach ($arResult['TASK']['PROPS']['FILES']['VALUE'] as &$file) {
     $file['TRUNCATED_NAME'] = TruncateText($file['ORIGINAL_NAME'], 20);
     $file["FILE_SIZE"] = formatBytes($file["FILE_SIZE"]);
 }
-
-//$arResult['TASK']['~DETAIL_TEXT'] = selectLinks($arResult['TASK']['~DETAIL_TEXT']);
-
-foreach ($arResult['COMMENTS'] as &$comment) {
-    $comment['~PREVIEW_TEXT'] = selectLinks($comment['~PREVIEW_TEXT']);
-}

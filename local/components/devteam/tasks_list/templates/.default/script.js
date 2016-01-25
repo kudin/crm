@@ -35,8 +35,11 @@ $(function() {
                                     type: 'error' });
                     } else {
                         $('#tasks_list tbody input[type=checkbox]:checked').each(function() { 
+                            id = $(this).val();
                             $('#task' + id).animate({opacity: 0.0 }, 600, function () { $(this).remove(); });
                         });
+                        check_state = 'uncheck_all';
+                        countChecked();
                     }
                 }
             });

@@ -130,9 +130,12 @@ if(in_array($arResult['USER_ID'], $arResult['PROGRAMERS_IDS'])) {
         $arResult['IS_CUSTOMER'] = true;
     }
 }
-if($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY'] || $USER->IsAdmin()) {
+if(!in_array($arResult['STATUS'], array(STATUS_LIST_ACCEPT, STATUS_LIST_COMPLETE))
+       && ($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY'] || $USER->IsAdmin())) {
     $arResult['CAN_EDIT'] = true; 
 }
+
+
 /* actions */
             
 if($action = $_REQUEST['action']) {
