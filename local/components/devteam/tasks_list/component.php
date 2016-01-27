@@ -68,8 +68,9 @@ $sorts = array('date' => 'ID',
                'name' => 'NAME',
                'priority' => 'PROPERTY_PRIORITY',
                'calc' => 'PROPERTY_CALC_COMMENTS',
-               'project' => 'PROPERTY_PROJECT');
-$defaultSort = 'date'; 
+               'project' => 'PROPERTY_PROJECT',
+               'comments' => 'PROPERTY_COMMNETS_CNT');
+$defaultSort = 'date';
 if($sort = $_REQUEST['sort']) { 
     if(in_array($sort, array_keys($sorts))) {
         $_SESSION['LIST_SORT'] = $sort;

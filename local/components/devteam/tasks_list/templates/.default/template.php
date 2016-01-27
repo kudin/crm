@@ -89,7 +89,8 @@
                                'calc' => 'Оценка, часы',
                                'date' => 'Дата создания',
                                'name' => 'Задача',
-                               'project' => 'Проект');
+                               'project' => 'Проект', 
+                               'comments' => 'Комментарии');
                 if(!in_array($name, array_keys($names))) {
                     return;
                 }  
@@ -107,14 +108,15 @@
                     <tr class="headings">
                         <th style="width: 20px;"></th>
                         <? if($GLOBALS['CRM_CONFIG']->getBool('show_project_logo_in_list') && !$arParams["PROJECT"]) { 
-                            $colspan = 7; ?>
+                            $colspan = 8; ?>
                         <th class="column-title"><?drawHeadTh('project', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
                         <? } else {
-                            $colspan = 6;
+                            $colspan = 7;
                         } ?>
                         <th class="column-title"><?drawHeadTh('name', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
                         <th class="column-title">Статус </th>
-                        <th class="column-title"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
+                        <th class="column-title"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
+                        <th class="column-title"><?drawHeadTh('comments', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
                         <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
                         <th class="column-title last" style="width: 120px;"><?drawHeadTh('priority', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
                         <th class="bulk-actions" colspan="<?=$colspan;?>">
@@ -147,15 +149,18 @@
                                     $task['PROPERTIES']['CALC']['VALUE'] != $task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?> 
                                 + <span title="Оценка комментариев"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE'] - $task['PROPERTIES']['CALC']['VALUE'];?></span> = <span title="Суммарная оценка"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE']?></span>
                             <? } ?>
-                        <? } ?>
+                        <? } elseif($task['STATUS']) {
+                            ?>
+                            <span title="Оценка задачи">по факту</span>
+                            <?
+                        } ?>
                         </td> 
-                        <td>
-                            <?= $task['DATE_CREATE'] ?>
-                        </td> 
+                        <td><?= $task['PROPERTIES']['COMMNETS_CNT']['VALUE'] ? $task['PROPERTIES']['COMMNETS_CNT']['VALUE'] : '';?></td>
+                        <td><?= $task['DATE_CREATE']; ?></td> 
                         <td class="last">
                             <div class="priorb prior<?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>"><?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?></div>
-                        </td> 
-                    </tr> 
+                        </td>
+                    </tr>
                 <? } ?>
                 </tbody> 
             </table> 
@@ -166,13 +171,11 @@
                     <div class="progress progress_sm">
                         <div role="progressbar" class="progress-bar bg-green" style="width: <?=$arResult['PERCENTS_CNT'];?>%;"></div>
                     </div>
-                    <?if($arResult['FILTER'] != 'end') {?>
+                    <?if($arResult['FILTER'] != 'end') { ?>
                         <a href="?filter=end">Показать выполненные</a>
-                    <? } else {
-                        ?>
+                    <? } else { ?>
                         <a href="?filter=open">Показать открытые</a>
-                        <?
-                    }?>
+                    <? } ?>
                 </div>  
                 <div class="col-md-6">
                     <p><b><?=$arResult['PERCENTS_TIME'];?>%</b> <?=$arResult['ACCEPTED_TASK_TIME'];?> из <?=$arResult['ALL_TASK_TIME'];?> часов</p >
@@ -184,16 +187,18 @@
             </div>  
         <? } else { ?>
             <div class="row">
-                <? if(!in_array($arResult['FILTER'], array('all', 'open')) && $arResult['TASK_CNT']) { ?>
-                    <div class="col-md-6 bottomtext"><p>Результат фильтрации не вернул ни одной задачи. <a href="?filter=open">Сбросить фильтр</a></p></div>
-                <? } elseif($arResult['FILTER'] == 'open' && $arResult['TASK_CNT']) { ?> 
-                    <div class="col-md-6 bottomtext"><p>Открытых задач нет. <a href="?filter=all">Показать все задачи</a></p></div>
-                <? } else { ?>
-                    <div class="col-md-6 bottomtext"><p>Задач нет. <a href="add/">Создать первую задачу</a></p></div>
-                <? } ?>
+                <div class="col-md-6 bottomtext"><p>
+                    <? if(!in_array($arResult['FILTER'], array('all', 'open')) && $arResult['TASK_CNT']) { ?>
+                        Результат фильтрации не вернул ни одной задачи. <a href="?filter=open">Сбросить фильтр</a>
+                    <? } elseif($arResult['FILTER'] == 'open' && $arResult['TASK_CNT']) { ?> 
+                        Открытых задач нет. <a href="?filter=all">Показать все задачи</a> 
+                    <? } else { ?>
+                        Задач нет. <a href="add/">Создать первую задачу</a> 
+                    <? } ?>
+                </p></div>
            </div>
         <? } ?>
-    </div> 
+    </div>
 </div>
 </div>
 </div>

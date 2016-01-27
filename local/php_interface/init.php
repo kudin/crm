@@ -297,6 +297,17 @@ class CrmConfig {
 
 class crmEntitiesHelper {
 
+    public static function recalcCommentsCnt($taskId) {
+        CModule::IncludeModule('iblock');
+        $num = 0;
+        $commentres = CIBlockElement::GetList(array(), array("PROPERTY_TASK" => $taskId, "IBLOCK_ID" => COMMENTS_IBLOCK_ID, "ACTIVE" => "Y"), false, false, array('ID', 'IBLOCK_ID')); 
+        while ($comment = $commentres->GetNext()) {
+            $num++;
+        }
+        CIBlockElement::SetPropertyValuesEx($taskId, TASKS_IBLOCK_ID, array('COMMNETS_CNT' => $num)); 
+        return $num;
+    }
+
     public static function recalcTaskTime($taskId) {
         CModule::IncludeModule('iblock');
         $summ = 0;

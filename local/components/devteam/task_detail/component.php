@@ -85,6 +85,7 @@ if ($_REQUEST['add_comment']) {
                   "NAME" => TruncateText(strip_tags($_REQUEST['comment']), 100),
                   "ACTIVE" => "Y",
                   "PREVIEW_TEXT" => TruncateText($_REQUEST['comment'], COMMENT_MAX_LENGHT)))) {
+            crmEntitiesHelper::recalcCommentsCnt($arParams['ID']);
             LocalRedirect(TASKS_LIST_URL . $arParams['PROJECT'] . '/' . $arParams['ID'] . '/');
         } else {
             ToolTip::AddError($el->LAST_ERROR);
@@ -197,13 +198,19 @@ if($action = $_REQUEST['action']) {
                 } 
                 break;
             case 'docalc':  
-                if($arResult['STATUS'] == false || $arResult['STATUS'] == STATUS_LIST_CALC_REJECT) { 
+                if($arResult['STATUS'] == false || $arResult['STATUS'] == STATUS_LIST_CALC_REJECT) {
                     if($time = formatTime($_REQUEST['time'])) {
                         CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC' => $time, 'CALC_COMMENTS' => $time));
                         $newStatus = STATUS_LIST_AGR_CALCED;
                     } else {
                         ToolTip::AddError('Введено некорректное значение оценки');
                     }
+                }
+                break;
+            case 'fact': 
+                if($arResult['STATUS'] == false || $arResult['STATUS'] == STATUS_LIST_CALC_REJECT) {
+                    CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC' => 0, 'CALC_COMMENTS' => 0));
+                    $newStatus = STATUS_LIST_AGR_CALCED;
                 }
                 break;
             default:

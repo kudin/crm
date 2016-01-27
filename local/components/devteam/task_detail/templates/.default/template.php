@@ -2,7 +2,7 @@
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
     die();
 ?>
-<div class="row">
+<div class="row taskrow">
     <div class="col-md-9">
         <div class="x_panel">
             <div class="x_title">
@@ -30,9 +30,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     </div>
                     <div class="col-md-12 task_content" >  
                         <div class="inbox-body">   
-                            <div class="view-mail"> 
-                                <?= $arResult['TASK']['~DETAIL_TEXT'] ? $arResult['TASK']['~DETAIL_TEXT'] : $arResult['TASK']['NAME']; ?> 
-                            </div>
+                            <div class="view-mail"><?= $arResult['TASK']['~DETAIL_TEXT'] ? $arResult['TASK']['~DETAIL_TEXT'] : $arResult['TASK']['NAME']; ?></div>
                             <?
                             if ($arResult['TASK']['PROPS']['FILES']['VALUE']) { ?>
                             <div class="attachment"> 
@@ -69,7 +67,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                             <form method="POST">
                                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group calcblock">
                                                     <input type="text" name="time" placeholder="Оценка в часах" class="form-control "> 
-                                                    <button type="submit" class="btn btn-success" name="docalc"><i class="fa fa-clock-o"></i> Оценить</button>
+                                                    <div class="btn-group">
+                                                        <button type="submit" class="btn btn-success" name="docalc"><i class="fa fa-clock-o"></i> Оценить</button>
+                                                        <button aria-expanded="false" data-toggle="dropdown" class="btn btn-success dropdown-toggle" type="button">
+                                                            <span class="caret"></span> 
+                                                        </button>
+                                                        <ul role="menu" class="dropdown-menu"><li><a href="?action=fact">Оценить по факту</a></li></ul>
+                                                    </div> 
                                                     <input type="hidden" name="action" value="docalc">
                                                 </div>  
                                             </form>
@@ -83,18 +87,24 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                         case false:
                                             ?>
                                             <form method="POST">
-                                                <div class="col-md-6 col-sm-6 col-xs-12 form-group calcblock">
-                                                    <input type="text" autocomplete="off" name="time" placeholder="Оценка в часах" class="form-control "> 
-                                                    <button type="submit" class="btn btn-success" name="docalc"><i class="fa fa-clock-o"></i> Оценить</button>
+                                                <div class="col-md-6 col-sm-6 col-xs-12 form-group calcblock"> 
+                                                    <input type="text" autocomplete="off" name="time" placeholder="Оценка в часах" class="form-control ">
+                                                    <div class="btn-group">
+                                                        <button type="submit" class="btn btn-success" name="docalc"><i class="fa fa-clock-o"></i> Оценить</button>
+                                                        <button aria-expanded="false" data-toggle="dropdown" class="btn btn-success dropdown-toggle" type="button">
+                                                            <span class="caret"></span> 
+                                                        </button>
+                                                        <ul role="menu" class="dropdown-menu"><li><a href="?action=fact">Оценить по факту</a></li></ul>
+                                                    </div>
                                                     <input type="hidden" name="action" value="docalc">
                                                 </div>
                                             </form>
                                             <?
                                             break;
                                         case STATUS_LIST_AGR_CALCED:
-                                            ?> 
-                                            <p>Задача оценена в <?=$arResult['TASK']['PROPS']['CALC']['VALUE']?> ч.</p>
-                                            <?
+                                            if($arResult['TASK']['PROPS']['CALC']['VALUE']) { ?>
+                                                <p>Задача оценена в <?=$arResult['TASK']['PROPS']['CALC']['VALUE']?> ч.</p>
+                                            <? } else { ?><p>Задача оценена по факту</p><? } 
                                             if($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS']) { ?>
                                                 <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Начать</a>
                                             <?
@@ -116,6 +126,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                         case STATUS_LIST_PAUSE: 
                                             ?>
                                             <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Продолжить</a>
+                                            <a class="btn btn-app" href="?action=complete"><i class="fa fa-flag"></i> Завершить</a>
                                             <?
                                             break;
                                         case STATUS_LIST_COMPLETE:
@@ -159,8 +170,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                             <? 
                                             break; 
                                         case STATUS_LIST_AGR_CALCED:
-                                            ?> 
-                                            <p>Оценка: <?=$arResult['TASK']['PROPS']['CALC']['VALUE']?> ч.</p>
+                                            if($arResult['TASK']['PROPS']['CALC']['VALUE']) { ?>
+                                                <p>Задача оценена в <?=$arResult['TASK']['PROPS']['CALC']['VALUE']?> ч.</p>
+                                            <? } else { ?><p>Задача оценена по факту</p><? } ?>
                                             <a href="?action=calcAgr" class="btn btn-success" type="button">Принять оценку</a>
                                             <a href="?action=calcReject" class="btn btn-danger" type="button">Отклонить оценку</a> 
                                             <?    
@@ -179,42 +191,16 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                 </div>    
             </div>
             <?php
-            include 'comments.php';
+            include 'template_comments.php';
             ?>
         </div>  
     </div> 
-    <div class="col-md-3">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2>Информация</h2>  
-                <div class="clearfix"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">  
-                    <p>Проект: <a href="<?=TASKS_LIST_URL?><?= $arResult['PROJECT']['ID']; ?>/"><?=$arResult['PROJECT']['NAME']?></a></p>
-                    <p class="date">Создана: <?= $arResult['TASK']['DATE_CREATE'] ?></p>
-                    <p>Постановщик: <?= $arResult['USERS'][$arResult['PROJECT']['CREATED_BY']]['NAME']; ?> <?= $arResult['USERS'][$arResult['PROJECT']['CREATED_BY']]['LAST_NAME']; ?></p> 
-                    <p>Исполнитель: <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['NAME']; ?> <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['LAST_NAME']; ?></p> 
-                    <p class="status">Статус: <span class="label label-success"><?=$arResult['STATUS_TEXT'];?></span></p> 
-                    <?
-                    if($arResult['TASK']['PROPS']['CALC']['VALUE']) { ?>
-                        <p>Оценка: <?=$arResult['TASK']['PROPS']['CALC']['VALUE'];?> ч.</p>
-                        <?  
-                    }
-                    foreach ($arResult['COMMENTS'] as $comment) {
-                        if($comment['STATUS'] != STATUS_COMMENT_CONFIRM) {
-                            continue;
-                        }
-                        ?>
-                        <p>+<?=$comment['PROPERTY_CALC_VALUE'];?> ч. <a href="#comment<?=$comment['ID']?>">Комментарий #<?=$comment['ID']?></a></p>
-                        <?
-                    } 
-                    if($arResult['TASK']['PROPS']['CALC_COMMENTS']['VALUE'] &&
-                            $arResult['TASK']['PROPS']['CALC']['VALUE'] != $arResult['TASK']['PROPS']['CALC_COMMENTS']['VALUE']) { ?>
-                        <p>Всего: <?=$arResult['TASK']['PROPS']['CALC_COMMENTS']['VALUE'];?> ч. </p>
-                    <? } ?>
-                </div>  
-            </div>
-        </div>
+    <div class="col-md-3"> 
+        <div class="row">
+            <?php
+            include 'template_inform.php';
+            include 'template_traking.php';
+            ?> 
+        </div> 
     </div>
 </div>

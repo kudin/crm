@@ -30,7 +30,14 @@
 }
 
 .taskcontrol .btn{
-     margin: 0px 10px 10px 0;
+     margin: 0px 0px 10px 0;
+}
+.taskcontrol .dropdown-menu{
+    top: 40px; 
+}
+
+.taskcontrol .dropdown-menu::after{
+    right: 28%;
 }
 
 .status .label {
@@ -104,3 +111,22 @@
 .edit_task_form {
     display: none;
 } 
+
+.taskrow > .col-md-9 {
+    width: 72%;
+}
+.taskrow > .col-md-3 {
+    width: 28%;
+}
+
+.trackingadd .col-md-3 {
+    padding-right: 0;
+}
+
+.trackingadd .col-md-12 {
+    text-align: right;
+}
+.trackingadd .col-md-12 .btn-success{
+     margin-right: 0px;
+     margin-top: 10px;  
+}
