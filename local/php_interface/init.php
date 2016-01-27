@@ -228,6 +228,30 @@ class RightsHandler {
 
 class crmEntitiesHelper {
 
+    public static function recalcTaskTime($taskId) {
+        CModule::IncludeModule('iblock');
+        $summ = 0;
+        $arSelect = Array("ID", "IBLOCK_ID", "PROPERTY_CALC");
+        $arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y', 'ID' => $taskId); 
+        $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect); 
+        if ($item = $res->GetNext()) {
+            $summ += $item['PROPERTY_CALC_VALUE']; 
+            $commentres = CIBlockElement::GetList(array(), 
+                                                  array("PROPERTY_TASK" => $taskId, 
+                                                        "IBLOCK_ID" => COMMENTS_IBLOCK_ID, 
+                                                        "ACTIVE" => "Y",
+                                                        "PROPERTY_STATUS" => STATUS_COMMENT_CONFIRM), 
+                                                  false, 
+                                                  false, 
+                                                  array('ID', 'IBLOCK_ID', 'PROPERTY_STATUS', 'PROPERTY_CALC')); 
+            while ($comment = $commentres->GetNext()) {
+                $summ += $comment['PROPERTY_CALC_VALUE']; 
+            }
+            CIBlockElement::SetPropertyValuesEx($taskId, TASKS_IBLOCK_ID, array('CALC_COMMENTS' => $summ)); 
+        }
+        return $summ; 
+    }
+    
     public static function GetProjectIdByTask($taskId) {
         CModule::IncludeModule('iblock');  
         $res = CIBlockElement::GetList(array(),

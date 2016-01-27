@@ -5,7 +5,11 @@
 <div class="x_panel">
     <div class="x_title">
         <? if($arParams["PROJECT"]) { ?>
-            <h2><?= $arResult['PROJECTS'][$arParams["PROJECT"]]['NAME']; ?></h2>
+            <h2<?
+            if($icon = $arResult['PROJECTS'][$arParams["PROJECT"]]["DETAIL_PICTURE"]["src"]) {
+                ?> class="vith-icon" style="background-image: url('<?=$icon;?>');" <?
+            }
+            ?>><?= $arResult['PROJECTS'][$arParams["PROJECT"]]['NAME']; ?></h2>
             <ul class="nav navbar-right panel_toolbox"> 
                 <li><a href="add/"><i class="fa fa-plus"></i> Поставить новую задачу</a></li> 
             </ul> 
@@ -80,11 +84,12 @@
         </div>     
         <? if (count($arResult['TASKS'])) {
             
-            function drawHeadTh($name, $sort, $order) {  
+            function drawHeadTh($name, $sort, $order) {
                 $names = array('priority' => 'Приоритет',
                                'calc' => 'Оценка, часы',
                                'date' => 'Дата создания',
-                               'name' => 'Задача');
+                               'name' => 'Задача',
+                               'project' => 'Проект');
                 if(!in_array($name, array_keys($names))) {
                     return;
                 }  
@@ -93,9 +98,7 @@
                     ?><i class="fa fa-sort-<?=$name == 'name' ? 'alpha' : 'amount';?>-<?=$order;?>"></i><?  
                     $newOrder = ($order == 'asc' ? 'desc' : 'asc');
                 }
-                ?>
-                    <a href="?sort=<?=$name;?>&order=<?=$newOrder;?>"><?=$names[$name];?></a>
-                <?
+                ?><a href="?sort=<?=$name;?>&order=<?=$newOrder;?>"><?=$names[$name];?></a><?
             }
             
             ?>
@@ -103,20 +106,18 @@
                 <thead>
                     <tr class="headings">
                         <th style="width: 20px;"></th>
-                        <th class="column-title">
-                            <?drawHeadTh('name', $arResult['SORT'], $arResult['SORT_ORDER']);?>
-                        </th>  
+                        <? if(!$arParams["PROJECT"]) { 
+                            $colspan = 7; ?>
+                        <th class="column-title"><?drawHeadTh('project', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
+                        <? } else {
+                            $colspan = 6;
+                        } ?>
+                        <th class="column-title"><?drawHeadTh('name', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
                         <th class="column-title">Статус </th>
-                        <th class="column-title">
-                            <?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?>
-                        </th>
-                        <th class="column-title">
-                            <?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?>
-                        </th>
-                        <th class="column-title last" style="width: 120px;">
-                            <?drawHeadTh('priority', $arResult['SORT'], $arResult['SORT_ORDER']);?>
-                        </th>
-                        <th class="bulk-actions" colspan="6">
+                        <th class="column-title"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
+                        <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
+                        <th class="column-title last" style="width: 120px;"><?drawHeadTh('priority', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
+                        <th class="bulk-actions" colspan="<?=$colspan;?>">
                             <span class="antoo" style="color:#fff; font-weight:500;">Действия с задачами (<span class="action-cnt"></span>):
                             <a href="#" data-mass-close>Закрыть</a>, <a href="#" data-mass-delete>Удалить</a></span>
                         </th>
@@ -127,7 +128,10 @@
                     <tr class="pointer" id="task<?=$task['ID']?>">
                         <td class="a-center">
                             <input type="checkbox" value="<?=$task['ID']?>" class="flat" name="table_records">
-                        </td>  
+                        </td>
+                        <? if(!$arParams["PROJECT"]) { ?>
+                            <td class="project-icon"><a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'><img src="<?=$arResult['PROJECTS'][$task['PROPERTIES']['PROJECT']['VALUE']]["DETAIL_PICTURE"]["src"];?>"></a></td>  
+                        <? } ?>
                         <td>
                             <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'>#<?=$task['ID'];?> <?= $task['NAME'] ?></a>
                             <br>

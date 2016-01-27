@@ -10,4 +10,16 @@
 
 .bottomtext {
     padding-top: 10px;
+} 
+
+#tasks_list .project-icon {
+    padding: 4px 1px 4px 20px;
+    max-width: 85px; 
+}
+
+h2.vith-icon{ 
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-size: 19px auto;
+    padding-left: 25px;
 }

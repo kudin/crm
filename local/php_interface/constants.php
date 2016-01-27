@@ -8,7 +8,7 @@ define('DEFAULT_PRIORITY', 5);
 define('MAX_PRIORITY', 9);
 define('MAX_TASK_TIME', 480);
 
-define('COMMENT_MAX_LENGHT', 40000);
+define('COMMENT_MAX_LENGHT', 50000);
 
 define('STATUS_COMMENT_CALCED', 11);
 define('STATUS_COMMENT_REJECT', 12);

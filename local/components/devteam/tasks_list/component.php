@@ -20,7 +20,7 @@ CModule::IncludeModule('iblock');
 
 /* projects */
 
-$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*");
+$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", "DETAIL_PICTURE");
 $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
 $userFilter = $USER->GetViewProjectsFilter();
 $arFilter = array_merge($userFilter, $arFilter);
@@ -36,6 +36,9 @@ while ($ob = $res->GetNextElement()) {
     } 
     if(!$arParams["PROJECT"] && $res->NavRecordCount == 1) {
         LocalRedirect(TASKS_LIST_URL . $arFields['ID'] . '/');
+    } 
+    if($arFields['DETAIL_PICTURE']) {
+        $arFields['DETAIL_PICTURE'] = CFile::ResizeImageGet($arFields['DETAIL_PICTURE'], array('width'=>80, 'height'=>50), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);                
     }
     $arResult['PROJECTS'][$arFields['ID']] = $arFields;
 }
@@ -64,7 +67,8 @@ $arResult['SORT_ORDER'] = $_SESSION['LIST_SORT_ORDER'];
 $sorts = array('date' => 'ID',
                'name' => 'NAME',
                'priority' => 'PROPERTY_PRIORITY',
-               'calc' => 'PROPERTY_CALC' );
+               'calc' => 'PROPERTY_CALC_COMMENTS',
+               'project' => 'PROPERTY_PROJECT');
 $defaultSort = 'date'; 
 if($sort = $_REQUEST['sort']) { 
     if(in_array($sort, array_keys($sorts))) {
@@ -89,8 +93,7 @@ $filters = array('all' => array(),
                  'reject' => array('PROPERTY_STATUS' => STATUS_LIST_REJECT),
                  'short' => array('<=PROPERTY_CALC' => 4), 
                  'norm' => array('>PROPERTY_CALC' => 4, '<PROPERTY_CALC' => 16),
-                 'long' => array('>=PROPERTY_CALC' => 16),
-    );
+                 'long' => array('>=PROPERTY_CALC' => 16));
 $defaultFilter = 'open';
 if($filter = $_REQUEST['filter']) { 
     if(in_array($filter, array_keys($filters))) {

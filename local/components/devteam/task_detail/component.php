@@ -14,7 +14,7 @@ if(!$USER->hasRightsToViewTask($arParams["ID"])) {
  
 if(!$arParams['DATE_FORMAT']) {
     $arParams['DATE_FORMAT'] = 'j F в H:i';
-} 
+}
 
 CModule::IncludeModule('iblock');
 
@@ -73,9 +73,8 @@ if ($ob = $res->GetNextElement()) {
 if ($_REQUEST['add_comment']) {
     $_REQUEST['commment'] = strip_tags($_REQUEST['commment']); 
     if (!$_REQUEST['comment']) {
-        $arResult['ERROR'] = 'Не введён комментарий';
-    } 
-    if (!$arResult['ERROR']) {
+        ToolTip::AddError('Не введён комментарий'); 
+    } else {
         $el = new CIBlockElement;
         if ($PRODUCT_ID = $el->Add(
             array("MODIFIED_BY" => $USER->GetID(),
@@ -83,12 +82,12 @@ if ($_REQUEST['add_comment']) {
                   "IBLOCK_ID" => COMMENTS_IBLOCK_ID,
                   "DATE_ACTIVE_FROM" => ConvertTimeStamp(false, 'FULL'),
                   "PROPERTY_VALUES" => array('TASK' => $arParams['ID']),
-                  "NAME" => TruncateText(strip_tags($_REQUEST['comment']), 180),
+                  "NAME" => TruncateText(strip_tags($_REQUEST['comment']), 100),
                   "ACTIVE" => "Y",
                   "PREVIEW_TEXT" => TruncateText($_REQUEST['comment'], COMMENT_MAX_LENGHT)))) {
             LocalRedirect(TASKS_LIST_URL . $arParams['PROJECT'] . '/' . $arParams['ID'] . '/');
         } else {
-            $arResult['ERROR'] = $el->LAST_ERROR;
+            ToolTip::AddError($el->LAST_ERROR);
         }
     }
 }
@@ -156,8 +155,7 @@ if($action = $_REQUEST['action']) {
                 if(in_array($commentId, array_keys($arComments)) && 
                         $time && 
                         ($arComments[$commentId] == false)) {  
-                    CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('CALC' => $time, 
-                                                                                              'STATUS' => $commentStatus)); 
+                    CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('CALC' => $time, 'STATUS' => $commentStatus)); 
                 }
                 break; 
 
@@ -175,13 +173,12 @@ if($action = $_REQUEST['action']) {
                 if(in_array($arResult['STATUS'], array(STATUS_LIST_CALC_AGRED, STATUS_LIST_PAUSE, STATUS_LIST_COMPLETE, STATUS_LIST_REJECT))) {
                     $newStatus = STATUS_LIST_WORK;
                 }
-                if($newStatus == STATUS_LIST_WORK) { 
+                if($newStatus == STATUS_LIST_WORK) {
                     $res = CIBlockElement::GetList(array(), 
                                                    array("IBLOCK_ID" => TASKS_IBLOCK_ID,
                                                          'ACTIVE' => 'Y',  
                                                          '!ID' => $arParams['ID'],
                                                          "PROPERTY_PROGRAMMER" => CUser::GetID(),
-                                                         "PROPERTY_PROJECT" => $arParams['PROJECT'],
                                                          "PROPERTY_STATUS" => STATUS_LIST_WORK),
                                                    false, false, array('ID')); 
                     while($taskArr = $res->Fetch()) {
@@ -201,9 +198,8 @@ if($action = $_REQUEST['action']) {
                 break;
             case 'docalc':  
                 if($arResult['STATUS'] == false || $arResult['STATUS'] == STATUS_LIST_CALC_REJECT) { 
-                    if($time = formatTime($_REQUEST['time'])) { 
-                        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC' => $time)); 
-                        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC_COMMENTS' => $time));
+                    if($time = formatTime($_REQUEST['time'])) {
+                        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC' => $time, 'CALC_COMMENTS' => $time));
                         $newStatus = STATUS_LIST_AGR_CALCED;
                     } else {
                         ToolTip::Add('Введено некорректное значение оценки');
@@ -260,21 +256,13 @@ if($action = $_REQUEST['action']) {
     }
     
     if($newStatus) {
-        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus));
+        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus)); 
+    } 
+
+    if($commentStatus == STATUS_COMMENT_CONFIRM || $newStatus == STATUS_LIST_AGR_CALCED) {
+        crmEntitiesHelper::recalcTaskTime($arParams['ID']);
     }
-    
-    if ($recalcTime) {
-        $summ = 0;
-        foreach ($arResult['COMMENTS'] as $comment) { 
-            if ($comment['STATUS'] != STATUS_COMMENT_CONFIRM) {
-                continue;
-            }
-            $summ += $comment['PROPERTY_CALC_VALUE']; 
-        } 
-        $summ += $arResult['TASK']['PROPS']['CALC']['VALUE'] + $time; 
-        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC_COMMENTS' => $summ)); 
-    }
-    
+
     LocalRedirect($APPLICATION->GetCurDir());
 }  
 
