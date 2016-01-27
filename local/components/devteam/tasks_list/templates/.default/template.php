@@ -6,7 +6,7 @@
     <div class="x_title">
         <? if($arParams["PROJECT"]) { ?>
             <h2<?
-            if($icon = $arResult['PROJECTS'][$arParams["PROJECT"]]["DETAIL_PICTURE"]["src"]) {
+            if($GLOBALS['CRM_CONFIG']->getBool('show_project_logo_in_titile') && $icon = $arResult['PROJECTS'][$arParams["PROJECT"]]["DETAIL_PICTURE"]["src"]) {
                 ?> class="vith-icon" style="background-image: url('<?=$icon;?>');" <?
             }
             ?>><?= $arResult['PROJECTS'][$arParams["PROJECT"]]['NAME']; ?></h2>
@@ -95,7 +95,7 @@
                 }  
                 $newOrder = 'desc';
                 if($sort == $name) { 
-                    ?><i class="fa fa-sort-<?=$name == 'name' ? 'alpha' : 'amount';?>-<?=$order;?>"></i><?  
+                    ?><i class="fa fa-sort-<?=$name == 'name' ? 'alpha' : 'amount';?>-<?=$order;?>"></i> <?  
                     $newOrder = ($order == 'asc' ? 'desc' : 'asc');
                 }
                 ?><a href="?sort=<?=$name;?>&order=<?=$newOrder;?>"><?=$names[$name];?></a><?
@@ -106,7 +106,7 @@
                 <thead>
                     <tr class="headings">
                         <th style="width: 20px;"></th>
-                        <? if(!$arParams["PROJECT"]) { 
+                        <? if($GLOBALS['CRM_CONFIG']->getBool('show_project_logo_in_list') && !$arParams["PROJECT"]) { 
                             $colspan = 7; ?>
                         <th class="column-title"><?drawHeadTh('project', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
                         <? } else {
@@ -129,7 +129,7 @@
                         <td class="a-center">
                             <input type="checkbox" value="<?=$task['ID']?>" class="flat" name="table_records">
                         </td>
-                        <? if(!$arParams["PROJECT"]) { ?>
+                        <? if($GLOBALS['CRM_CONFIG']->getBool('show_project_logo_in_list') && !$arParams["PROJECT"]) { ?>
                             <td class="project-icon"><a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'><img src="<?=$arResult['PROJECTS'][$task['PROPERTIES']['PROJECT']['VALUE']]["DETAIL_PICTURE"]["src"];?>"></a></td>  
                         <? } ?>
                         <td>

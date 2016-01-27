@@ -2,14 +2,19 @@
 include 'constants.php';
 include 'tools/functions.php';
 
-CModule::AddAutoloadClasses("", array("ToolTip" => "/local/php_interface/tools/classes/tooltip.php", 
-                                      "BitrixHelper" => "/local/php_interface/tools/classes/bitrixhelper.php",
-                                      "StatusHelper" => "/local/php_interface/tools/classes/statushelper.php"));
 
+foreach(array('ToolTip', 
+              'Views', 
+              'BitrixHelper', 
+              'StatusHelper') as $className) {
+    $arrClasses[$className] = "/local/php_interface/tools/classes/" . strtolower($className). ".php";
+}
+CModule::AddAutoloadClasses("", $arrClasses);
+            
 class CrmUser extends CUser {
 
     /* projects handlers */
-    
+
     public function hasRigthsToAddProject() {
          return parent::IsAdmin();
     }
@@ -225,6 +230,70 @@ class RightsHandler {
     }
 }
 
+class CrmConfig { 
+
+    private static $defaultConf = array(
+        'show_project_logo_in_list' => true,
+        'show_project_logo_in_titile' => true
+    );
+
+    function __construct() {
+        session_start();
+        if(!$_SESSION['CRM_CONFIG']) {
+            $this->read();
+        }
+    }
+
+    public function get($name) {
+        return $_SESSION['CRM_CONFIG'][$name];
+    } 
+
+    public function getBool($name) { 
+        return $this->get($name) == 'Y';
+    }
+
+    public function set($name, $value) {
+        if(in_array($name, array_keys(self::$defaultConf))) { 
+            $_SESSION['CRM_CONFIG'][$name] = $value;
+        }
+        $this->save();
+    }
+
+    public function getAll() { 
+        return $_SESSION['CRM_CONFIG'];
+    }
+
+    public function setAll($arrConf) {
+        $keys = array_keys(self::$defaultConf);
+        foreach($keys as $key) {
+            if($arrConf[$key]) {
+                $_SESSION['CRM_CONFIG'][$key] = $arrConf[$key];
+            } else {
+                $_SESSION['CRM_CONFIG'][$key] = false;
+            } 
+        } 
+        $this->save();
+    }
+
+    private function read() { 
+        $rsUser = CUser::GetList(($by="id"), ($order="desc"), array('ID' => CUser::GetID()), array('SELECT' => array('UF_CONFIG'), 'FIELDS' => array('ID')));  
+        if($data = $rsUser->Fetch()) {
+            $arr = unserialize($data['~UF_CONFIG']);
+        }
+        if(!$arr) {
+            $_SESSION['CRM_CONFIG'] = self::$defaultConf;
+            $this->save();
+        } else {
+            $_SESSION['CRM_CONFIG'] = $arr;
+        }
+    }
+
+    public function save() {
+        $user = new CUser; 
+        $user->Update(CUser::GetID(), array('UF_CONFIG' => serialize($_SESSION['CRM_CONFIG'])));
+    }
+
+}
 
 class crmEntitiesHelper {
 
@@ -291,3 +360,6 @@ function ChangeCUserToCrmUser() {
     global $USER;
     $USER = new CrmUser();
 }
+
+
+$GLOBALS['CRM_CONFIG'] = new CrmConfig();

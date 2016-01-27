@@ -30,7 +30,7 @@
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
         <?$APPLICATION->ShowHead(); ?>
-    </head> 
+    </head>
     <body class="nav-sm"> 
         <div class="container body">
             <div class="main_container"> 

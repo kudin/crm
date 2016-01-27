@@ -146,10 +146,10 @@ if($action = $_REQUEST['action']) {
             case 'calccomment': 
                 $commentId = intval($_REQUEST["commentId"]);
                 $time = formatTime($_REQUEST["timeComment"]);
-                if($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY']) {
+                if($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY']) { 
                     $commentStatus = STATUS_COMMENT_CONFIRM;
-                    $recalcTime = true;
-                } else {
+                    $recalcTime = true; 
+                } else { 
                     $commentStatus = STATUS_COMMENT_CALCED;
                 }
                 if(in_array($commentId, array_keys($arComments)) && 
@@ -158,7 +158,7 @@ if($action = $_REQUEST['action']) {
                     CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('CALC' => $time, 'STATUS' => $commentStatus)); 
                 }
                 break; 
-
+            
             /* tasks */
                 
             case 'closeTask':
@@ -202,7 +202,7 @@ if($action = $_REQUEST['action']) {
                         CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC' => $time, 'CALC_COMMENTS' => $time));
                         $newStatus = STATUS_LIST_AGR_CALCED;
                     } else {
-                        ToolTip::Add('Введено некорректное значение оценки');
+                        ToolTip::AddError('Введено некорректное значение оценки');
                     }
                 }
                 break;
