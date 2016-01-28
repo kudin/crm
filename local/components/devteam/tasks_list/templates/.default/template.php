@@ -192,9 +192,13 @@
                         Результат фильтрации не вернул ни одной задачи. <a href="?filter=open">Сбросить фильтр</a>
                     <? } elseif($arResult['FILTER'] == 'open' && $arResult['TASK_CNT']) { ?> 
                         Открытых задач нет. <a href="?filter=all">Показать все задачи</a> 
-                    <? } else { ?>
+                    <? } elseif($arResult['PROJECT']) { ?>
                         Задач нет. <a href="add/">Создать первую задачу</a> 
-                    <? } ?>
+                    <? } else {
+                        ?>
+                        Задач нет. <a href="#" data-target=".bs-example-modal-sm" data-toggle="modal">Создать первую задачу</a>
+                        <?
+                    } ?>
                 </p></div>
            </div>
         <? } ?>

@@ -1,7 +1,7 @@
 <?php
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
     die();
-?>
+?> 
 <div class="row taskrow">
     <div class="col-md-9">
         <div class="x_panel">
@@ -37,9 +37,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 <ul><? 
                                     foreach ($arResult['TASK']['PROPS']['FILES']['VALUE'] as $file) { ?>
                                         <li>
-                                            <a class="atch-thumb" href="<?= $file['SRC'] ?>">
-                                                <img title="<?=$file['ORIGINAL_NAME']?>" src="<?= $file['icon'] ?>">
-                                            </a>
+                                            <a class="atch-thumb" href="<?= $file['SRC'] ?>"><img title="<?=$file['ORIGINAL_NAME']?>" src="<?= $file['icon'] ?>"></a>
                                             <br>
                                             <div class="file-name">
                                                 <a title="<?=$file['ORIGINAL_NAME']?>" href="<?= $file['SRC'] ?>"><?= $file["TRUNCATED_NAME"]; ?></a>

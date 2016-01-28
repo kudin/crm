@@ -1,6 +1,6 @@
 <?php
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
-    die();  
+    die();
 ?> 
 <div class="row"> 
     <div class="col-md-6 col-xs-12">
