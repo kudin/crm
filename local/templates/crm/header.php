@@ -59,71 +59,27 @@
                                 )
                         );?> </div> 
                     </div>
-                </div> 
-                <!-- top navigation -->
+                </div>  
                 <div class="top_nav"> 
                     <div class="nav_menu">
                         <nav class="" role="navigation">  
                          <ul class="nav navbar-nav navbar-right">
-                         <? $APPLICATION->IncludeComponent('devteam:current_user', 'nav'); ?> 
-                                <li role="presentation" class="dropdown">
-                                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa fa-envelope-o"></i>
-                                        <span class="badge bg-green">6</span>
-                                    </a>
-                                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list animated fadeInDown" role="menu">
-                                        <li>
-                                            <a>
-                                                <span class="image">
-                                                    <img src="/images/user.png" alt="Profile Image" />
-                                                </span>
-                                                <span>
-                                                    <span>John Smith</span>
-                                                    <span class="time">3 mins ago</span>
-                                                </span>
-                                                <span class="message">
-                                                    Film festivals used to be do-or-die moments for movie makers. They were where... 
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a>
-                                                <span class="image">
-                                                    <img src="/images/user.png" alt="Profile Image" />
-                                                </span>
-                                                <span>
-                                                    <span>John Smith</span>
-                                                    <span class="time">3 mins ago</span>
-                                                </span>
-                                                <span class="message">
-                                                    Film festivals used to be do-or-die moments for movie makers. They were where... 
-                                                </span>
-                                            </a>
-                                        </li> 
-                                        <li>
-                                            <div class="text-center">
-                                                <a> 
-                                                    <i class="fa fa-angle-right"></i>
-                                                </a>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-
-                            </ul> 
-                                 <div class="nav toggle">
-                                <div class="input-group" style="left: 20px; margin-bottom: 0px;">
-                                    <input type="text" class="form-control" placeholder="Задача, комментарий, проект...">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">Найти</button>
-                                    </span>
-                                </div>
-                              </div> 
+                         <?php 
+                         $APPLICATION->IncludeComponent('devteam:current_user', 'nav'); 
+                         $APPLICATION->IncludeComponent('devteam:events');
+                         ?> 
+                         </ul> 
+                         <div class="nav toggle">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Задача, комментарий, проект...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">Найти</button>
+                                </span>
+                            </div>
+                          </div> 
                         </nav>
                     </div> 
-                </div>
-                <!-- /top navigation --> 
-                <!-- page content -->
+                </div> 
                 <div class="right_col" role="main"> 
-                    <div class=""> 
+                    <div> 
                         <div class="clearfix"></div>

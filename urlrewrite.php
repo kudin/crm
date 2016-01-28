@@ -1,6 +1,5 @@
 <?
-$arUrlRewrite = array(
-    
+$arUrlRewrite = array( 
 	array(
 		"CONDITION" => "#^/tasks/([^/]+)/add/$#",
 		"RULE" => "ID=\$1",
@@ -24,5 +23,11 @@ $arUrlRewrite = array(
 		"RULE" => "ID=\$1",
 		"ID" => "",
 		"PATH" => "/projects/detail.php",
+	),
+	array(
+		"CONDITION" => "#^/users/([^/]+)/.*?\$#",
+		"RULE" => "ID=\$1",
+		"ID" => "",
+		"PATH" => "/users/detail.php",
 	),
 );

@@ -13,8 +13,7 @@
             <ul class="nav navbar-right panel_toolbox"> 
                 <li><a href="add/"><i class="fa fa-plus"></i> Поставить новую задачу</a></li> 
             </ul> 
-        <? } else {
-            ?>
+        <? } else { ?>
             <h2>Задачи по всем проектам</h2>
             <ul class="nav navbar-right panel_toolbox"> 
                 <li><a href="#" data-target=".bs-example-modal-sm" data-toggle="modal"><i class="fa fa-plus"></i> Поставить новую задачу</a></li> 
@@ -108,7 +107,7 @@
                         <th style="width: 20px;"></th>
                         <? if($GLOBALS['CRM_CONFIG']->getBool('show_project_logo_in_list') && !$arParams["PROJECT"]) { 
                             $colspan = 7; ?>
-                        <th class="column-title" style="width: 90px;"><?drawHeadTh('project', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
+                        <th class="column-title column-project-ico"><?drawHeadTh('project', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
                         <? } else {
                             $colspan = 6;
                         } ?>
@@ -135,7 +134,10 @@
                         <td>
                             <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'>#<?=$task['ID'];?> <?= $task['NAME'] ?></a>
                             <br>
-                            <small><?= $task['DATE_CREATE'] ?></small>
+                            <div class="small"><?= $task['DATE_CREATE'];?></div>
+                            <? if($arResult['USER_ID'] != $task['PROPERTIES']['PROGRAMMER']['VALUE']) { ?>
+                               <div class="small">Исполнитель: <?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?> </div> 
+                            <? } ?>
                         </td>   
                         <td>
                             <p><?=$task['STATUS_TEXT'];?></p>

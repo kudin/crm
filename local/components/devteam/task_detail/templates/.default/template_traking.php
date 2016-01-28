@@ -5,7 +5,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
 <div class="col-md-12">
     <div class="x_panel">
         <div class="x_title">
-            <h2>Зартаты</h2>  
+            <h2>Затраты</h2>  
             <div class="clearfix"></div>
         </div>
         <div class="row">

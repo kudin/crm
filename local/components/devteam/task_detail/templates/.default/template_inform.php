@@ -12,8 +12,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
             <div class="col-md-12">  
                 <p>Проект: <a href="<?= TASKS_LIST_URL ?><?= $arResult['PROJECT']['ID']; ?>/"><?= $arResult['PROJECT']['NAME'] ?></a></p>
                 <p class="date">Создана: <?= $arResult['TASK']['DATE_CREATE'] ?></p>
-                <p>Постановщик: <?= $arResult['USERS'][$arResult['TASK']['CREATED_BY']]['NAME']; ?> <?= $arResult['USERS'][$arResult['TASK']['CREATED_BY']]['LAST_NAME']; ?></p> 
-                <p>Исполнитель: <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['NAME']; ?> <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['LAST_NAME']; ?></p> 
+                <p>Постановщик: <?= $arResult['USERS'][$arResult['TASK']['CREATED_BY']]['FULL_NAME']; ?></p> 
+                <p>Исполнитель: <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['FULL_NAME']; ?></p> 
                 <p class="status">Статус: <span class="label label-success"><?= $arResult['STATUS_TEXT']; ?></span></p> 
                 <? if ($arResult['TASK']['PROPS']['CALC']['VALUE']) { ?>
                     <p>Оценка: <?= $arResult['TASK']['PROPS']['CALC']['VALUE']; ?> ч.</p>

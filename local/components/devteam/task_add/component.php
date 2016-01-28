@@ -29,9 +29,10 @@ if($_REQUEST['addtask']) {
         $priority = DEFAULT_PRIORITY;
     }
 
+    $programmer = $_REQUEST['PROGRAMMER'];
     $arProjectArray = Array(
         "PROPERTY_VALUES" => array( 
-            'PROGRAMMER' => $_REQUEST['PROGRAMMER'],
+            'PROGRAMMER' => $programmer,
             'PROJECT' => $arParams["PROJECT"],
             'FILES' => $arFiles,
             'PRIORITY' => $priority,
@@ -42,13 +43,15 @@ if($_REQUEST['addtask']) {
         "NAME" => $name,
         "DETAIL_TEXT" => $description,
     ); 
-    if ($el->Add($arProjectArray)) {
-        ToolTip::Add('Задача "' . $name . '" добавлена');
+    if ($newTaskId = $el->Add($arProjectArray)) {
+        ToolTip::Add('Задача "' . $name . '" добавлена'); 
+        $logger = new CrmLog('task');
+        $logger->add($programmer, $newTaskId, 'add', $description);
         LocalRedirect(TASKS_LIST_URL . $arParams["PROJECT"] . '/'); 
     } else {
         $arResult['ERROR'] = $el->LAST_ERROR;
     } 
-}
+} 
 
  
 $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*");

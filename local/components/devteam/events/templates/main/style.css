@@ -1,0 +1,7 @@
+.big-imgs .image img{
+    min-width: 68px;
+}
+
+.msg_list a:hover {
+    text-decoration: none;
+}

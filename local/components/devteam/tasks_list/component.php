@@ -28,7 +28,7 @@ $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 $res->NavStart();
 while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields(); 
-    if($arParams["PROJECT"] == $arFields['ID']) {
+    if($arParams["PROJECT"] && ($arParams["PROJECT"] == $arFields['ID'])) {
         $arProps = $ob->GetProperties();
         $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
         $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE']; 
@@ -114,18 +114,26 @@ $res = CIBlockElement::GetList(array($sorts[$_SESSION['LIST_SORT']] => $_SESSION
                                $arFilter,
                                false,
                                array('nPageSize' => $arParams['COUNT']), 
-                               array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", "DATE_CREATE"));
+                               array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", "DATE_CREATE", "CREATED_BY"));
 while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();
     if (strlen($arFields["DATE_CREATE"]) > 0) {
         $arFields["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($arFields["DATE_CREATE"], CSite::GetDateFormat()));
     }
-    $arFields['PROPERTIES'] = $ob->GetProperties();
+    $arFields['PROPERTIES'] = $ob->GetProperties(); 
+    if(!$arParams["PROJECT"]) {
+        $usersArr[] = $arFields['PROPERTIES']['PROGRAMMER']['VALUE'];
+        $usersArr[] = $arFields['CREATED_BY'];
+    }
     $arFields['STATUS'] = $arFields['PROPERTIES']['STATUS']["VALUE_ENUM_ID"];
     $arFields['STATUS_TEXT'] = StatusHelper::getStr($arFields['STATUS']);
     $arResult['TASKS'][] = $arFields;
 }
 $arResult["NAV_STRING"] = $res->GetPageNavString();
+if(count($usersArr)) {
+    $arResult['USERS'] = BitrixHelper::getUsersArrByIds($usersArr);
+} 
+$arResult['USER_ID'] = CUser::GetID();
 
 
 /* statistic */

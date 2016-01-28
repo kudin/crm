@@ -68,6 +68,22 @@ if ($ob = $res->GetNextElement()) {
 }
 
 
+/* rights */
+
+$arResult['USER_ID'] = $USER->GetID();
+if(in_array($arResult['USER_ID'], $arResult['PROGRAMERS_IDS'])) {
+    $arResult['IS_PROGRAMMER'] = true;
+} else {
+    if(in_array($arResult['USER_ID'], $arResult['CUSTOMERS_IDS'])) {
+        $arResult['IS_CUSTOMER'] = true;
+    }
+}
+if(!in_array($arResult['STATUS'], array(STATUS_LIST_ACCEPT, STATUS_LIST_COMPLETE))
+       && ($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY'] || $USER->IsAdmin())) {
+    $arResult['CAN_EDIT'] = true; 
+}
+
+
 /* comments */
 
 if ($_REQUEST['add_comment']) {
@@ -85,7 +101,14 @@ if ($_REQUEST['add_comment']) {
                   "NAME" => TruncateText(strip_tags($_REQUEST['comment']), 100),
                   "ACTIVE" => "Y",
                   "PREVIEW_TEXT" => TruncateText($_REQUEST['comment'], COMMENT_MAX_LENGHT)))) {
-            crmEntitiesHelper::recalcCommentsCnt($arParams['ID']);
+            crmEntitiesHelper::recalcCommentsCnt($arParams['ID']); 
+            $logger = new CrmLog('task');
+            if($arResult['IS_PROGRAMMER']) {
+                $userId = $arResult['TASK']['CREATED_BY'];
+            } else {
+                $userId = $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE'];
+            }
+            $logger->add($userId, $arParams['ID'], 'comment', $_REQUEST['comment']); 
             LocalRedirect(TASKS_LIST_URL . $arParams['PROJECT'] . '/' . $arParams['ID'] . '/#comment' . $commentId);
         } else {
             ToolTip::AddError($el->LAST_ERROR);
@@ -93,7 +116,7 @@ if ($_REQUEST['add_comment']) {
     }
 }
 
-$created_by = array();
+$created_by = array($arResult['TASK']['CREATED_BY']);
 $res = CIBlockElement::GetList(
     array("DATE_ACTIVE_FROM" => "ASC"), 
     array("PROPERTY_TASK" => $arParams['ID'], 
@@ -118,22 +141,6 @@ while ($ar_fields = $res->GetNext()) {
 
 $usersIds = array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS'], $created_by);
 $arResult['USERS'] = BitrixHelper::getUsersArrByIds($usersIds);  
-
-
-/* rights */
-
-$arResult['USER_ID'] = $USER->GetID();
-if(in_array($arResult['USER_ID'], $arResult['PROGRAMERS_IDS'])) {
-    $arResult['IS_PROGRAMMER'] = true;
-} else {
-    if(in_array($arResult['USER_ID'], $arResult['CUSTOMERS_IDS'])) {
-        $arResult['IS_CUSTOMER'] = true;
-    }
-}
-if(!in_array($arResult['STATUS'], array(STATUS_LIST_ACCEPT, STATUS_LIST_COMPLETE))
-       && ($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY'] || $USER->IsAdmin())) {
-    $arResult['CAN_EDIT'] = true; 
-}
 
 
 /* actions */

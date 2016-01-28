@@ -40,7 +40,7 @@ if(!$arResult['PROGRAMERS_IDS']) {
                                 foreach ($arResult['PROGRAMERS_IDS'] as $userId) {
                                     $user = $arResult['USERS'][$userId];
                                     ?>
-                                    <option value='<?= $user['ID']; ?>'><?= $user['NAME']; ?> <?= $user['LAST_NAME']; ?>  (<?= $user['LOGIN']; ?>) </option>
+                                    <option value='<?= $user['ID']; ?>'><?= $user['FULL_NAME']; ?>  (<?= $user['LOGIN']; ?>) </option>
                                     <? }
                                 ?>
                             </select>   

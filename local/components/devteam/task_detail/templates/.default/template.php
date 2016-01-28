@@ -13,7 +13,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     <?if($arResult['CAN_EDIT']) {?>    
                         <li><a href="#" class="edit_task"><i class="fa fa-edit"></i> Редактировать</a></li> 
                     <? } ?>
-                    <li><a href="<?=TASKS_LIST_URL?><?= $arResult['PROJECT']['ID']; ?>/"><i class="fa fa-arrow-left"></i> К списку задач</a></li> 
+                    <li><a href="<?=TASKS_LIST_URL;?><?= $arResult['PROJECT']['ID']; ?>/"><i class="fa fa-arrow-left"></i> К списку задач</a></li> 
                 </ul>
                 <div class="clearfix"></div> 
             </div>
@@ -23,7 +23,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                         <form class="edit_task_form" action="<?= $APPLICATION->GetCurPage(); ?>" method="POST" enctype="multipart/form-data">  
                             <textarea name="new_task"><?= $arResult['TASK']['~DETAIL_TEXT'] ? $arResult['TASK']['~DETAIL_TEXT'] : $arResult['TASK']['NAME']; ?></textarea> 
                             <div class="compose-btn pull-right">
-                                <button  class="btn btn-sm btn-danger edit_cancel" value="" >Отмена</button>
+                                <button class="btn btn-sm btn-danger edit_cancel">Отмена</button>
                                 <input type="submit" class="btn btn-sm btn-success" value="Изменить" name="edit_complete"> 
                             </div>
                         </form>
@@ -152,12 +152,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                         case STATUS_LIST_CALC_REJECT:
                                             ?>
                                             <p>Оценка отклонена</p>
-                                            <p>Ожидает оценки от <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['NAME']; ?> <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['LAST_NAME']; ?></p>  
+                                            <p>Ожидает новой оценки от <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['FULL_NAME']; ?></p>  
                                             <?
                                             break;
                                         case false:
                                             ?>
-                                            <p>Ожидает оценки от <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['NAME']; ?> <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['LAST_NAME']; ?></p>  
+                                            <p>Ожидает оценки от <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['FULL_NAME']; ?></p>  
                                             <?
                                             break;
                                         case STATUS_LIST_COMPLETE:
@@ -178,7 +178,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                         default:
                                             ?>
                                             <p><?=StatusHelper::getStr($arResult['STATUS'])?></p>
-                                            <?
+                                            <? 
                                             break;
                                     } 
                                 } 

@@ -7,7 +7,7 @@ while($arUser = $rsUsers->Fetch()) {
     $arResult['USERS'][] = $arUser;
 }
  
-if ($_REQUEST['add']) { 
+if ($_REQUEST['add']) {
     CModule::IncludeModule('iblock');
     $el = new CIBlockElement;
     $name = trim($_REQUEST['name']);

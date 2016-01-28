@@ -18,6 +18,7 @@ class BitrixHelper {
             if($arUser['PERSONAL_PHOTO']) {
                 $arUser['PERSONAL_PHOTO'] = CFile::ResizeImageGet($arUser['PERSONAL_PHOTO'], array('width'=>100, 'height'=>100), BX_RESIZE_IMAGE_PROPORTIONAL, true);       
             } 
+            $arUser['FULL_NAME'] = $arUser['NAME'] . ' ' . $arUser['LAST_NAME'];
             $users[$arUser['ID']] = $arUser;
         }
         return $users;

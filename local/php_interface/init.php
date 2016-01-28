@@ -1,16 +1,12 @@
 <?php
 include 'constants.php';
-include 'tools/functions.php';
+include 'tools/functions.php'; 
 
-
-foreach(array('ToolTip', 
-              'Views', 
-              'BitrixHelper', 
-              'StatusHelper') as $className) {
+foreach(array('ToolTip', 'CrmLog', 'BitrixHelper', 'StatusHelper') as $className) {
     $arrClasses[$className] = "/local/php_interface/tools/classes/" . strtolower($className). ".php";
 }
 CModule::AddAutoloadClasses("", $arrClasses);
-            
+
 class CrmUser extends CUser {
 
     /* projects handlers */
@@ -26,14 +22,13 @@ class CrmUser extends CUser {
     public function hasRigthsToEditProject() {
          return parent::IsAdmin();
     }
-
-
+            
     /* tasks handlers */
     
     public function hasRigthsToAddTask($arFields) {
         if(parent::IsAdmin()) {
             return true;
-        }  
+        }
         return $this->iAmACustomerInProject($arFields["PROPERTY_VALUES"]["PROJECT"]) || 
                $this->iAmAProgrammerInProject($arFields["PROPERTY_VALUES"]["PROJECT"]);
     }
@@ -54,8 +49,7 @@ class CrmUser extends CUser {
         } 
         
     }
-
-    
+            
     /* view rights projects */
     
     public function hasRightsToViewProject($projectId) {
@@ -94,8 +88,7 @@ class CrmUser extends CUser {
         }
         return false;
     }
-
-    
+            
     /* view rights tasks */
     
     public function hasRightsToViewTask($taskId) {
@@ -142,10 +135,6 @@ class CrmUser extends CUser {
         return false;
     }
 
-
-    /* Вернёт фильтр, который вытянет проекты, которые можно видеть пользователю
-       то что возвращает этот метод нужно мержить к фильтру везде где тянем проект или проекты
-    */
     public function GetViewProjectsFilter() {
         if(parent::IsAdmin()) {  
             return array(); 
@@ -175,8 +164,7 @@ class CrmUser extends CUser {
     }
 
 }
-
-
+            
 foreach(array('Add', 'Delete', 'Update') as $action) {
     AddEventHandler("iblock", "OnBeforeIBlockElement" . $action, array("RightsHandler", "OnBeforeIBlockElement" . $action));
 }
@@ -225,6 +213,9 @@ class RightsHandler {
             if(!$USER->$method($arFields)) {
                 $APPLICATION->throwException("У вас недостаточно прав на эту операцию");
                 return false;
+            } elseif($action == 'Delete') {
+                $log = new CrmLog();
+                $log->delete($arFields['ID']);
             }
         }
     }
@@ -333,6 +324,10 @@ class crmEntitiesHelper {
         return $summ; 
     }
     
+    public static function GetTaskUrl($taskId) {
+        return TASKS_LIST_URL . self::GetProjectIdByTask($taskId) . '/' . $taskId . '/';
+    }
+
     public static function GetProjectIdByTask($taskId) {
         CModule::IncludeModule('iblock');  
         $res = CIBlockElement::GetList(array(),
@@ -364,14 +359,12 @@ class crmEntitiesHelper {
     }
 
 }
-
-
+            
 AddEventHandler("main", "OnBeforeProlog", "ChangeCUserToCrmUser");
 
 function ChangeCUserToCrmUser() {
     global $USER;
     $USER = new CrmUser();
 }
-
-
+            
 $GLOBALS['CRM_CONFIG'] = new CrmConfig();

@@ -14,7 +14,7 @@
 
 #tasks_list .project-icon {
     padding: 4px 1px 4px 9px;
-    max-width: 80px; 
+    width: 86px; 
 }
 
 h2.vith-icon{ 
@@ -23,3 +23,9 @@ h2.vith-icon{
     background-size: 19px auto;
     padding-left: 25px;
 } 
+
+#tasks_list .small{
+    float: left;
+    margin-right: 10px;
+}
+ 
