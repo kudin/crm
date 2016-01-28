@@ -28,7 +28,7 @@ while ($ob = $res->GetNextElement()) {
         }
     }
     if($arFields['DETAIL_PICTURE']) {
-        $arFields['DETAIL_PICTURE'] = CFile::ResizeImageGet($arFields['DETAIL_PICTURE'], array('width'=>200, 'height'=>60), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);                
+        $arFields['DETAIL_PICTURE'] = CFile::ResizeImageGet($arFields['DETAIL_PICTURE'], array('width'=>45, 'height'=>45), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);                
     }
     $arResult['ITEMS'][] = $arFields;
 }

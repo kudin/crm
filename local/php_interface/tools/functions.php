@@ -1,5 +1,12 @@
 <?php
 
+function fixUrl($url) {
+    if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+        $url = "http://" . $url;
+    } 
+    return $url;
+}
+
 function formatBytes($bytes, $precision = 2) {
     $units = array('B', 'KB', 'MB', 'GB', 'TB');
     $bytes = max($bytes, 0);

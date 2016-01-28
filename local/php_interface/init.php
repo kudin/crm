@@ -234,7 +234,8 @@ class CrmConfig {
 
     private static $defaultConf = array(
         'show_project_logo_in_list' => true,
-        'show_project_logo_in_titile' => true
+        'show_project_logo_in_titile' => true,
+        'project_icon_click_href' => 'task',
     );
 
     function __construct() {

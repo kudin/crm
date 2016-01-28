@@ -27,6 +27,22 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-6 col-sm-6 col-xs-12 control-label">Клик по иконке проекта в списке задач ведёт на
+                        </label> 
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                       <div class="radio">
+                           <label>
+                               <input type="radio" name="project_icon_click_href" value="task" <?=$arResult['CONF']['project_icon_click_href']== 'task' ? ' checked ' : '';?>> Задачу
+                           </label>
+                       </div>
+                       <div class="radio">
+                           <label>
+                               <input type="radio" name="project_icon_click_href" value="list" <?=$arResult['CONF']['project_icon_click_href']== 'list' ? ' checked ' : '';?>> Список задач проекта
+                           </label>
+                       </div>
+                        </div>
+                    </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-6"> 

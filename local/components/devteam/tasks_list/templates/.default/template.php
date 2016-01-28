@@ -87,8 +87,7 @@
             function drawHeadTh($name, $sort, $order) {
                 $names = array('priority' => 'Приоритет',
                                'calc' => 'Оценка, часы',
-                               'date' => 'Дата создания',
-                               'name' => 'Задача',
+                               'date' => 'Задача',
                                'project' => 'Проект', 
                                'comments' => 'Комментарии');
                 if(!in_array($name, array_keys($names))) {
@@ -96,7 +95,7 @@
                 }  
                 $newOrder = 'desc';
                 if($sort == $name) { 
-                    ?><i class="fa fa-sort-<?=$name == 'name' ? 'alpha' : 'amount';?>-<?=$order;?>"></i> <?  
+                    ?><i class="fa fa-sort-amount-<?=$order;?>"></i> <?  
                     $newOrder = ($order == 'asc' ? 'desc' : 'asc');
                 }
                 ?><a href="?sort=<?=$name;?>&order=<?=$newOrder;?>"><?=$names[$name];?></a><?
@@ -108,17 +107,16 @@
                     <tr class="headings">
                         <th style="width: 20px;"></th>
                         <? if($GLOBALS['CRM_CONFIG']->getBool('show_project_logo_in_list') && !$arParams["PROJECT"]) { 
-                            $colspan = 8; ?>
-                        <th class="column-title"><?drawHeadTh('project', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
+                            $colspan = 7; ?>
+                        <th class="column-title" style="width: 90px;"><?drawHeadTh('project', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
                         <? } else {
-                            $colspan = 7;
+                            $colspan = 6;
                         } ?>
-                        <th class="column-title"><?drawHeadTh('name', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
+                        <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
                         <th class="column-title">Статус </th>
                         <th class="column-title"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
-                        <th class="column-title"><?drawHeadTh('comments', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
-                        <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
-                        <th class="column-title last" style="width: 120px;"><?drawHeadTh('priority', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
+                        <th class="column-title"><?drawHeadTh('comments', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
+                        <th class="column-title" style="width: 120px;"><?drawHeadTh('priority', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
                         <th class="bulk-actions" colspan="<?=$colspan;?>">
                             <span class="antoo" style="color:#fff; font-weight:500;">Действия с задачами (<span class="action-cnt"></span>):
                             <a href="#" data-mass-close>Закрыть</a>, <a href="#" data-mass-delete>Удалить</a></span>
@@ -132,7 +130,7 @@
                             <input type="checkbox" value="<?=$task['ID']?>" class="flat" name="table_records">
                         </td>
                         <? if($GLOBALS['CRM_CONFIG']->getBool('show_project_logo_in_list') && !$arParams["PROJECT"]) { ?>
-                            <td class="project-icon"><a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'><img src="<?=$arResult['PROJECTS'][$task['PROPERTIES']['PROJECT']['VALUE']]["DETAIL_PICTURE"]["src"];?>"></a></td>  
+                            <td class="project-icon"><a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?if($GLOBALS['CRM_CONFIG']->get('project_icon_click_href') != 'list') { ?><?= $task['ID'] ?>/<? } ?>'><img src="<?=$arResult['PROJECTS'][$task['PROPERTIES']['PROJECT']['VALUE']]["DETAIL_PICTURE"]["src"];?>"></a></td>  
                         <? } ?>
                         <td>
                             <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'>#<?=$task['ID'];?> <?= $task['NAME'] ?></a>
@@ -156,7 +154,6 @@
                         } ?>
                         </td> 
                         <td><?= $task['PROPERTIES']['COMMNETS_CNT']['VALUE'] ? $task['PROPERTIES']['COMMNETS_CNT']['VALUE'] : '';?></td>
-                        <td><?= $task['DATE_CREATE']; ?></td> 
                         <td class="last">
                             <div class="priorb prior<?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>"><?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?></div>
                         </td>

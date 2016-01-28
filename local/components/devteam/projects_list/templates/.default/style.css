@@ -3,3 +3,22 @@
     padding-top: 4px !important;
     vertical-align: middle !important;
 } 
+
+.circle_avatars img {
+    border-radius: 40px;
+}
+
+.circle_avatars .username{
+    float: left;
+    margin-top: 11px;
+    margin-left: 10px;
+}
+
+.circle_avatars ul li{
+    width: 180px;
+}
+ 
+.circle_avatars img.avatar { 
+    height: 46px; 
+    width: 46px;
+}

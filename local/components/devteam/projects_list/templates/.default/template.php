@@ -29,31 +29,32 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         <tr id="project<?=$project['ID']?>">  
                             <td class="project_name">
                                 <a href='<?=TASKS_LIST_URL;?><?=$project['ID']?>/'><?=$project['NAME']?></a>
-                                <br>
-                                <small><?=$project['PREVIEW_TEXT'];?></small> 
+                                <?if($project['PROPERTIES']["URL"]["VALUE"]) { ?><br>
+                                <small><a target="_blank" href="<?=fixUrl($project['PROPERTIES']["URL"]["VALUE"]);?>"><?=$project['PROPERTIES']["URL"]["VALUE"];?></a></small> 
+                                <? } ?>
                             </td>
                             <td class="logos"> 
                             <? if($project['DETAIL_PICTURE']) { ?>
                                 <a href='/tasks/<?=$project['ID']?>/'><img src="<?=$project['DETAIL_PICTURE']['src']?>"></a>
                             <? } ?>
                             </td>  
-                            <td class="big-avatars">
+                            <td class="big-avatars circle_avatars">
                                 <? if($project['PROPERTIES']['CUSTOMER']['VALUE']) { ?> 
                                 <ul class="list-inline">
                                     <?foreach($project['PROPERTIES']['CUSTOMER']['VALUE'] as $userId) {?>
                                     <li>
-                                        <img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] ? $arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] : '/images/user.png';?>">
+                                        <img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] ? $arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] : '/images/user.png';?>"><div class="username"><?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?></div>
                                     </li> 
                                     <?}?>
                                 </ul>
                                 <? } ?>
                             </td>
-                            <td class="big-avatars"> 
+                            <td class="big-avatars circle_avatars"> 
                                <?if($project['PROPERTIES']['PROGRAMMER']['VALUE']) {?> 
                                 <ul class="list-inline">
                                     <?foreach($project['PROPERTIES']['PROGRAMMER']['VALUE'] as $userId) {?>
                                     <li>
-                                        <img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] ? $arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] : '/images/user.png';?>">
+                                        <img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] ? $arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] : '/images/user.png';?>"><div class="username"><?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?></div>
                                     </li> 
                                     <?}?>
                                 </ul>
