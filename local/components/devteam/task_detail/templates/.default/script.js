@@ -22,7 +22,7 @@ $(function() {
         $('.task_content').show();
         e.preventDefault();
     });
-
+      
     $('.showPanel').on('click', function() {
         id = $(this).data('id');
         $('#' + id).show();

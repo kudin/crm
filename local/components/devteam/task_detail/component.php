@@ -76,7 +76,7 @@ if ($_REQUEST['add_comment']) {
         ToolTip::AddError('Не введён комментарий'); 
     } else {
         $el = new CIBlockElement;
-        if ($PRODUCT_ID = $el->Add(
+        if ($commentId = $el->Add(
             array("MODIFIED_BY" => $USER->GetID(),
                   "IBLOCK_SECTION_ID" => false,
                   "IBLOCK_ID" => COMMENTS_IBLOCK_ID,
@@ -86,7 +86,7 @@ if ($_REQUEST['add_comment']) {
                   "ACTIVE" => "Y",
                   "PREVIEW_TEXT" => TruncateText($_REQUEST['comment'], COMMENT_MAX_LENGHT)))) {
             crmEntitiesHelper::recalcCommentsCnt($arParams['ID']);
-            LocalRedirect(TASKS_LIST_URL . $arParams['PROJECT'] . '/' . $arParams['ID'] . '/');
+            LocalRedirect(TASKS_LIST_URL . $arParams['PROJECT'] . '/' . $arParams['ID'] . '/#comment' . $commentId);
         } else {
             ToolTip::AddError($el->LAST_ERROR);
         }
@@ -281,6 +281,32 @@ $new_task = $_REQUEST["new_task"];
     $el = new CIBlockElement;  
     $res = $el->Update($arParams['ID'], array("DETAIL_TEXT" => $new_task));
     LocalRedirect($APPLICATION->GetCurDir());
+}
+
+
+/* edit comment */
+
+if($editComment = intval($_REQUEST['editcomment'])) {
+    $arResult['EDIT_COMMENT'] = $editComment;
+}
+
+if($_REQUEST['cancel_edit_comment']) {
+    LocalRedirect($APPLICATION->GetCurDir() . '#comment' . intval($_REQUEST['id']));
+}
+
+if(($_REQUEST['edit_comment']) && ($id = intval($_REQUEST['id']))) {
+    foreach($arResult['COMMENTS'] as $comment) {
+        if($comment['ID'] == $id) {
+            if($comment['CREATED_BY'] == $arResult['USER_ID']) { 
+                $el = new CIBlockElement;  
+                $res = $el->Update($id, array("PREVIEW_TEXT" => TruncateText($_REQUEST['comment_text'], COMMENT_MAX_LENGHT))); 
+            } else {
+                ToolTip::AddError('Ошибка доступа к комментарию');
+            }
+            break;
+        }
+    }
+    LocalRedirect($APPLICATION->GetCurDir() . '#comment' . intval($_REQUEST['id']));  
 }
 
 

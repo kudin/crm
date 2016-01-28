@@ -80,10 +80,21 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
             <strong class="name"><?= $arResult['USERS'][$comment['CREATED_BY']]['NAME']; ?> <?= $arResult['USERS'][$comment['CREATED_BY']]['LAST_NAME']; ?></strong>
             <span class="date"><?= $comment['DATE_CREATE']; ?></span> <?
-            if($comment['CREATED_BY'] == $arResult['USER_ID']) { 
-                ?><a href="#" title="Редактировать"><i class="fa fa-edit"></i></a><?
-            } ?>
-            <div class="comment_text"><?= $comment['~PREVIEW_TEXT']; ?></div> 
+            if(($comment['CREATED_BY'] == $arResult['USER_ID']) && ($arResult['EDIT_COMMENT'] != $comment['ID'])) { 
+                ?><a href="?editcomment=<?=$comment['ID'];?>#comment<?=$comment['ID'];?>" title="Редактировать"><i class="fa fa-edit"></i></a><?
+            } 
+            if(($comment['CREATED_BY'] == $arResult['USER_ID']) && ($arResult['EDIT_COMMENT'] == $comment['ID'])) { ?>
+                <form action="<?= $APPLICATION->GetCurPage(); ?>" method="POST" enctype="multipart/form-data" class="commentEditForm">  
+                    <textarea class="tiny" name="comment_text"><?= $comment['~PREVIEW_TEXT']; ?></textarea> 
+                    <div class="compose-btn pull-right">
+                        <input type="hidden" name="id" value="<?=$comment['ID'];?>">
+                        <input type="submit" class="btn btn-sm btn-danger" name="cancel_edit_comment" value="Отмена">
+                        <input type="submit" class="btn btn-sm btn-success" value="Изменить" name="edit_comment"> 
+                    </div>
+                </form>
+            <? } else { ?>
+                <div class="comment_text"><?= $comment['~PREVIEW_TEXT']; ?></div>
+            <? } ?>
         </div> 
     <? } ?>
     <div class="col-md-12">

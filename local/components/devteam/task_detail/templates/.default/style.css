@@ -126,7 +126,12 @@
 .trackingadd .col-md-12 {
     text-align: right;
 }
+
 .trackingadd .col-md-12 .btn-success{
      margin-right: 0px;
      margin-top: 10px;  
+}
+
+.commentEditForm{
+    padding-left: 60px; margin-top: 10px;
 }

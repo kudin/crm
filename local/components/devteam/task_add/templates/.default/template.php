@@ -53,13 +53,13 @@ if(!$arResult['PROGRAMERS_IDS']) {
                         </div> 
                     </div> 
                     <div class="form-group"> 
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Файлы</label>
-                    <a class="btn" data-add-files><i class="fa fa-plus"></i> Вложить файл </a>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Файлы</label> 
                         <div class="col-md-4 col-sm-4 col-xs-12 hiddenfiles" > 
                             <label class="form-control"><input type="file" name="attach[]"></label> 
                             <label class="form-control"><input type="file" name="attach[]"></label> 
                             <label class="form-control"><input type="file" name="attach[]"></label> 
-                        </div> 
+                        </div>
+                        <a class="btn add-files"><i class="fa fa-plus"></i> Добавить файл </a>
                     </div>  
                     <div class="ln_solid"></div>
                     <div class="form-group">
