@@ -15,6 +15,7 @@
 #tasks_list .project-icon {
     padding: 4px 1px 4px 9px;
     width: 86px; 
+    vertical-align: inherit;
 }
 
 h2.vith-icon{ 
@@ -27,5 +28,12 @@ h2.vith-icon{
 #tasks_list .small{
     float: left;
     margin-right: 10px;
-}
+} 
  
+.red, .red_task, .red_task a{
+    color: red;
+}  
+
+.bold{
+    font-weight: bold;
+}

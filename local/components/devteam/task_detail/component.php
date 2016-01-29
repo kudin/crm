@@ -18,6 +18,7 @@ if(!$arParams['DATE_FORMAT']) {
 
 CModule::IncludeModule('iblock');
 
+$logger = new CrmLog('task');  
 
 /* project */
 
@@ -59,7 +60,7 @@ if ($ob = $res->GetNextElement()) {
     }
     if (strlen($arResult['TASK']["DATE_CREATE"]) > 0) {
         $arResult['TASK']["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($arResult['TASK']["DATE_CREATE"], CSite::GetDateFormat()));
-    }
+    } 
     $arResult['STATUS'] = $arResult['TASK']['PROPS']['STATUS']["VALUE_ENUM_ID"]; 
     $arResult['STATUS_TEXT'] = StatusHelper::getStr($arResult['STATUS']);
 } else {
@@ -71,13 +72,12 @@ if ($ob = $res->GetNextElement()) {
 /* rights */
 
 $arResult['USER_ID'] = $USER->GetID();
-if(in_array($arResult['USER_ID'], $arResult['PROGRAMERS_IDS'])) {
+if($arResult['TASK']['PROPS']['PROGRAMMER']['VALUE'] == $arResult['USER_ID']) {
     $arResult['IS_PROGRAMMER'] = true;
-} else {
-    if(in_array($arResult['USER_ID'], $arResult['CUSTOMERS_IDS'])) {
-        $arResult['IS_CUSTOMER'] = true;
-    }
+} elseif($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY']) {
+        $arResult['IS_CUSTOMER'] = true; 
 }
+
 if(!in_array($arResult['STATUS'], array(STATUS_LIST_ACCEPT, STATUS_LIST_COMPLETE))
        && ($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY'] || $USER->IsAdmin())) {
     $arResult['CAN_EDIT'] = true; 
@@ -101,14 +101,11 @@ if ($_REQUEST['add_comment']) {
                   "NAME" => TruncateText(strip_tags($_REQUEST['comment']), 100),
                   "ACTIVE" => "Y",
                   "PREVIEW_TEXT" => TruncateText($_REQUEST['comment'], COMMENT_MAX_LENGHT)))) {
-            crmEntitiesHelper::recalcCommentsCnt($arParams['ID']); 
-            $logger = new CrmLog('task');
-            if($arResult['IS_PROGRAMMER']) {
-                $userId = $arResult['TASK']['CREATED_BY'];
-            } else {
-                $userId = $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE'];
-            }
-            $logger->add($userId, $arParams['ID'], 'comment', $_REQUEST['comment']); 
+            crmEntitiesHelper::recalcCommentsCnt($arParams['ID']);  
+            $logger->add(array($arResult['TASK']['CREATED_BY'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
+                        $arParams['ID'], 
+                        'comment',
+                        $_REQUEST['comment']); 
             LocalRedirect(TASKS_LIST_URL . $arParams['PROJECT'] . '/' . $arParams['ID'] . '/#comment' . $commentId);
         } else {
             ToolTip::AddError($el->LAST_ERROR);
@@ -147,7 +144,7 @@ $arResult['USERS'] = BitrixHelper::getUsersArrByIds($usersIds);
             
 if($action = $_REQUEST['action']) {
     if($arResult['IS_PROGRAMMER']) {
-        switch ($action) { 
+        switch ($action) {
 
             /* comments */
             
@@ -270,15 +267,20 @@ if($action = $_REQUEST['action']) {
     }
     
     if($newStatus) {
-        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus)); 
-    } 
+        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus));  
+        if(!in_array($newStatus, array(STATUS_LIST_PAUSE, STATUS_LIST_WORK))) { 
+            $logger->add(array($arResult['TASK']['CREATED_BY'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']),
+                        $arParams['ID'], 'status', 
+                        StatusHelper::getStr($newStatus) . ' #' . $arResult['TASK']['ID'] . ' ' . $arResult['TASK']['NAME']);
+        }
+    }
 
     if($commentStatus == STATUS_COMMENT_CONFIRM || $newStatus == STATUS_LIST_AGR_CALCED) {
         crmEntitiesHelper::recalcTaskTime($arParams['ID']);
     }
 
     LocalRedirect($APPLICATION->GetCurDir());
-}  
+}   
 
 
 /* edit task */
@@ -286,7 +288,11 @@ if($action = $_REQUEST['action']) {
 $new_task = $_REQUEST["new_task"];
     if($arResult['CAN_EDIT'] && isset($new_task)) {
     $el = new CIBlockElement;  
-    $res = $el->Update($arParams['ID'], array("DETAIL_TEXT" => $new_task));
+    $res = $el->Update($arParams['ID'], array("DETAIL_TEXT" => $new_task)); 
+    $logger->add(array($arResult['TASK']['CREATED_BY'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
+                $arParams['ID'], 
+                'edit',
+                $new_task);
     LocalRedirect($APPLICATION->GetCurDir());
 }
 
@@ -306,7 +312,9 @@ if(($_REQUEST['edit_comment']) && ($id = intval($_REQUEST['id']))) {
         if($comment['ID'] == $id) {
             if($comment['CREATED_BY'] == $arResult['USER_ID']) { 
                 $el = new CIBlockElement;  
-                $res = $el->Update($id, array("PREVIEW_TEXT" => TruncateText($_REQUEST['comment_text'], COMMENT_MAX_LENGHT))); 
+                $res = $el->Update($id, array("PREVIEW_TEXT" => TruncateText($_REQUEST['comment_text'], COMMENT_MAX_LENGHT)));  
+                $logger->add(array($arResult['TASK']['CREATED_BY'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
+                            $arParams['ID'], 'edit_comment', $_REQUEST['comment_text']);
             } else {
                 ToolTip::AddError('Ошибка доступа к комментарию');
             }
@@ -316,5 +324,6 @@ if(($_REQUEST['edit_comment']) && ($id = intval($_REQUEST['id']))) {
     LocalRedirect($APPLICATION->GetCurDir() . '#comment' . intval($_REQUEST['id']));  
 }
 
+$logger->view($arParams['ID']);
 
 $this->IncludeComponentTemplate();

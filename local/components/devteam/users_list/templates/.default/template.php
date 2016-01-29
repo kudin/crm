@@ -13,15 +13,14 @@ foreach($arResult['USERS'] as $user) {
                     </ul>
                 </div>
                 <div class="right col-xs-4 text-center">
-                    <img class="img-circle img-responsive" alt="" src="<?=$user['PERSONAL_PHOTO']['src'] ? $user['PERSONAL_PHOTO']['src'] : '/images/user.png';?>">
+                    <a  href="/users/<?=$user['ID']?>/" ><img class="img-circle img-responsive" alt="" src="<?=$user['PERSONAL_PHOTO']['src'] ? $user['PERSONAL_PHOTO']['src'] : '/images/user.png';?>"></a>
                 </div>
             </div>
             <div class="col-xs-12 bottom text-center">
                 <div class="col-xs-12 col-sm-6 emphasis">
 
                 </div>
-                <div class="col-xs-12 col-sm-6 emphasis">
-
+                <div class="col-xs-12 col-sm-6 emphasis"> 
                     <a class="btn btn-primary btn-xs" href="/users/<?=$user['ID']?>/" type="button"> <i class="fa fa-user"></i> Просмотр профиля </a>
                 </div>
             </div>

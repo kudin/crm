@@ -17,6 +17,8 @@ if($arParams["COUNT"] <= 0) {
 
 CModule::IncludeModule('iblock');
 
+$logger = new CrmLog();  
+
 
 /* projects */
 
@@ -38,7 +40,7 @@ while ($ob = $res->GetNextElement()) {
         LocalRedirect(TASKS_LIST_URL . $arFields['ID'] . '/');
     } 
     if($arFields['DETAIL_PICTURE']) {
-        $arFields['DETAIL_PICTURE'] = CFile::ResizeImageGet($arFields['DETAIL_PICTURE'], array('width'=>80, 'height'=>50), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);                
+        $arFields['DETAIL_PICTURE'] = CFile::ResizeImageGet($arFields['DETAIL_PICTURE'], array('width'=>60, 'height'=>50), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);                
     }
     $arResult['PROJECTS'][$arFields['ID']] = $arFields;
 }
@@ -69,6 +71,7 @@ $sorts = array('date' => 'ID',
                'priority' => 'PROPERTY_PRIORITY',
                'calc' => 'PROPERTY_CALC_COMMENTS',
                'project' => 'PROPERTY_PROJECT',
+               'ispolnitel' => 'PROPERTY_PROGRAMMER',
                'comments' => 'PROPERTY_COMMNETS_CNT');
 $defaultSort = 'date';
 if($sort = $_REQUEST['sort']) { 
@@ -124,7 +127,10 @@ while ($ob = $res->GetNextElement()) {
     if(!$arParams["PROJECT"]) {
         $usersArr[] = $arFields['PROPERTIES']['PROGRAMMER']['VALUE'];
         $usersArr[] = $arFields['CREATED_BY'];
-    }
+    } 
+    $arFields['NOT_VIEWED'] = $logger->isNotViewed($arFields['ID']); 
+    $arFields['NEW_COMMENTS'] = $logger->getNewCommentsCnt($arFields['ID']);  
+    $arFields['NEW_STATUS'] = $logger->getStatusField($arFields['ID']);
     $arFields['STATUS'] = $arFields['PROPERTIES']['STATUS']["VALUE_ENUM_ID"];
     $arFields['STATUS_TEXT'] = StatusHelper::getStr($arFields['STATUS']);
     $arResult['TASKS'][] = $arFields;

@@ -1,24 +1,34 @@
 .logos {
     padding-bottom: 4px !important;
     padding-top: 4px !important;
-    vertical-align: middle !important;
+    vertical-align: sub !important;
 } 
 
+.logos img{ 
+    margin-top: 3px;
+    margin-bottom: 2px;}
+
 .circle_avatars img {
-    border-radius: 40px;
+    border-radius: 20px;
 }
 
 .circle_avatars .username{
     float: left;
-    margin-top: 11px;
+    margin-top: 5px;
     margin-left: 10px;
 }
 
+.circle_avatars ul{
+    width: 180px;
+}
+ 
 .circle_avatars ul li{
     width: 180px;
 }
  
 .circle_avatars img.avatar { 
-    height: 46px; 
-    width: 46px;
+    height: 29px; 
+    width: 29px;
+    border: none;
+    padding: 0;
 }

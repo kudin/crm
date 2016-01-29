@@ -88,6 +88,7 @@
                                'calc' => 'Оценка, часы',
                                'date' => 'Задача',
                                'project' => 'Проект', 
+                               'ispolnitel' => 'Исполнитель',
                                'comments' => 'Комментарии');
                 if(!in_array($name, array_keys($names))) {
                     return;
@@ -111,10 +112,11 @@
                         <? } else {
                             $colspan = 6;
                         } ?>
-                        <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
-                        <th class="column-title">Статус </th>
-                        <th class="column-title"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
-                        <th class="column-title"><?drawHeadTh('comments', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
+                        <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
+                        <th class="column-title" style="width: 130px;"><?drawHeadTh('ispolnitel', $arResult['SORT'], $arResult['SORT_ORDER']);?> </th>
+                        <th class="column-title" style="width: 160px;">Статус </th>
+                        <th class="column-title" style="width: 130px;"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
+                        <th class="column-title" style="width: 130px;"><?drawHeadTh('comments', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 120px;"><?drawHeadTh('priority', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
                         <th class="bulk-actions" colspan="<?=$colspan;?>">
                             <span class="antoo" style="color:#fff; font-weight:500;">Действия с задачами (<span class="action-cnt"></span>):
@@ -134,20 +136,23 @@
                         <td>
                             <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'>#<?=$task['ID'];?> <?= $task['NAME'] ?></a>
                             <br>
-                            <div class="small"><?= $task['DATE_CREATE'];?></div>
-                            <? if($arResult['USER_ID'] != $task['PROPERTIES']['PROGRAMMER']['VALUE']) { ?>
-                               <div class="small">Исполнитель: <?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?> </div> 
+                            <div class="small"><?= $task['DATE_CREATE'];?></div> 
+                            <? if($task['NEW_STATUS']) { ?>
+                               <div class="small red"><?=$task['NEW_STATUS'];?></div> 
                             <? } ?>
-                        </td>   
+                        </td>    
+                        <td>
+                            <a href="/users/<?=$task['PROPERTIES']['PROGRAMMER']['VALUE'];?>/"><?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?></a>
+                        </td>
                         <td>
                             <p><?=$task['STATUS_TEXT'];?></p>
                         </td>   
                         <td><?
-                        if($task['PROPERTIES']['CALC']['VALUE']) { ?>
-                            <span title="Оценка задачи"><?= $task['PROPERTIES']['CALC']['VALUE'] ?></span>
+                        if($task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?>
+                            <span title="Суммарная оценка"><?= $task['PROPERTIES']['CALC_COMMENTS']['VALUE'] ?></span>
                             <? if($task['PROPERTIES']['CALC_COMMENTS']['VALUE'] && 
-                                    $task['PROPERTIES']['CALC']['VALUE'] != $task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?> 
-                                + <span title="Оценка комментариев"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE'] - $task['PROPERTIES']['CALC']['VALUE'];?></span> = <span title="Суммарная оценка"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE']?></span>
+                                  $task['PROPERTIES']['CALC']['VALUE'] != $task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?> 
+                                (<span title="Оценка задачи"><?=$task['PROPERTIES']['CALC']['VALUE']?> + <span title="Оценка комментариев"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE'] - $task['PROPERTIES']['CALC']['VALUE'];?></span>) </span> 
                             <? } ?>
                         <? } elseif($task['STATUS']) {
                             ?>
@@ -155,7 +160,19 @@
                             <?
                         } ?>
                         </td> 
-                        <td><?= $task['PROPERTIES']['COMMNETS_CNT']['VALUE'] ? $task['PROPERTIES']['COMMNETS_CNT']['VALUE'] : '';?></td>
+                        <td>
+                            <span>
+                            <?if($task['NEW_COMMENTS']) {
+                                ?>
+                                <?=$task['PROPERTIES']['COMMNETS_CNT']['VALUE'];?>
+                                <span class="bold">(<?=$task['NEW_COMMENTS'];?>)</span>
+                                <?
+                            } else {
+                                ?>
+                                <?= $task['PROPERTIES']['COMMNETS_CNT']['VALUE'] ? $task['PROPERTIES']['COMMNETS_CNT']['VALUE'] : '';?>
+                                <?
+                            }?></span>
+                        </td>
                         <td class="last">
                             <div class="priorb prior<?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>"><?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?></div>
                         </td>

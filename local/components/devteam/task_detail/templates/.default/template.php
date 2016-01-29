@@ -50,7 +50,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                             </div>
                             <? } ?> 
                             <div class="taskcontrol"> 
-                                <?  
+                                <? 
                                 if($arResult['IS_PROGRAMMER']) {
                                     switch ($arResult['STATUS']) {
                                         case STATUS_LIST_CALC_AGRED:
