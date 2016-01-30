@@ -115,7 +115,7 @@
                         <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 130px;"><?drawHeadTh('ispolnitel', $arResult['SORT'], $arResult['SORT_ORDER']);?> </th>
                         <th class="column-title" style="width: 160px;">Статус </th>
-                        <th class="column-title" style="width: 130px;"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
+                        <th class="column-title" style="width: 145px;"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 130px;"><?drawHeadTh('comments', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 120px;"><?drawHeadTh('priority', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
                         <th class="bulk-actions" colspan="<?=$colspan;?>">
@@ -142,17 +142,68 @@
                             <? } ?>
                         </td>    
                         <td>
-                            <a href="/users/<?=$task['PROPERTIES']['PROGRAMMER']['VALUE'];?>/"><?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?></a>
+                            <a title="<?=$arResult['USERS'][$task['CREATED_BY']]['FULL_NAME'];?> &rarr; <?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?>" href="/users/<?=$task['PROPERTIES']['PROGRAMMER']['VALUE'];?>/"><?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?></a>
                         </td>
-                        <td>
-                            <p><?=$task['STATUS_TEXT'];?></p>
+                        <td><?  $color = false;
+                                if(($task['PROPERTIES']['PROGRAMMER']['VALUE'] == $arResult['USER_ID']) 
+                                        && $task['CREATED_BY'] == $arResult['USER_ID']) {
+                                    switch ($task['STATUS']) {
+                                        case STATUS_LIST_PAUSE:
+                                        case STATUS_LIST_WORK:
+                                        case STATUS_LIST_CALC_AGRED:
+                                        case NULL:
+                                            $color = 'green';
+                                            break;
+                                        case STATUS_LIST_COMPLETE:
+                                        case STATUS_LIST_ACCEPT:
+                                        case STATUS_LIST_CALC_REJECT:
+                                            $color = 'gray';
+                                            break;
+                                    }     
+                                } elseif ($task['PROPERTIES']['PROGRAMMER']['VALUE'] == $arResult['USER_ID']) { 
+                                    switch ($task['STATUS']) {
+                                        case STATUS_LIST_PAUSE:
+                                        case STATUS_LIST_WORK:
+                                        case STATUS_LIST_CALC_AGRED:
+                                        case NULL:
+                                            $color = 'green';
+                                            break;
+                                        case STATUS_LIST_COMPLETE:
+                                        case STATUS_LIST_ACCEPT:
+                                        case STATUS_LIST_CALC_REJECT:
+                                            $color = 'gray';
+                                            break;
+                                    }
+                                } elseif ($task['CREATED_BY']) {
+                                    switch ($task['STATUS']) {
+                                        case STATUS_LIST_AGR_CALCED:
+                                            $color = 'green';
+                                            break;
+                                        case STATUS_LIST_COMPLETE:
+                                        case STATUS_LIST_ACCEPT:
+                                        case STATUS_LIST_CALC_REJECT:
+                                            $color = 'gray';
+                                            break;
+                                    }
+                                } else {
+                                    switch ($task['STATUS']) {
+                                        case STATUS_LIST_COMPLETE:
+                                        case STATUS_LIST_ACCEPT:
+                                        case STATUS_LIST_CALC_REJECT:
+                                            $color = 'gray';
+                                            break;
+                                    }
+                                } ?>
+                            <p<?if($color) {
+                                ?> class="status_<?=$color;?>" <?
+                            }?>><?=$task['STATUS_TEXT'];?></p>
                         </td>   
                         <td><?
                         if($task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?>
                             <span title="Суммарная оценка"><?= $task['PROPERTIES']['CALC_COMMENTS']['VALUE'] ?></span>
                             <? if($task['PROPERTIES']['CALC_COMMENTS']['VALUE'] && 
                                   $task['PROPERTIES']['CALC']['VALUE'] != $task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?> 
-                                (<span title="Оценка задачи"><?=$task['PROPERTIES']['CALC']['VALUE']?> + <span title="Оценка комментариев"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE'] - $task['PROPERTIES']['CALC']['VALUE'];?></span>) </span> 
+                                (<span title="Оценка задачи"><?=$task['PROPERTIES']['CALC']['VALUE'] ? $task['PROPERTIES']['CALC']['VALUE'] : 'По факту';?> + <span title="Оценка комментариев"><?=$task['PROPERTIES']['CALC_COMMENTS']['VALUE'] - $task['PROPERTIES']['CALC']['VALUE'];?></span>) </span> 
                             <? } ?>
                         <? } elseif($task['STATUS']) {
                             ?>
@@ -208,7 +259,7 @@
                         Результат фильтрации не вернул ни одной задачи. <a href="?filter=open">Сбросить фильтр</a>
                     <? } elseif($arResult['FILTER'] == 'open' && $arResult['TASK_CNT']) { ?> 
                         Открытых задач нет. <a href="?filter=all">Показать все задачи</a> 
-                    <? } elseif($arResult['PROJECT']) { ?>
+                    <? } elseif($arParams['PROJECT']) { ?>
                         Задач нет. <a href="add/">Создать первую задачу</a> 
                     <? } else {
                         ?>

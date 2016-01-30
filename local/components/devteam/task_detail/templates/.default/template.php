@@ -51,32 +51,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                             <? } ?> 
                             <div class="taskcontrol"> 
                                 <? 
-                                if($arResult['IS_PROGRAMMER']) {
+                                if($arResult['IS_PROGRAMMER'] || $arResult['IS_PROGRAMMER_AND_CUSTOMER']) {
                                     switch ($arResult['STATUS']) {
                                         case STATUS_LIST_CALC_AGRED:
                                             ?> 
                                             <p>В очереди на выполнение</p> 
                                             <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Начать</a>
                                             <? 
-                                            break;
-                                        case STATUS_LIST_CALC_REJECT:
-                                            ?> 
-                                            <p>Оценка отклонена</p>
-                                            <form method="POST">
-                                                <div class="col-md-6 col-sm-6 col-xs-12 form-group calcblock">
-                                                    <input type="text" name="time" placeholder="Оценка в часах" class="form-control "> 
-                                                    <div class="btn-group">
-                                                        <button type="submit" class="btn btn-success" name="docalc"><i class="fa fa-clock-o"></i> Оценить</button>
-                                                        <button aria-expanded="false" data-toggle="dropdown" class="btn btn-success dropdown-toggle" type="button">
-                                                            <span class="caret"></span> 
-                                                        </button>
-                                                        <ul role="menu" class="dropdown-menu"><li><a href="?action=fact">Оценить по факту</a></li></ul>
-                                                    </div> 
-                                                    <input type="hidden" name="action" value="docalc">
-                                                </div>  
-                                            </form>
-                                            <?
-                                            break;
+                                            break; 
                                         case STATUS_LIST_ACCEPT:
                                             ?>
                                             <p>Задача закрыта</p>
@@ -152,7 +134,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                         case STATUS_LIST_CALC_REJECT:
                                             ?>
                                             <p>Оценка отклонена</p>
-                                            <p>Ожидает новой оценки от <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['FULL_NAME']; ?></p>  
+                                            <a href="?action=getnewcalc" class="btn btn-success" type="button">Запрость новую оценку</a>   
                                             <?
                                             break;
                                         case false:

@@ -45,4 +45,4 @@ function formatTime($time) {
         $time = false;
     }
     return $time;
-}
+} 

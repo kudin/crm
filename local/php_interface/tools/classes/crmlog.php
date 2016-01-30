@@ -19,7 +19,8 @@
 class CrmLog {
      
     private static $msgMaxLen = 250;
-    private $actions = array('add' => 1, 'comment' => 2, 'status' => 3, 'edit' => 4, 'edit_comment' => 5);
+    private $actions = array('add' => 1, 'comment' => 2, 'status' => 3,
+                             'edit' => 4, 'edit_comment' => 5, 'comment_status' => 6);
     private $module;
     private static $cache; 
     static $notViewedIds = array();
@@ -96,13 +97,16 @@ class CrmLog {
                     $item['TEXT_ACTION'] = 'Добавлен комментарий';
                     break;
                 case 3:
-                    $item['TEXT_ACTION'] = 'Изменён статус';
+                    $item['TEXT_ACTION'] = 'Изменён статус задачи';
                     break;
                 case 4:
                     $item['TEXT_ACTION'] = 'Изменена задача';
                     break;
                 case 5:
                     $item['TEXT_ACTION'] = 'Изменён комментарий';
+                    break;
+                case 6:
+                    $item['TEXT_ACTION'] = 'Изменён статус комментария';
                     break;
             }
             $result[] = $item;
@@ -159,7 +163,7 @@ class CrmLog {
         } 
         global $DB;
         $item = intval($item);
-        $action = $this->actions[$action];
+        $action = $this->actions[$action]; 
         $message = trim(strip_tags($message));
         $message = $DB->ForSql($message, self::$msgMaxLen); 
         $query = "INSERT INTO `crmlog` (`ID`, `FROM_USER`, `TO_USER`, `MODULE`, "

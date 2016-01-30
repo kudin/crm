@@ -138,4 +138,9 @@
 
 .commentcalc .label{
     margin-right: 5px;
+} 
+
+.status_cancel:hover{
+        color: red;
+    text-decoration: none;
 }

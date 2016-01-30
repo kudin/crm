@@ -85,7 +85,7 @@ if(!$_SESSION['LIST_SORT']) {
 $arResult['SORT'] = $_SESSION['LIST_SORT'];
 
 $filters = array('all' => array(), 
-                 'open' => array('!PROPERTY_STATUS' => STATUS_LIST_ACCEPT),
+                 'open' => array('!PROPERTY_STATUS' => array(STATUS_LIST_ACCEPT, STATUS_LIST_CALC_REJECT)),
                  'end' =>  array('PROPERTY_STATUS' => STATUS_LIST_ACCEPT),
                  'nocalc' => array('PROPERTY_STATUS' => false),
                  'agrcalced' => array('PROPERTY_STATUS' => STATUS_LIST_AGR_CALCED),
@@ -133,7 +133,7 @@ while ($ob = $res->GetNextElement()) {
     $arFields['NEW_STATUS'] = $logger->getStatusField($arFields['ID']);
     $arFields['STATUS'] = $arFields['PROPERTIES']['STATUS']["VALUE_ENUM_ID"];
     $arFields['STATUS_TEXT'] = StatusHelper::getStr($arFields['STATUS']);
-    $arResult['TASKS'][] = $arFields;
+    $arResult['TASKS'][] = $arFields;  
 }
 $arResult["NAV_STRING"] = $res->GetPageNavString();
 if(count($usersArr)) {

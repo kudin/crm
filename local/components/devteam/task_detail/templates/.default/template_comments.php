@@ -16,7 +16,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <? 
                 if(!(($comment['CREATED_BY'] == $arResult['USER_ID']) &&
                       ($arResult['EDIT_COMMENT'] == $comment['ID']))) {
-                    if($arResult['IS_PROGRAMMER']) {
+                    if($arResult['IS_PROGRAMMER'] || $arResult['IS_PROGRAMMER_AND_CUSTOMER']) {
                         switch ($comment['STATUS']) {
                             case false: 
                                 ?>
@@ -32,8 +32,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <? 
                                 break; 
                             case STATUS_COMMENT_CALCED:
-                                ?>
-                                <span class="label label-info">Оценён в <?=$comment['PROPERTY_CALC_VALUE']?> ч.</span>
+                                ?> 
+                        <span class="label label-info">Оценён в <?=$comment['PROPERTY_CALC_VALUE'];?> ч. <a href="?action=cancel_status&id=<?=$comment['ID'];?>" class="status_cancel" title="Отменить оценку">x</a> </span>
                                 <?
                                 break;
                             case STATUS_COMMENT_REJECT:

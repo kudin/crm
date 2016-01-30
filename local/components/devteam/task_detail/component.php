@@ -71,12 +71,15 @@ if ($ob = $res->GetNextElement()) {
 
 /* rights */
 
-$arResult['USER_ID'] = $USER->GetID();
-if($arResult['TASK']['PROPS']['PROGRAMMER']['VALUE'] == $arResult['USER_ID']) {
+$arResult['USER_ID'] = $USER->GetID();  
+if(($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY']) && 
+   ($arResult['USER_ID'] == $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE'])) {
+    $arResult['IS_PROGRAMMER_AND_CUSTOMER'] = true;
+} elseif ($arResult['TASK']['PROPS']['PROGRAMMER']['VALUE'] == $arResult['USER_ID']) {
     $arResult['IS_PROGRAMMER'] = true;
 } elseif($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY']) {
-        $arResult['IS_CUSTOMER'] = true; 
-}
+    $arResult['IS_CUSTOMER'] = true; 
+} 
 
 if(!in_array($arResult['STATUS'], array(STATUS_LIST_ACCEPT, STATUS_LIST_COMPLETE))
        && ($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY'] || $USER->IsAdmin())) {
@@ -140,14 +143,22 @@ $usersIds = array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS'],
 $arResult['USERS'] = BitrixHelper::getUsersArrByIds($usersIds);  
 
 
-/* actions */
-            
+/* actions */  
+
+$newStatus = NULL;
+
 if($action = $_REQUEST['action']) {
-    if($arResult['IS_PROGRAMMER']) {
-        switch ($action) {
+    if($arResult['IS_PROGRAMMER'] || $arResult['IS_PROGRAMMER_AND_CUSTOMER']) {
+        switch ($action) { 
 
             /* comments */
             
+            case 'cancel_status':
+                $commentId = intval($_REQUEST["id"]);
+                if($arComments[$commentId] != false && in_array($commentId, array_keys($arComments))) {    
+                    CIBlockElement::SetPropertyValuesEx($commentId, COMMENTS_IBLOCK_ID, array('CALC' => 0, 'STATUS' => false)); 
+                }
+                break; 
             case 'calccomment': 
                 $commentId = intval($_REQUEST["commentId"]);
                 $time = formatTime($_REQUEST["timeComment"]);
@@ -198,14 +209,22 @@ if($action = $_REQUEST['action']) {
                 break;
             case 'complete':
                 if(in_array($arResult['STATUS'], array(STATUS_LIST_WORK, STATUS_LIST_PAUSE, STATUS_LIST_REJECT))) {
-                    $newStatus = STATUS_LIST_COMPLETE;
-                } 
+                    if($arResult['IS_PROGRAMMER_AND_CUSTOMER']) {
+                        $newStatus = STATUS_LIST_ACCEPT;
+                    } else {
+                        $newStatus = STATUS_LIST_COMPLETE;
+                    }
+                }
                 break;
             case 'docalc':  
                 if($arResult['STATUS'] == false || $arResult['STATUS'] == STATUS_LIST_CALC_REJECT) {
                     if($time = formatTime($_REQUEST['time'])) {
                         CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('CALC' => $time, 'CALC_COMMENTS' => $time));
-                        $newStatus = STATUS_LIST_AGR_CALCED;
+                        if($arResult['IS_PROGRAMMER_AND_CUSTOMER']) {
+                            $newStatus = STATUS_LIST_CALC_AGRED;
+                        } else {
+                            $newStatus = STATUS_LIST_AGR_CALCED;
+                        }
                     } else {
                         ToolTip::AddError('Введено некорректное значение оценки');
                     }
@@ -261,12 +280,16 @@ if($action = $_REQUEST['action']) {
                     $newStatus = STATUS_LIST_ACCEPT;
                 }
                 break;
+            case 'getnewcalc':
+                if($arResult['STATUS'] == STATUS_LIST_CALC_REJECT)
+                    $newStatus = 0;
+                break;
             default:
                 break;
         } 
     }
     
-    if($newStatus) {
+    if(!is_null($newStatus)) {
         CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus));  
         if(!in_array($newStatus, array(STATUS_LIST_PAUSE, STATUS_LIST_WORK))) { 
             $logger->add(array($arResult['TASK']['CREATED_BY'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']),
@@ -276,7 +299,7 @@ if($action = $_REQUEST['action']) {
     }
 
     if($commentStatus == STATUS_COMMENT_CONFIRM || $newStatus == STATUS_LIST_AGR_CALCED) {
-        crmEntitiesHelper::recalcTaskTime($arParams['ID']);
+        crmEntitiesHelper::recalcTaskTime($arParams['ID']); 
     }
 
     LocalRedirect($APPLICATION->GetCurDir());
@@ -290,10 +313,8 @@ $new_task = $_REQUEST["new_task"];
     $el = new CIBlockElement;  
     $res = $el->Update($arParams['ID'], array("DETAIL_TEXT" => $new_task)); 
     $logger->add(array($arResult['TASK']['CREATED_BY'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
-                $arParams['ID'], 
-                'edit',
-                $new_task);
-    LocalRedirect($APPLICATION->GetCurDir());
+                 $arParams['ID'], 'edit', $new_task, true);
+    LocalRedirect($APPLICATION->GetCurDir()); 
 }
 
 

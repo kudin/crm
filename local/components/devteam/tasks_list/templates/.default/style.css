@@ -37,3 +37,12 @@ h2.vith-icon{
 .bold{
     font-weight: bold;
 }
+
+.status_green{
+    color: green;
+    font-weight: bold;
+}
+
+.status_gray{
+    color: #cdcdcd; 
+}
