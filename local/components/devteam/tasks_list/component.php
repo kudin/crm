@@ -29,12 +29,16 @@ $arFilter = array_merge($userFilter, $arFilter);
 $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 $res->NavStart();
 while ($ob = $res->GetNextElement()) {
-    $arFields = $ob->GetFields(); 
+    $arFields = $ob->GetFields();
+    $arProps = $ob->GetProperties(); 
     if($arParams["PROJECT"] && ($arParams["PROJECT"] == $arFields['ID'])) {
-        $arProps = $ob->GetProperties();
         $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
-        $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE']; 
-        $arResult['USERS'] = BitrixHelper::getUsersArrByIds(array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS']));
+        $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'];  
+    }
+    foreach(array('PROGRAMMER', 'CUSTOMER') as $propCode) {
+        foreach ($arProps[$propCode]['VALUE'] as $userid) {
+            $arResult['ALL_USERS'][] = $userid;
+        } 
     } 
     if(!$arParams["PROJECT"] && $res->NavRecordCount == 1) {
         LocalRedirect(TASKS_LIST_URL . $arFields['ID'] . '/');
@@ -52,6 +56,14 @@ if(!$arParams["PROJECT"]) {
         return;
     }
 } 
+$arResult['ALL_USERS'] = array_unique($arResult['ALL_USERS']); 
+$arResult['USERS'] = BitrixHelper::getUsersArrByIds($arResult['ALL_USERS']);
+if($arParams['PROJECT']) { 
+    $currentProjectUsers = array();
+    $currentProjectUsers = array_merge($currentProjectUsers, $arResult['CUSTOMERS_IDS']);
+    $currentProjectUsers = array_merge($currentProjectUsers, $arResult['PROGRAMERS_IDS']);
+    $arResult['ALL_USERS'] = array_unique($currentProjectUsers);
+}
 
 
 /* tasks */
@@ -109,10 +121,28 @@ if(!$_SESSION['LIST_FILTER']) {
 }
 $arResult['FILTER'] = $_SESSION['LIST_FILTER'];
 
+$filters2 = array('all' => array(),
+                  'my' => array("PROPERTY_PROGRAMMER" => $USER->GetID()),
+                  'not_me' => array("!PROPERTY_PROGRAMMER" => $USER->GetID())); 
+foreach($arResult['ALL_USERS'] as $userId) {
+    $filters2[$userId] = array("PROPERTY_PROGRAMMER" => $userId);
+}
+
+if($filter2 = $_REQUEST['filter2']) {
+    if(in_array($filter2, array_keys($filters2))) {
+        $_SESSION['LIST_FILTER2'] = $filter2;
+    }
+}
+if(!$_SESSION['LIST_FILTER2']) {
+    $_SESSION['LIST_FILTER2'] = 'my';
+}
+$arResult['FILTER2'] = $_SESSION['LIST_FILTER2'];
+
 $arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y');  
 $arFilter['PROPERTY_PROJECT'] = $arParams["PROJECT"] ? $arParams["PROJECT"] : $projects; 
 $statisticFilter = $arFilter = array_merge($USER->GetViewTasksFilter(), $arFilter);
 $arFilter = array_merge($arFilter, $filters[$_SESSION['LIST_FILTER']]); 
+$arFilter = array_merge($arFilter, $filters2[$_SESSION['LIST_FILTER2']]); 
 $res = CIBlockElement::GetList(array($sorts[$_SESSION['LIST_SORT']] => $_SESSION['LIST_SORT_ORDER']), 
                                $arFilter,
                                false,
@@ -123,11 +153,7 @@ while ($ob = $res->GetNextElement()) {
     if (strlen($arFields["DATE_CREATE"]) > 0) {
         $arFields["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($arFields["DATE_CREATE"], CSite::GetDateFormat()));
     }
-    $arFields['PROPERTIES'] = $ob->GetProperties(); 
-    if(!$arParams["PROJECT"]) {
-        $usersArr[] = $arFields['PROPERTIES']['PROGRAMMER']['VALUE'];
-        $usersArr[] = $arFields['CREATED_BY'];
-    } 
+    $arFields['PROPERTIES'] = $ob->GetProperties();  
     $arFields['NOT_VIEWED'] = $logger->isNotViewed($arFields['ID']); 
     $arFields['NEW_COMMENTS'] = $logger->getNewCommentsCnt($arFields['ID']);  
     $arFields['NEW_STATUS'] = $logger->getStatusField($arFields['ID']);
@@ -135,10 +161,7 @@ while ($ob = $res->GetNextElement()) {
     $arFields['STATUS_TEXT'] = StatusHelper::getStr($arFields['STATUS']);
     $arResult['TASKS'][] = $arFields;  
 }
-$arResult["NAV_STRING"] = $res->GetPageNavString();
-if(count($usersArr)) {
-    $arResult['USERS'] = BitrixHelper::getUsersArrByIds($usersArr);
-} 
+$arResult["NAV_STRING"] = $res->GetPageNavString(); 
 $arResult['USER_ID'] = CUser::GetID();
 
 

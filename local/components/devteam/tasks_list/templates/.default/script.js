@@ -7,6 +7,11 @@ $(function() {
         var filter = $(this).val();
         location.href = "?filter=" + filter;
     });
+    
+    $(document).on('change', '#tasks_show2', function() {
+        var filter = $(this).val();
+        location.href = "?filter2=" + filter;
+    });
      
     $(document).on('change', '#projects_list', function() {
         id = $(this).val();

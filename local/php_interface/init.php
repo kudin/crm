@@ -94,16 +94,9 @@ class CrmUser extends CUser {
     public function hasRightsToViewTask($taskId) {
         if(parent::IsAdmin()) {  
             return true; 
-        } 
-        if($this->iAmACustomerInTask($taskId) || $this->iAmAProgrammerInTask($taskId)) {
-            return true;
-        } 
-        $projectId = crmEntitiesHelper::GetProjectIdByTask($taskId);
-        if($this->iAmACustomerInProject($projectId)) {
-            return true;
-        }
-        return false;
-    } 
+        }  
+        return in_array(crmEntitiesHelper::GetProjectIdByTask($taskId), $this->getMyProjects()); 
+    }
             
     public function iAmAProgrammerInTask($taskId) {
         CModule::IncludeModule('iblock');  
@@ -149,17 +142,15 @@ class CrmUser extends CUser {
         return $arFilter;
     }
     
+    private function getMyProjects() {
+        return crmEntitiesHelper::getProjectsByThisUser();
+    }
+    
     public function GetViewTasksFilter() {
         if(parent::IsAdmin()) {  
             return array(); 
         }
-        $arFilter = array(  
-                array(
-                    "LOGIC" => "OR",
-                    array("CREATED_BY" => parent::GetID()),
-                    array("PROPERTY_PROGRAMMER" => parent::GetID())
-                )
-        );
+        $arFilter = array('PROPERTY_PROJECT' => $this->getMyProjects()); 
         return $arFilter;
     }
 
@@ -340,9 +331,26 @@ class crmEntitiesHelper {
         } 
     }
     
+    static $thisUserProjects = false;
+
+    public static function getProjectsByThisUser() {
+        if(self::$thisUserProjects === false) {
+            self::$thisUserProjects = array();
+            CModule::IncludeModule('iblock');  
+            global $USER;
+            $arrFilter = array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
+            $arrFilter = array_merge($USER->GetViewProjectsFilter(), $arrFilter);
+            $res = CIBlockElement::GetList(array(), $arrFilter, false, false, array("ID")); 
+            while ($project = $res->GetNext()) {
+                self::$thisUserProjects[] = $project["ID"];
+            } 
+        }
+        return self::$thisUserProjects;
+    }
+    
     public static function isProject($id) {
         CModule::IncludeModule('iblock');  
-        $res = CIBlockElement::GetList(Array(), Array("IBLOCK_ID"=>PROJECTS_IBLOCK_ID, 'ID' => $id), false, false, Array("ID", "IBLOCK_ID"));
+        $res = CIBlockElement::GetList(Array(), Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID, 'ID' => $id), false, false, Array("ID", "IBLOCK_ID"));
         if($ob = $res->GetNext()) { 
             return true;
         }
@@ -351,7 +359,7 @@ class crmEntitiesHelper {
     
     public static function isTask($id) {
         CModule::IncludeModule('iblock');  
-        $res = CIBlockElement::GetList(Array(), Array("IBLOCK_ID"=>TASKS_IBLOCK_ID, 'ID' => $id), false, false, Array("ID", "IBLOCK_ID"));
+        $res = CIBlockElement::GetList(Array(), Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ID' => $id), false, false, Array("ID", "IBLOCK_ID"));
         if($ob = $res->GetNext()) { 
             return true;
         }

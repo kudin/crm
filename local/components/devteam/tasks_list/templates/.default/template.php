@@ -51,7 +51,7 @@
                     ?>
                 </select>
             </div>
-            <div class="f1"><p>Показать: </p></div>
+            <div class="f1"><p>Статус: </p></div>
             <div class="f2"><select id="tasks_show" class="form-control"> 
                 <? foreach(array('all' => 'Все',  
                                  'open' => 'Открытые', 
@@ -76,7 +76,36 @@
                         <option <?if($code == $arResult['FILTER']) { ?> selected="selected" <? } ?> value="<?=$code;?>"><?=$value;?></option> 
                     <? }  
                 } ?> 
-            </select></div> 
+            </select></div>  
+            <div class="f1"><p>Исполнитель: </p></div>
+            <div class="f2">
+            <select id="tasks_show2" class="form-control"> 
+                <?
+                foreach(array(
+                    'all' => 'Все',
+                    'my' => 'Я (' . $arResult['USERS'][$arResult['USER_ID']]['FULL_NAME'] . ')',
+                    'not_me' => 'Не я',
+                    false,
+                ) as $code => $value) {
+                    if(!$value) {
+                        ?><option disabled=""><?=str_repeat('-', 20);?></option>
+                    <? } else { ?> 
+                        <option <?if($code == $arResult['FILTER2']) { ?> selected="selected" <? } ?> value="<?=$code?>"><?=$value;?></option>
+                    <?
+                    }
+                } 
+                foreach($arResult['ALL_USERS'] as $userId) {
+                    if($userId == $arResult['USER_ID']) {
+                        continue;
+                    }
+                    ?>
+                    <option <?if($userId == $arResult['FILTER2']) { ?> selected="selected" <? } ?> value="<?=$userId;?>"><?=$arResult['USERS'][$userId]['FULL_NAME'];?></option>
+                    <?
+                    }
+                ?>
+            </select>
+            </div>  
+            
             <? if(!in_array($arResult['FILTER'], array('all', 'open'))) { ?>
             <button class="btn btn-default" type="button" id="reset_list_filter">Сбросить фильтр</button>
             <? } ?>
@@ -131,7 +160,11 @@
                             <input type="checkbox" value="<?=$task['ID']?>" class="flat" name="table_records">
                         </td>
                         <? if($GLOBALS['CRM_CONFIG']->getBool('show_project_logo_in_list') && !$arParams["PROJECT"]) { ?>
-                            <td class="project-icon"><a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?if($GLOBALS['CRM_CONFIG']->get('project_icon_click_href') != 'list') { ?><?= $task['ID'] ?>/<? } ?>'><img src="<?=$arResult['PROJECTS'][$task['PROPERTIES']['PROJECT']['VALUE']]["DETAIL_PICTURE"]["src"];?>"></a></td>  
+                            <td class="project-icon">
+                                <?if($arResult['PROJECTS'][$task['PROPERTIES']['PROJECT']['VALUE']]["DETAIL_PICTURE"]["src"]) {?>
+                                <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?if($GLOBALS['CRM_CONFIG']->get('project_icon_click_href') != 'list') { ?><?= $task['ID'] ?>/<? } ?>'><img src="<?=$arResult['PROJECTS'][$task['PROPERTIES']['PROJECT']['VALUE']]["DETAIL_PICTURE"]["src"];?>"></a>
+                                <? } ?>
+                            </td>  
                         <? } ?>
                         <td>
                             <a href='<?=TASKS_LIST_URL;?><?= $task['PROPERTIES']["PROJECT"]['VALUE'] ?>/<?= $task['ID'] ?>/'>#<?=$task['ID'];?> <?= $task['NAME'] ?></a>
@@ -256,9 +289,9 @@
             <div class="row">
                 <div class="col-md-6 bottomtext"><p>
                     <? if(!in_array($arResult['FILTER'], array('all', 'open')) && $arResult['TASK_CNT']) { ?>
-                        Результат фильтрации не вернул ни одной задачи. <a href="?filter=open">Сбросить фильтр</a>
+                        Результат фильтрации не вернул ни одной задачи. <a href="?filter=open&filter2=all">Сбросить фильтр</a>
                     <? } elseif($arResult['FILTER'] == 'open' && $arResult['TASK_CNT']) { ?> 
-                        Открытых задач нет. <a href="?filter=all">Показать все задачи</a> 
+                        Открытых задач нет. <a href="?filter=all&filter2=all">Показать все задачи</a> 
                     <? } elseif($arParams['PROJECT']) { ?>
                         Задач нет. <a href="add/">Создать первую задачу</a> 
                     <? } else {
