@@ -144,3 +144,10 @@
         color: red;
     text-decoration: none;
 }
+
+.editable_hidden {
+    display: none;
+}
+.editable_show {
+   display: inline;
+}

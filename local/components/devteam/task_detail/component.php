@@ -39,7 +39,7 @@ if ($ob = $res->GetNextElement()) {
 } 
 
 
-/* tasks */
+/* task */
 
 $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", 'DETAIL_TEXT', "DATE_CREATE", "CREATED_BY");
 $arFilter = Array(
@@ -72,17 +72,17 @@ if ($ob = $res->GetNextElement()) {
 /* rights */
 
 $arResult['USER_ID'] = $USER->GetID();  
-if(($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY']) && 
+if(($arResult['USER_ID'] == $arResult['TASK']['PROPS']['CUSTOMER']['VALUE']) && 
    ($arResult['USER_ID'] == $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE'])) {
     $arResult['IS_PROGRAMMER_AND_CUSTOMER'] = true;
-} elseif ($arResult['TASK']['PROPS']['PROGRAMMER']['VALUE'] == $arResult['USER_ID']) {
+} elseif ($arResult['USER_ID'] == $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']) {
     $arResult['IS_PROGRAMMER'] = true;
-} elseif($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY']) {
+} elseif($arResult['USER_ID'] == $arResult['TASK']['PROPS']['CUSTOMER']['VALUE']) {
     $arResult['IS_CUSTOMER'] = true; 
 } 
 
 if(!in_array($arResult['STATUS'], array(STATUS_LIST_ACCEPT, STATUS_LIST_COMPLETE))
-       && ($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY'] || $USER->IsAdmin())) {
+       && ($arResult['USER_ID'] == $arResult['TASK']['PROPS']['CUSTOMER']['VALUE'] || $USER->IsAdmin())) {
     $arResult['CAN_EDIT'] = true; 
 }
 
@@ -105,7 +105,7 @@ if ($_REQUEST['add_comment']) {
                   "ACTIVE" => "Y",
                   "PREVIEW_TEXT" => TruncateText($_REQUEST['comment'], COMMENT_MAX_LENGHT)))) {
             crmEntitiesHelper::recalcCommentsCnt($arParams['ID']);  
-            $logger->add(array($arResult['TASK']['CREATED_BY'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
+            $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
                         $arParams['ID'], 
                         'comment',
                         $_REQUEST['comment']); 
@@ -162,7 +162,7 @@ if($action = $_REQUEST['action']) {
             case 'calccomment': 
                 $commentId = intval($_REQUEST["commentId"]);
                 $time = formatTime($_REQUEST["timeComment"]);
-                if($arResult['USER_ID'] == $arResult['TASK']['CREATED_BY']) { 
+                if($arResult['USER_ID'] == $arResult['TASK']['PROPS']['CUSTOMER']['VALUE']) { 
                     $commentStatus = STATUS_COMMENT_CONFIRM;
                     $recalcTime = true; 
                 } else { 
@@ -185,8 +185,8 @@ if($action = $_REQUEST['action']) {
             case 'start':
                 if(($arResult['STATUS'] == STATUS_LIST_AGR_CALCED) && ($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS'])) {
                     $newStatus = STATUS_LIST_WORK;
-                } 
-                if(in_array($arResult['STATUS'], array(STATUS_LIST_CALC_AGRED, STATUS_LIST_PAUSE, STATUS_LIST_COMPLETE, STATUS_LIST_REJECT))) {
+                }
+                if(in_array($arResult['STATUS'], array(STATUS_LIST_CALC_AGRED, STATUS_LIST_PAUSE, STATUS_LIST_COMPLETE, STATUS_LIST_REJECT, STATUS_LIST_ACCEPT, STATUS_LIST_AGR_CALCED))) {
                     $newStatus = STATUS_LIST_WORK;
                 }
                 if($newStatus == STATUS_LIST_WORK) {
@@ -259,7 +259,9 @@ if($action = $_REQUEST['action']) {
                 break;
             
             /* tasks */
-                
+            case 'start':
+                    $newStatus = STATUS_LIST_WORK;
+                break;
             case 'calcAgr':
                 if($arResult['STATUS'] == STATUS_LIST_AGR_CALCED) {
                     $newStatus = STATUS_LIST_CALC_AGRED;
@@ -292,7 +294,7 @@ if($action = $_REQUEST['action']) {
     if(!is_null($newStatus)) {
         CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus));  
         if(!in_array($newStatus, array(STATUS_LIST_PAUSE, STATUS_LIST_WORK))) { 
-            $logger->add(array($arResult['TASK']['CREATED_BY'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']),
+            $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']),
                         $arParams['ID'], 'status', 
                         StatusHelper::getStr($newStatus) . ' #' . $arResult['TASK']['ID'] . ' ' . $arResult['TASK']['NAME']);
         }
@@ -312,7 +314,7 @@ $new_task = $_REQUEST["new_task"];
     if($arResult['CAN_EDIT'] && isset($new_task)) {
     $el = new CIBlockElement;  
     $res = $el->Update($arParams['ID'], array("DETAIL_TEXT" => $new_task)); 
-    $logger->add(array($arResult['TASK']['CREATED_BY'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
+    $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
                  $arParams['ID'], 'edit', $new_task, true);
     LocalRedirect($APPLICATION->GetCurDir()); 
 }
@@ -334,7 +336,7 @@ if(($_REQUEST['edit_comment']) && ($id = intval($_REQUEST['id']))) {
             if($comment['CREATED_BY'] == $arResult['USER_ID']) { 
                 $el = new CIBlockElement;  
                 $res = $el->Update($id, array("PREVIEW_TEXT" => TruncateText($_REQUEST['comment_text'], COMMENT_MAX_LENGHT)));  
-                $logger->add(array($arResult['TASK']['CREATED_BY'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
+                $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
                             $arParams['ID'], 'edit_comment', $_REQUEST['comment_text']);
             } else {
                 ToolTip::AddError('Ошибка доступа к комментарию');
@@ -343,6 +345,26 @@ if(($_REQUEST['edit_comment']) && ($id = intval($_REQUEST['id']))) {
         }
     }
     LocalRedirect($APPLICATION->GetCurDir() . '#comment' . intval($_REQUEST['id']));  
+}
+
+
+/* delete comment */
+if($delete_comment = $_REQUEST['delete_comment']) {
+    foreach($arResult['COMMENTS'] as $comment) {
+        if($comment['ID'] == $delete_comment) {
+            if($comment['CREATED_BY'] == $arResult['USER_ID']) {  
+                $el = new CIBlockElement;  
+                $res = $el->Update($delete_comment, array("ACTIVE" => 'N'));  
+                $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
+                            $arParams['ID'], 'delete_comment', strip_tags($comment['~PREVIEW_TEXT'])); 
+                ToolTip::Add('Комментарий удалён');
+            } else { 
+                ToolTip::AddError('Ошибка доступа к комментарию');
+            }
+            break;
+        }
+    }
+    LocalRedirect($APPLICATION->GetCurDir());  
 }
 
 $logger->view($arParams['ID']);

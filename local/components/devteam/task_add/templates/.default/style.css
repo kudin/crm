@@ -2,3 +2,21 @@
     width: 93%;
     border-right-width: 0;
 }
+
+.customer_label {
+    margin-top: 8px;
+    width: auto; 
+    float: left; 
+    margin-right: 10px;
+}
+
+.customer_label a {
+    border-bottom: 1px dotted;
+}
+.customer_label a:hover {
+    text-decoration: none;
+}
+
+.select-customer {
+    display: none;
+}

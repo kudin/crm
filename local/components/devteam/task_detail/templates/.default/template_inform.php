@@ -12,8 +12,29 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
             <div class="col-md-12">  
                 <p>Проект: <a href="<?= TASKS_LIST_URL ?><?= $arResult['PROJECT']['ID']; ?>/"><?= $arResult['PROJECT']['NAME'] ?></a></p>
                 <p class="date">Создана: <?= $arResult['TASK']['DATE_CREATE'] ?></p>
-                <p>Постановщик: <?= $arResult['USERS'][$arResult['TASK']['CREATED_BY']]['FULL_NAME']; ?></p> 
-                <p>Исполнитель: <?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['FULL_NAME']; ?></p> 
+                <?if($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'] != $arResult['TASK']['CREATED_BY']) {
+                    ?>
+                <p>Создатель: <?= $arResult['USERS'][$arResult['TASK']['CREATED_BY']]['FULL_NAME']; ?></p>
+                <?
+                }?>
+                <p>Постановщик: <span class="editable_show"><?= $arResult['USERS'][$arResult['TASK']['PROPS']['CUSTOMER']['VALUE']]['FULL_NAME']; ?></span>
+                    <select class="editable_hidden"><?
+                    foreach($arResult['CUSTOMERS_IDS'] as $id) {
+                        ?>
+                        <option<?if($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'] == $id) {?> selected <?}?>><?=$arResult['USERS'][$id]['FULL_NAME'];?></option>
+                            <?
+                    }
+                    ?></select>
+                </p> 
+                <p>Исполнитель: <span class="editable_show"><?= $arResult['USERS'][$arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']]['FULL_NAME']; ?></span>
+                 <select class="editable_hidden"><?
+                    foreach($arResult['PROGRAMERS_IDS'] as $id) {
+                        ?>
+                     <option <?if($arResult['TASK']['PROPS']['PROGRAMMER']['VALUE'] == $id) {?> selected <?}?> ><?=$arResult['USERS'][$id]['FULL_NAME'];?></option>
+                            <? 
+                    }
+                    ?></select>
+                </p> 
                 <p class="status">Статус: <span class="label label-success"><?= $arResult['STATUS_TEXT']; ?></span></p> 
                 <? if ($arResult['TASK']['PROPS']['CALC']['VALUE']) { ?>
                     <p>Оценка: <?= $arResult['TASK']['PROPS']['CALC']['VALUE']; ?> ч.</p>
@@ -37,4 +58,4 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
             </div>  
         </div>
     </div>
-</div>
+</div> 

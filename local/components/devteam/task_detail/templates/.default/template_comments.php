@@ -84,8 +84,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <span><a href="#comment<?=$comment['ID']?>">#<?=$comment['ID']?></a></span> <strong class="name"><?= $arResult['USERS'][$comment['CREATED_BY']]['FULL_NAME']; ?></strong>
             <span class="date"><?= $comment['DATE_CREATE']; ?></span> <?
             if(($comment['CREATED_BY'] == $arResult['USER_ID']) && ($arResult['EDIT_COMMENT'] != $comment['ID'])) { 
-                ?><a href="?editcomment=<?=$comment['ID'];?>#comment<?=$comment['ID'];?>" title="Редактировать"><i class="fa fa-edit"></i></a><?
-            } 
+                ?><a href="?editcomment=<?=$comment['ID'];?>#comment<?=$comment['ID'];?>" title="Редактировать"><i class="fa fa-edit"></i></a> <a onclick="return confirm('Вы действительно хотите удалить этот комментарий?')" href="?delete_comment=<?=$comment['ID'];?>" title="Удалить"><i class="fa fa-remove"></i></a><?
+            }
             if(($comment['CREATED_BY'] == $arResult['USER_ID']) && ($arResult['EDIT_COMMENT'] == $comment['ID'])) { ?>
                 <form action="<?= $APPLICATION->GetCurPage(); ?>" method="POST" enctype="multipart/form-data" class="commentEditForm">  
                     <textarea class="tiny" name="comment_text"><?= $comment['~PREVIEW_TEXT']; ?></textarea> 

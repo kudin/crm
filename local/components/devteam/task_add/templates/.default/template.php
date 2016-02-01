@@ -40,11 +40,28 @@ if(!$arResult['PROGRAMERS_IDS']) {
                                 foreach ($arResult['PROGRAMERS_IDS'] as $userId) {
                                     $user = $arResult['USERS'][$userId];
                                     ?>
-                                    <option value='<?= $user['ID']; ?>'><?= $user['FULL_NAME']; ?>  (<?= $user['LOGIN']; ?>) </option>
+                                    <option value='<?= $user['ID']; ?>'><?= $user['FULL_NAME']; ?></option>
                                     <? }
                                 ?>
                             </select>   
-                        </div>  
+                        </div>   
+                        <label for="last-name" class="control-label col-md-1 col-sm-1 col-xs-12">Постановщик <span class="required">*</span>
+                        </label>  
+                        <div class="col-md-4 col-sm-4 col-xs-12"> 
+                        <? if (count($arResult['CUSTOMERS_IDS']) > 1) { ?>
+                            <div class="customer_label"><a href="#"><?= $arResult['USERS'][$arResult['USER_ID']]['FULL_NAME']; ?></a></div>
+                            <select class="form-control select-customer" name='CUSTOMER'><?
+                                foreach ($arResult['CUSTOMERS_IDS'] as $userId) {
+                                    $user = $arResult['USERS'][$userId];
+                                    ?>
+                                    <option <? if ($arResult['USER_ID'] == $user['ID']) { ?> selected <? } ?> value='<?= $user['ID']; ?>'><?= $user['FULL_NAME']; ?>  </option>
+                                <? } ?>
+                            </select><?
+                        } else {
+                            ?>
+                            <div class="customer_label"><?= $arResult['USERS'][$arResult['USER_ID']]['FULL_NAME']; ?></div> 
+                        <? } ?>
+                        </div>
                     </div> 
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12" for="description">Описание </label>

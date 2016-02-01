@@ -1,6 +1,6 @@
 $(function() { 
     $(document).on('click', '#reset_list_filter', function() {
-        location.href = "?filter=open";
+        location.href = "?filter=open&filter2=my";
     });
    
     $(document).on('change', '#tasks_show', function() {

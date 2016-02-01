@@ -61,7 +61,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                             break; 
                                         case STATUS_LIST_ACCEPT:
                                             ?>
-                                            <p>Задача закрыта</p>
+                                            <p>Задача закрыта</p> 
+                                            <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Возобновить</a>
                                             <?
                                             break;
                                         case false:
@@ -87,8 +88,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                             <? } else { ?><p>Задача оценена по факту</p><? } 
                                             if($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS']) { ?>
                                                 <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Начать</a>
+                                            <? } ?>
+                                              <a href="?action=start" class="btn btn-success" type="button">Подтвердить оценку самостоятельно</a>
                                             <?
-                                            }
                                             break; 
                                         case STATUS_LIST_WORK:
                                             ?>
@@ -116,7 +118,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                             <? if($arResult['PROGRAMERS_IDS'] == $arResult['CUSTOMERS_IDS']) { ?>
                                                 <a href="?action=closeTask" class="btn btn-success" type="button">Закрыть задачу</a>
                                             <? }
-                                            break;
+                                            break; 
                                         default:
                                             ?>
                                             <p><?=StatusHelper::getStr($arResult['STATUS'])?></p>
@@ -126,6 +128,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 }
                                 if($arResult['IS_CUSTOMER']) {
                                     switch ($arResult['STATUS']) { 
+                                        case STATUS_LIST_ACCEPT:
+                                            ?>
+                                            <p>Задача закрыта</p> 
+                                            <a class="btn btn-app" href="?action=start"><i class="fa fa-play"></i> Возобновить</a>
+                                            <?
+                                            break;
                                         case STATUS_LIST_CALC_AGRED:
                                             ?>
                                             <p>В очереди на выполнение</p>

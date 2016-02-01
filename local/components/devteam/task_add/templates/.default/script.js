@@ -8,13 +8,19 @@ $(function () {
         toolbar: 'undo redo | bold italic forecolor underline strikethrough | alignleft aligncenter alignright | link  media ',
         content_css: ['/css/tiny/style.css'],
         min_height: 250,
-        height: 320
+        height: 320,
+        gecko_spellcheck:true
     }); 
     
     $(document).on('click', '.add-files', function(e) {
         $(this).removeClass('add-files').addClass('add-more-files').html('<i class="fa fa-plus"></i>  Добавить ещё файлы');
         $('.hiddenfiles').show();
         e.preventDefault(); 
+    });
+    
+    $(document).on('click', '.customer_label a', function(e) {
+       $(this).parent().remove();
+       $('.select-customer').show();
     });
    
     $(document).on('click', '.add-more-files', function(e) { 

@@ -20,7 +20,8 @@ class CrmLog {
      
     private static $msgMaxLen = 250;
     private $actions = array('add' => 1, 'comment' => 2, 'status' => 3,
-                             'edit' => 4, 'edit_comment' => 5, 'comment_status' => 6);
+                             'edit' => 4, 'edit_comment' => 5, 'comment_status' => 6, 
+                             'delete_comment' => 7);
     private $module;
     private static $cache; 
     static $notViewedIds = array();
@@ -107,6 +108,9 @@ class CrmLog {
                     break;
                 case 6:
                     $item['TEXT_ACTION'] = 'Изменён статус комментария';
+                    break;
+                case 7:
+                    $item['TEXT_ACTION'] = 'Комментарий удалён';
                     break;
             }
             $result[] = $item;

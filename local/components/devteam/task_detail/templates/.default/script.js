@@ -12,14 +12,20 @@ $(function() {
             plugins: ['textcolor colorpicker link media'],
             toolbar: 'undo redo | bold italic forecolor underline strikethrough | alignleft aligncenter alignright | link media',
             content_css: ['/css/tiny/style.css'], 
-            height: 360
+            height: 360, 
+            gecko_spellcheck:true
         });
+        $('.editable_show').hide();
+        $('.editable_hidden').show();
     });
     
     $('.edit_cancel').on('click', function(e) {  
         $('.edit_task').show();
         $('.edit_task_form').hide();
         $('.task_content').show();
+
+        $('.editable_show').show();
+        $('.editable_hidden').hide();
         e.preventDefault();
     });
       
@@ -30,8 +36,9 @@ $(function() {
         return false;
     });
 
-    tinymce.init({
+    tinymce.init({ 
         menubar: false,
+        gecko_spellcheck:true,
         statusbar: false,
         selector: '.tiny',
         language: 'ru',

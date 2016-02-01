@@ -12,7 +12,7 @@ class CrmUser extends CUser {
     /* projects handlers */
 
     public function hasRigthsToAddProject() {
-         return parent::IsAdmin();
+        return true; 
     }
 
     public function hasRigthsToDeleteProject() {
@@ -20,7 +20,7 @@ class CrmUser extends CUser {
     }
 
     public function hasRigthsToEditProject() {
-         return parent::IsAdmin();
+        return parent::IsAdmin();
     }
             
     /* tasks handlers */
@@ -118,7 +118,7 @@ class CrmUser extends CUser {
         $res = CIBlockElement::GetList(array(),
                                        array("IBLOCK_ID" => TASKS_IBLOCK_ID, 
                                              'ID' => $taskId,
-                                             'CREATED_BY' => parent::GetID()),
+                                             'PROPERTY_CUSTOMER' => parent::GetID()),
                                        false, 
                                        false, 
                                        array("ID", "IBLOCK_ID")); 

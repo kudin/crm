@@ -106,7 +106,7 @@
             </select>
             </div>  
             
-            <? if(!in_array($arResult['FILTER'], array('all', 'open'))) { ?>
+            <? if((!in_array($arResult['FILTER'], array('all', 'open'))) || ($arResult['FILTER2'] != 'my')) { ?>
             <button class="btn btn-default" type="button" id="reset_list_filter">Сбросить фильтр</button>
             <? } ?>
         </div>     
@@ -175,22 +175,21 @@
                             <? } ?>
                         </td>    
                         <td>
-                            <a title="<?=$arResult['USERS'][$task['CREATED_BY']]['FULL_NAME'];?> &rarr; <?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?>" href="/users/<?=$task['PROPERTIES']['PROGRAMMER']['VALUE'];?>/"><?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?></a>
+                            <a title="<?=$arResult['USERS'][$task['PROPERTIES']['CUSTOMER']['VALUE']]['FULL_NAME'];?> &rarr; <?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?>" href="/users/<?=$task['PROPERTIES']['PROGRAMMER']['VALUE'];?>/"><?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?></a>
                         </td>
                         <td><?  $color = false;
                                 if(($task['PROPERTIES']['PROGRAMMER']['VALUE'] == $arResult['USER_ID']) 
-                                        && $task['CREATED_BY'] == $arResult['USER_ID']) {
+                                        && $task['PROPERTIES']['CUSTOMER']['VALUE'] == $arResult['USER_ID']) {
                                     switch ($task['STATUS']) {
                                         case STATUS_LIST_PAUSE:
                                         case STATUS_LIST_WORK:
                                         case STATUS_LIST_CALC_AGRED:
                                         case NULL:
                                             $color = 'green';
-                                            break;
-                                        case STATUS_LIST_COMPLETE:
+                                            break; 
                                         case STATUS_LIST_ACCEPT:
                                         case STATUS_LIST_CALC_REJECT:
-                                            $color = 'gray';
+                                            $color = 'gray'; 
                                             break;
                                     }     
                                 } elseif ($task['PROPERTIES']['PROGRAMMER']['VALUE'] == $arResult['USER_ID']) { 
@@ -198,29 +197,28 @@
                                         case STATUS_LIST_PAUSE:
                                         case STATUS_LIST_WORK:
                                         case STATUS_LIST_CALC_AGRED:
+                                        case STATUS_LIST_REJECT:
                                         case NULL:
                                             $color = 'green';
-                                            break;
-                                        case STATUS_LIST_COMPLETE:
+                                            break; 
                                         case STATUS_LIST_ACCEPT:
                                         case STATUS_LIST_CALC_REJECT:
                                             $color = 'gray';
                                             break;
                                     }
-                                } elseif ($task['CREATED_BY']) {
+                                } elseif ($task['PROPERTIES']['CUSTOMER']['VALUE'] == $arResult['USER_ID']) {
                                     switch ($task['STATUS']) {
+                                        case STATUS_LIST_COMPLETE:
                                         case STATUS_LIST_AGR_CALCED:
                                             $color = 'green';
-                                            break;
-                                        case STATUS_LIST_COMPLETE:
+                                            break; 
                                         case STATUS_LIST_ACCEPT:
                                         case STATUS_LIST_CALC_REJECT:
                                             $color = 'gray';
                                             break;
                                     }
                                 } else {
-                                    switch ($task['STATUS']) {
-                                        case STATUS_LIST_COMPLETE:
+                                    switch ($task['STATUS']) { 
                                         case STATUS_LIST_ACCEPT:
                                         case STATUS_LIST_CALC_REJECT:
                                             $color = 'gray';
@@ -289,9 +287,9 @@
             <div class="row">
                 <div class="col-md-6 bottomtext"><p>
                     <? if(!in_array($arResult['FILTER'], array('all', 'open')) && $arResult['TASK_CNT']) { ?>
-                        Результат фильтрации не вернул ни одной задачи. <a href="?filter=open&filter2=all">Сбросить фильтр</a>
+                        Результат фильтрации не вернул ни одной задачи. <a href="?filter=open&filter2=my">Сбросить фильтр</a>
                     <? } elseif($arResult['FILTER'] == 'open' && $arResult['TASK_CNT']) { ?> 
-                        Открытых задач нет. <a href="?filter=all&filter2=all">Показать все задачи</a> 
+                        Открытых задач нет. <a href="?filter=all&filter2=my">Показать все мои задачи</a> 
                     <? } elseif($arParams['PROJECT']) { ?>
                         Задач нет. <a href="add/">Создать первую задачу</a> 
                     <? } else {

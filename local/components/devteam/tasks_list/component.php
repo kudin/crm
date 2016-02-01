@@ -111,7 +111,7 @@ $filters = array('all' => array(),
                  'norm' => array('>PROPERTY_CALC' => 4, '<PROPERTY_CALC' => 16),
                  'long' => array('>=PROPERTY_CALC' => 16));
 $defaultFilter = 'open';
-if($filter = $_REQUEST['filter']) { 
+if($filter = $_REQUEST['filter']) {
     if(in_array($filter, array_keys($filters))) {
         $_SESSION['LIST_FILTER'] = $filter;
     }

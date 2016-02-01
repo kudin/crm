@@ -12,6 +12,8 @@ if(!$USER->hasRightsToViewProject($arParams["PROJECT"])){
 
 CModule::IncludeModule('iblock');
 
+$arResult['USER_ID'] = CUser::GetID();
+
 if($_REQUEST['addtask']) {
     $el = new CIBlockElement;
     $name = trim($_REQUEST['name']);
@@ -30,12 +32,15 @@ if($_REQUEST['addtask']) {
     }
 
     $programmer = $_REQUEST['PROGRAMMER'];
+    $customer = $_REQUEST['CUSTOMER'] ? $_REQUEST['CUSTOMER'] : CUser::GetID();
+ 
     $arProjectArray = Array(
         "PROPERTY_VALUES" => array( 
             'PROGRAMMER' => $programmer,
             'PROJECT' => $arParams["PROJECT"],
             'FILES' => $arFiles,
             'PRIORITY' => $priority,
+            'CUSTOMER' => $customer
         ),
         "MODIFIED_BY" => $USER->GetID(),
         "IBLOCK_SECTION_ID" => false,
@@ -46,7 +51,7 @@ if($_REQUEST['addtask']) {
     if ($newTaskId = $el->Add($arProjectArray)) {
         ToolTip::Add('Задача "' . $name . '" добавлена'); 
         $logger = new CrmLog('task');
-        $logger->add($programmer, $newTaskId, 'add', $description);
+        $logger->add(array($programmer, $customer), $newTaskId, 'add', $description);
         LocalRedirect(TASKS_LIST_URL . $arParams["PROJECT"] . '/'); 
     } else {
         $arResult['ERROR'] = $el->LAST_ERROR;
@@ -63,7 +68,10 @@ $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 if ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();  
     $arProps = $ob->GetProperties();
-    $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
+    $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE']; 
+    if(!in_array($arResult['USER_ID'], $arResult['CUSTOMERS_IDS'])) {
+        $arResult['CUSTOMERS_IDS'][] = $arResult['USER_ID'];
+    } 
     $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'];   
     $arResult['USERS'] = BitrixHelper::getUsersArrByIds(array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS']));
     $arResult['PROJECT'] = $arFields;
@@ -72,6 +80,4 @@ if ($ob = $res->GetNextElement()) {
 } else { 
     ShowError('Такой проект не найден или доступ к нему запрещён'); 
 }
-
-
 
