@@ -6,9 +6,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
     <div class="col-md-9">
         <div class="x_panel">
             <div class="x_title">
-                <h2><?= $arResult['TASK']['NAME']; ?>
+                <h2 class="editable_show"><?= $arResult['TASK']['NAME']; ?>
                     <div class="priorb prior<?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?>"><?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?></div>
                 </h2> 
+                <input data-edittask="Y" name="NAME_NEW" type="text" class="form-control editable_hidden" value="<?= $arResult['TASK']['NAME']; ?>" style="width: 66%"> 
+                <select data-edittask="Y" name="priority" class="form-control prior<?=$arResult['TASK']['PROPS']['PRIORITY']['VALUE'];?> editable_hidden" name="priory" id="priory"><?
+                for($prior = 0; $prior <= MAX_PRIORITY; $prior++) {
+                    ?><option class="prior<?=$prior;?>" <?if($prior == $arResult['TASK']['PROPS']['PRIORITY']['VALUE']) {?> selected="selected" <? } ?>><?=$prior;?></option><?
+                }
+                ?></select>
                 <ul class="nav navbar-right panel_toolbox">
                     <?if($arResult['CAN_EDIT']) {?>    
                         <li><a href="#" class="edit_task"><i class="fa fa-edit"></i> Редактировать</a></li> 
@@ -20,13 +26,35 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
             <div class="x_content bootom_border ">  
                 <div class="row">  
                     <div class="col-md-12">
+                        <? if($arResult['CAN_EDIT']) { ?> 
                         <form class="edit_task_form" action="<?= $APPLICATION->GetCurPage(); ?>" method="POST" enctype="multipart/form-data">  
                             <textarea name="new_task"><?= $arResult['TASK']['~DETAIL_TEXT'] ? $arResult['TASK']['~DETAIL_TEXT'] : $arResult['TASK']['NAME']; ?></textarea> 
-                            <div class="compose-btn pull-right">
-                                <button class="btn btn-sm btn-danger edit_cancel">Отмена</button>
-                                <input type="submit" class="btn btn-sm btn-success" value="Изменить" name="edit_complete"> 
-                            </div>
+                            <div class="row editfilerow">  
+                                <div class="col-md-4 col-sm-4 col-xs-12 hiddenfiles" style="display: block;"> 
+                                    <p><a href="#" onclick="$('.add_files').show(); return false;">Добавить файлы</a></p>
+                                    <div class="add_files">
+                                    <label class="form-control"><input type="file" name="attach[]"></label> 
+                                    <label class="form-control"><input type="file" name="attach[]"></label> 
+                                    <label class="form-control"><input type="file" name="attach[]"></label> 
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">  
+                                    <? if ($arResult['TASK']['PROPS']['FILES']['VALUE']) { ?>  
+                                        <p>Удалить файлы</p>
+                                        <? foreach ($arResult['TASK']['PROPS']['FILES']['VALUE'] as $file) { ?>
+                                        <p title="<?= $file['ORIGINAL_NAME'] ?>"><input type="checkbox" name="deletefile[]" value="<?=$file['ID'];?>"> <?= $file["TRUNCATED_NAME"]; ?></p> 
+                                        <? } ?>
+                                     <? } ?> 
+                                </div>  
+                                <div class="col-md-4 col-sm-4 col-xs-12"> 
+                                    <div class="compose-btn pull-right">
+                                        <button class="btn btn-sm btn-danger edit_cancel">Отмена</button>
+                                        <button class="btn btn-sm btn-success" name="edit_complete">Изменить</button>
+                                    </div>
+                                </div>  
+                            </div>     
                         </form>
+                        <? } ?>
                     </div>
                     <div class="col-md-12 task_content" >  
                         <div class="inbox-body">   

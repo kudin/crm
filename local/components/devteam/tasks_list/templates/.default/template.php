@@ -38,74 +38,79 @@
     </div>
     <div class="x_content">  
         <div class="tasks_filter">  
-            <div class="f1"><p>Проект</p></div>
-            <div class="f2"><select id="projects_list" class="form-control" <? if(count($arResult['PROJECTS']) == 1) { ?> disabled="disabled" <? } ?>>
-                    <? if(count($arResult['PROJECTS']) > 1) { ?>
-                        <option value="0">Все</option>
-                    <? } 
-                    foreach ($arResult['PROJECTS'] as $project) {
+            <div class="fgroup">
+                <div class="f1"><p>Проект</p></div>
+                <div class="f2"><select id="projects_list" class="form-control" <? if(count($arResult['PROJECTS']) == 1) { ?> disabled="disabled" <? } ?>>
+                        <? if(count($arResult['PROJECTS']) > 1) { ?>
+                            <option value="0">Все</option>
+                        <? } 
+                        foreach ($arResult['PROJECTS'] as $project) {
+                            ?>
+                            <option <? if ($arParams["PROJECT"] == $project['ID']) { ?> selected="selected" <? } ?> value="<?= $project['ID'] ?>"><?= $project['NAME'] ?></option>  
+                            <?
+                        }
                         ?>
-                        <option <? if ($arParams["PROJECT"] == $project['ID']) { ?> selected="selected" <? } ?> value="<?= $project['ID'] ?>"><?= $project['NAME'] ?></option>  
+                    </select>
+                </div>
+            </div>
+            <div class="fgroup">
+                <div class="f1"><p>Статус: </p></div>
+                <div class="f2"><select id="tasks_show" class="form-control"> 
+                    <? foreach(array('all' => 'Все',  
+                                     'open' => 'Открытые', 
+                                     'end' => 'Закрытые',
+                                     false,
+                                     'nocalc' => 'Ожидают оценки',
+                                     'agrcalced' => StatusHelper::getStr(STATUS_LIST_AGR_CALCED),
+                                     'calcreject' => StatusHelper::getStr(STATUS_LIST_CALC_REJECT),
+                                     'calcagred' => 'Запущено в работу (оценка принята)',
+                                     'work' => StatusHelper::getStr(STATUS_LIST_WORK),
+                                     'pause' => 'В паузе',
+                                     'complete' => 'Готово (не закрытые)',
+                                     'reject' => 'Задача отклонена',
+                                     false,
+                                     'short' => 'Короткие ( <4ч. )',
+                                     'norm' => 'Средние ( 4-16ч. )',
+                                     'long' => 'Большие ( >16ч. )'
+                                     ) as $code => $value) { 
+                        if(!$value) {
+                            ?><option disabled=""><?=str_repeat('-', 20);?></option>
+                        <? } else { ?>
+                            <option <?if($code == $arResult['FILTER']) { ?> selected="selected" <? } ?> value="<?=$code;?>"><?=$value;?></option> 
+                        <? }  
+                    } ?> 
+                </select></div>  
+            </div>
+            <div class="fgroup">
+                <div class="f1"><p>Исполнитель: </p></div>
+                <div class="f2">
+                <select id="tasks_show2" class="form-control"> 
+                    <?
+                    foreach(array(
+                        'all' => 'Все',
+                        'my' => 'Я (' . $arResult['USERS'][$arResult['USER_ID']]['FULL_NAME'] . ')',
+                        'not_me' => 'Не я',
+                        false,
+                    ) as $code => $value) {
+                        if(!$value) {
+                            ?><option disabled=""><?=str_repeat('-', 20);?></option>
+                        <? } else { ?> 
+                            <option <?if($code == $arResult['FILTER2']) { ?> selected="selected" <? } ?> value="<?=$code?>"><?=$value;?></option>
                         <?
-                    }
+                        }
+                    } 
+                    foreach($arResult['ALL_USERS'] as $userId) {
+                        if($userId == $arResult['USER_ID']) {
+                            continue;
+                        }
+                        ?>
+                        <option <?if($userId == $arResult['FILTER2']) { ?> selected="selected" <? } ?> value="<?=$userId;?>"><?=$arResult['USERS'][$userId]['FULL_NAME'];?></option>
+                        <?
+                        }
                     ?>
                 </select>
+                </div>  
             </div>
-            <div class="f1"><p>Статус: </p></div>
-            <div class="f2"><select id="tasks_show" class="form-control"> 
-                <? foreach(array('all' => 'Все',  
-                                 'open' => 'Открытые', 
-                                 'end' => 'Закрытые',
-                                 false,
-                                 'nocalc' => 'Ожидают оценки',
-                                 'agrcalced' => StatusHelper::getStr(STATUS_LIST_AGR_CALCED),
-                                 'calcreject' => StatusHelper::getStr(STATUS_LIST_CALC_REJECT),
-                                 'calcagred' => 'Запущено в работу (оценка принята)',
-                                 'work' => StatusHelper::getStr(STATUS_LIST_WORK),
-                                 'pause' => 'В паузе',
-                                 'complete' => 'Готово (не закрытые)',
-                                 'reject' => 'Задача отклонена',
-                                 false,
-                                 'short' => 'Короткие ( <4ч. )',
-                                 'norm' => 'Средние ( 4-16ч. )',
-                                 'long' => 'Большие ( >16ч. )'
-                                 ) as $code => $value) { 
-                    if(!$value) {
-                        ?><option disabled=""><?=str_repeat('-', 20);?></option>
-                    <? } else { ?>
-                        <option <?if($code == $arResult['FILTER']) { ?> selected="selected" <? } ?> value="<?=$code;?>"><?=$value;?></option> 
-                    <? }  
-                } ?> 
-            </select></div>  
-            <div class="f1"><p>Исполнитель: </p></div>
-            <div class="f2">
-            <select id="tasks_show2" class="form-control"> 
-                <?
-                foreach(array(
-                    'all' => 'Все',
-                    'my' => 'Я (' . $arResult['USERS'][$arResult['USER_ID']]['FULL_NAME'] . ')',
-                    'not_me' => 'Не я',
-                    false,
-                ) as $code => $value) {
-                    if(!$value) {
-                        ?><option disabled=""><?=str_repeat('-', 20);?></option>
-                    <? } else { ?> 
-                        <option <?if($code == $arResult['FILTER2']) { ?> selected="selected" <? } ?> value="<?=$code?>"><?=$value;?></option>
-                    <?
-                    }
-                } 
-                foreach($arResult['ALL_USERS'] as $userId) {
-                    if($userId == $arResult['USER_ID']) {
-                        continue;
-                    }
-                    ?>
-                    <option <?if($userId == $arResult['FILTER2']) { ?> selected="selected" <? } ?> value="<?=$userId;?>"><?=$arResult['USERS'][$userId]['FULL_NAME'];?></option>
-                    <?
-                    }
-                ?>
-            </select>
-            </div>  
-            
             <? if((!in_array($arResult['FILTER'], array('all', 'open'))) || ($arResult['FILTER2'] != 'my')) { ?>
             <button class="btn btn-default" type="button" id="reset_list_filter">Сбросить фильтр</button>
             <? } ?>
@@ -116,6 +121,7 @@
                 $names = array('priority' => 'Приоритет',
                                'calc' => 'Оценка, часы',
                                'date' => 'Задача',
+                               'tracking' => 'Затрачено',
                                'project' => 'Проект', 
                                'ispolnitel' => 'Исполнитель',
                                'comments' => 'Комментарии');
@@ -145,6 +151,7 @@
                         <th class="column-title" style="width: 130px;"><?drawHeadTh('ispolnitel', $arResult['SORT'], $arResult['SORT_ORDER']);?> </th>
                         <th class="column-title" style="width: 160px;">Статус </th>
                         <th class="column-title" style="width: 145px;"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
+                        <th class="column-title" style="width: 145px;"><?drawHeadTh('tracking', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 130px;"><?drawHeadTh('comments', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 120px;"><?drawHeadTh('priority', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
                         <th class="bulk-actions" colspan="<?=$colspan;?>">
@@ -241,7 +248,12 @@
                             <span title="Оценка задачи">по факту</span>
                             <?
                         } ?>
-                        </td> 
+                        </td>
+                        <td>
+                            <?if($task['PROPERTIES']['TRACKING']['VALUE']) { ?>
+                            <?=$task['PROPERTIES']['TRACKING']['VALUE']?> ч.
+                            <? } ?>
+                        </td>    
                         <td>
                             <span>
                             <?if($task['NEW_COMMENTS']) {
@@ -291,10 +303,10 @@
                     <? } elseif($arResult['FILTER'] == 'open' && $arResult['TASK_CNT']) { ?> 
                         Открытых задач нет. <a href="?filter=all&filter2=my">Показать все мои задачи</a> 
                     <? } elseif($arParams['PROJECT']) { ?>
-                        Задач нет. <a href="add/">Создать первую задачу</a> 
+                        Задач нет. <a href="add/">Создать задачу</a> 
                     <? } else {
                         ?>
-                        Задач нет. <a href="#" data-target=".bs-example-modal-sm" data-toggle="modal">Создать первую задачу</a>
+                        Задач нет. <a href="#" data-target=".bs-example-modal-sm" data-toggle="modal">Создать задачу</a>
                         <?
                     } ?>
                 </p></div>

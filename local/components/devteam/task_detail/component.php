@@ -77,14 +77,11 @@ if(($arResult['USER_ID'] == $arResult['TASK']['PROPS']['CUSTOMER']['VALUE']) &&
     $arResult['IS_PROGRAMMER_AND_CUSTOMER'] = true;
 } elseif ($arResult['USER_ID'] == $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']) {
     $arResult['IS_PROGRAMMER'] = true;
-} elseif($arResult['USER_ID'] == $arResult['TASK']['PROPS']['CUSTOMER']['VALUE']) {
+} elseif(in_array($arResult['USER_ID'], $arResult['CUSTOMERS_IDS'])) {
     $arResult['IS_CUSTOMER'] = true; 
 } 
 
-if(!in_array($arResult['STATUS'], array(STATUS_LIST_ACCEPT, STATUS_LIST_COMPLETE))
-       && ($arResult['USER_ID'] == $arResult['TASK']['PROPS']['CUSTOMER']['VALUE'] || $USER->IsAdmin())) {
-    $arResult['CAN_EDIT'] = true; 
-}
+$arResult['CAN_EDIT'] = (($arResult['USER_ID'] == $arResult['TASK']['PROPS']['CUSTOMER']['VALUE']) || $USER->IsAdmin());
 
 
 /* comments */
@@ -311,11 +308,39 @@ if($action = $_REQUEST['action']) {
 /* edit task */
 
 $new_task = $_REQUEST["new_task"];
-    if($arResult['CAN_EDIT'] && isset($new_task)) {
-    $el = new CIBlockElement;  
-    $res = $el->Update($arParams['ID'], array("DETAIL_TEXT" => $new_task)); 
-    $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
-                 $arParams['ID'], 'edit', $new_task, true);
+if($arResult['CAN_EDIT'] && isset($new_task)) {
+    $el = new CIBlockElement; 
+    $updated = $el->Update($arParams['ID'], array("DETAIL_TEXT" => $new_task, "NAME" => $_REQUEST['NAME_NEW']));
+    if($updated) {
+        $propsUpdate['PRIORITY'] = validatePriority($_REQUEST['priority']);
+        $calc = formatTime($_REQUEST['NEW_CALC']);
+        if($calc != $arResult['TASK']['PROPS']['CALC']['VALUE']) {
+            $propsUpdate['CALC'] = $calc;
+        }
+        if($newCustomer = intval($_REQUEST['CUSTOMER_NEW'])) {
+            if(in_array($newCustomer, $arResult['CUSTOMERS_IDS'])) {
+                $propsUpdate['CUSTOMER'] = $newCustomer;
+            }
+        } 
+        if($newProgrammer = intval($_REQUEST['PROGRAMMER_NEW'])) {
+            if(in_array($newProgrammer, $arResult['PROGRAMERS_IDS'])) {
+                $propsUpdate['PROGRAMMER'] = $newProgrammer;
+            }
+        }    
+        $deletefiles = $_REQUEST['deletefile'];
+        if(is_array($deletefiles) && count($deletefiles)) { 
+            foreach ($deletefiles as $delFileID) {  
+                // удалить файл
+            }
+        }
+        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, $propsUpdate);
+        $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), $arParams['ID'], 'edit', $new_task, true);
+        if(isset($propsUpdate['CALC'])) {
+            crmEntitiesHelper::recalcTaskTime($arParams['ID']); 
+        }
+    } else {
+        ToolTip::AddError($el->LAST_ERROR);
+    }
     LocalRedirect($APPLICATION->GetCurDir()); 
 }
 
@@ -366,6 +391,20 @@ if($delete_comment = $_REQUEST['delete_comment']) {
     }
     LocalRedirect($APPLICATION->GetCurDir());  
 }
+
+
+/* tracking time */
+
+$res = CIBlockElement::GetList(
+    array("ID" => "ASC"), 
+    array("PROPERTY_TASK" => $arParams['ID'], "IBLOCK_ID" => TRACKING_IBLOCK_ID, "ACTIVE" => "Y"), 
+    false,
+    false,  
+    array('DETAIL_TEXT', 'ID', 'DATE_CREATE', 'PROPERTY_HOURS')); 
+while ($ar_fields = $res->GetNext()) {  
+    $arResult['TRACKING'][] = $ar_fields;
+}
+
 
 $logger->view($arParams['ID']);
 

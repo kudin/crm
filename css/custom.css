@@ -6406,8 +6406,10 @@ ul.notifications {
 
 .tasks_filter{
     background: rgb(247, 247, 247) none repeat scroll 0% 0%; 
+    display: table;
+    min-height: 54px;
     padding: 10px;
-
+    width: 100%;
 }
 
 #tasks_sort_by{
@@ -6429,10 +6431,6 @@ ul.notifications {
 
 .tasks_filter .btn{
     margin-left: 20px;
-}
-
-.tasks_filter{
-    height: 54px;
 }
 
 .x_content .f3{

@@ -37,12 +37,23 @@ function getFileIcon($file) {
     return $icon;
 }
 
-function formatTime($time) { 
+function formatTime($time, $maxtime = MAX_TASK_TIME) { 
     $time = trim($time);
     $time = str_replace(array(',', ' '), array('.', ''), $time);
     $time = floatval($time);
-    if(!$time || $time > MAX_TASK_TIME) {
+    if($time < 0) {
+        $time = false;
+    }
+    if(!$time || $time > $maxtime) {
         $time = false;
     }
     return $time;
 } 
+
+function validatePriority($priority) {
+    $priority = intval($priority);
+    if(!in_array($priority, range(0, MAX_PRIORITY))) {
+        $priority = DEFAULT_PRIORITY;
+    }
+    return $priority;
+}

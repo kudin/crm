@@ -34,7 +34,7 @@ if(!$arResult['PROGRAMERS_IDS']) {
                     <div class="form-group">
                         <label for="last-name" class="control-label col-md-2 col-sm-2 col-xs-12">Ответственный <span class="required">*</span>
                         </label> 
-                        <div class="col-md-4 col-sm-4 col-xs-12"> 
+                        <div class="col-md-3 col-sm-3 col-xs-12"> 
                             <select class=" form-control"  name='PROGRAMMER'>
                                 <?
                                 foreach ($arResult['PROGRAMERS_IDS'] as $userId) {
@@ -45,7 +45,7 @@ if(!$arResult['PROGRAMERS_IDS']) {
                                 ?>
                             </select>   
                         </div>   
-                        <label for="last-name" class="control-label col-md-1 col-sm-1 col-xs-12">Постановщик <span class="required">*</span>
+                        <label for="last-name" class="control-label col-md-2 col-sm-2 col-xs-12">Постановщик <span class="required">*</span>
                         </label>  
                         <div class="col-md-4 col-sm-4 col-xs-12"> 
                         <? if (count($arResult['CUSTOMERS_IDS']) > 1) { ?>

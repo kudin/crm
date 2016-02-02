@@ -99,6 +99,9 @@ class CrmUser extends CUser {
     }
             
     public function iAmAProgrammerInTask($taskId) {
+        if(!$taskId) {
+            return false;
+        }
         CModule::IncludeModule('iblock');  
         $res = CIBlockElement::GetList(array(),
                                        array("IBLOCK_ID" => TASKS_IBLOCK_ID, 
@@ -291,6 +294,28 @@ class crmEntitiesHelper {
         return $num;
     }
 
+    public static function recalcTaskTracking($taskId) {
+        CModule::IncludeModule('iblock');
+        $summ = 0;
+        $arSelect = Array("ID", "IBLOCK_ID");
+        $arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y', 'ID' => $taskId); 
+        $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect); 
+        if ($item = $res->GetNext()) { 
+            $trackres = CIBlockElement::GetList(array(), 
+                                                  array("PROPERTY_TASK" => $taskId, 
+                                                        "IBLOCK_ID" => TRACKING_IBLOCK_ID, 
+                                                        "ACTIVE" => "Y"), 
+                                                  false, 
+                                                  false, 
+                                                  array('ID', 'IBLOCK_ID', 'PROPERTY_HOURS')); 
+            while ($track = $trackres->GetNext()) {
+                $summ += $track['PROPERTY_HOURS_VALUE']; 
+            }
+            CIBlockElement::SetPropertyValuesEx($taskId, TASKS_IBLOCK_ID, array('TRACKING' => $summ)); 
+        }
+        return $summ;
+    }
+    
     public static function recalcTaskTime($taskId) {
         CModule::IncludeModule('iblock');
         $summ = 0;

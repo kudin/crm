@@ -26,10 +26,7 @@ if($_REQUEST['addtask']) {
         } 
     }
     
-    $priority = intval($_REQUEST['priority']);
-    if(!in_array($priority, range(0, MAX_PRIORITY))) {
-        $priority = DEFAULT_PRIORITY;
-    }
+    $priority = validatePriority($_REQUEST['priority']); 
 
     $programmer = $_REQUEST['PROGRAMMER'];
     $customer = $_REQUEST['CUSTOMER'] ? $_REQUEST['CUSTOMER'] : CUser::GetID();

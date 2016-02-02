@@ -10,7 +10,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
     <? if ($arResult['EVENTS']) { ?>
         <ul id="menu1" class="dropdown-menu list-unstyled msg_list animated fadeInDown" role="menu">
         <? foreach ($arResult['EVENTS'] as $event) {
-            if($n++ > 5) {
+            if($n++ >= 5) {
                 break;
             }
             ?>

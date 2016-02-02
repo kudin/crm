@@ -3,11 +3,12 @@
 define('PROJECTS_IBLOCK_ID', 1);
 define('TASKS_IBLOCK_ID', 2);
 define('COMMENTS_IBLOCK_ID', 3);
-define('TIME_IBLOCK_ID', 4);
+define('TRACKING_IBLOCK_ID', 4);
  
 define('DEFAULT_PRIORITY', 5);
 define('MAX_PRIORITY', 9);
 define('MAX_TASK_TIME', 480);
+define('MAX_TRACKING_TIME', 160);
 
 define('COMMENT_MAX_LENGHT', 50000);
 

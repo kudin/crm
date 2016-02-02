@@ -46,3 +46,16 @@ h2.vith-icon{
 .status_gray{
     color: #cdcdcd; 
 }
+
+#tasks_show {
+    width: 190px;
+}
+
+#tasks_show2 {
+    width: 180px;
+}
+
+.fgroup{
+    height: 38px;
+    float: left;
+}

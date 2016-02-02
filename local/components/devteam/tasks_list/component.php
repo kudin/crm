@@ -80,6 +80,7 @@ $arResult['SORT_ORDER'] = $_SESSION['LIST_SORT_ORDER'];
 
 $sorts = array('date' => 'ID',
                'name' => 'NAME',
+               'tracking' => 'PROPERTY_TRACKING',
                'priority' => 'PROPERTY_PRIORITY',
                'calc' => 'PROPERTY_CALC_COMMENTS',
                'project' => 'PROPERTY_PROJECT',

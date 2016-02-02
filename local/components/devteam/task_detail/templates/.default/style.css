@@ -148,6 +148,38 @@
 .editable_hidden {
     display: none;
 }
+
 .editable_show {
-   display: inline;
+   display: inline-block;
+}
+
+.editcalc {
+    padding-left: 5px;
+    width: 60px;
+} 
+
+.compose-btn{
+    margin-top: 5px;
+}
+
+.add_files {
+    display: none;
+}
+
+.editfilerow{
+    margin-top: 10px;
+}
+
+.editfilerow p{
+    margin-bottom: 4px;
+}
+
+.trackingrow {
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    padding-top: 5px; padding-bottom: 5px;
+}
+ 
+.trackingrow:nth-child(2n){
+    background-color: #fafafa;
 }
