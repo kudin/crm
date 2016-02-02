@@ -1,12 +1,22 @@
-<?php
+<?php 
 
-define('NEED_AUTH', 'Y');
+define('NEED_AUTH', 'Y'); 
 
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php"); 
 
-$APPLICATION->SetTitle('Сотрудники');
- 
-$APPLICATION->IncludeComponent('devteam:events', 'user', array('USER_ID' => $ID)); 
+$APPLICATION->SetTitle('Пользователь');
 
+?>
+<div class="row">
+    <?
+    if($USER->GetID() == $ID || $USER->IsAdmin()) {
+        $APPLICATION->IncludeComponent('devteam:user_detail', '', array('USER_ID' => $ID)); 
+        $APPLICATION->IncludeComponent('devteam:events', 'user', array('USER_ID' => $ID)); 
+    } else {
+        ShowError('Доступ запрешён');
+    }
+    ?> 
+</div>
+<?
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php");
  

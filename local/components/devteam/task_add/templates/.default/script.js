@@ -5,7 +5,7 @@ $(function () {
         selector: '.tiny',
         language: 'ru',
         plugins: ['textcolor colorpicker link media'],
-        toolbar: 'undo redo | bold italic forecolor underline strikethrough | alignleft aligncenter alignright | link  media ',
+        toolbar: 'undo redo | bold italic forecolor underline strikethrough | bullist numlist | alignleft aligncenter alignright | link  media ',
         content_css: ['/css/tiny/style.css'],
         min_height: 250,
         height: 320,
@@ -31,4 +31,4 @@ $(function () {
     $('#priory').change(function() {
         $('#priory').attr('class', 'form-control prior' + $('#priory').val());
     });
-});
+}); 

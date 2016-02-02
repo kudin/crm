@@ -2,11 +2,10 @@
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
 die();
 ?>
-<div class="row">
 <div class="col-md-6">
 <div class="x_panel">
     <div class="x_title">
-        <h2>Последняя активность пользователя <?= $arResult['USERS'][$event['FROM_USER']]['FULL_NAME']; ?></h2> 
+        <h2>Последняя активность пользователя <?= $arResult['USERS'][$arParams['USER_ID']]['FULL_NAME']; ?></h2> 
         <div class="clearfix"></div>
     </div>
     <div class="x_content">
@@ -31,5 +30,4 @@ die();
         ?>
     </div>
 </div>
-</div> 
 </div>

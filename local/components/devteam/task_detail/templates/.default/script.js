@@ -49,7 +49,7 @@ $(function() {
                                 <a class="removetrack" href="#"><i class="fa fa-remove"></i></a>\n\
                             </div>\n\
                             <div class="col-md-2 col-sm-2 col-xs-12">\n\
-                                <a href="#">' + h + '</a> ч.\n\
+                              ' + h + ' ч.\n\
                             </div> \n\
                             <div class="col-md-9 col-sm-9 col-xs-12"> \n\
                                  ' + trackdesc + ' \n\
@@ -81,7 +81,7 @@ $(function() {
             selector: '.edit_task_form textarea',
             language: 'ru',
             plugins: ['textcolor colorpicker link media'],
-            toolbar: 'undo redo | bold italic forecolor underline strikethrough | alignleft aligncenter alignright | link media',
+            toolbar: 'undo redo | bold italic forecolor underline strikethrough | bullist numlist | alignleft aligncenter alignright | link media',
             content_css: ['/css/tiny/style.css'], 
             height: 360, 
             gecko_spellcheck:true
@@ -114,7 +114,7 @@ $(function() {
         selector: '.tiny',
         language: 'ru',
         plugins: ['textcolor colorpicker link media'],
-        toolbar: 'undo redo | bold italic forecolor underline strikethrough | alignleft aligncenter alignright | link media',
+        toolbar: 'undo redo | bold italic forecolor underline strikethrough | bullist numlist | alignleft aligncenter alignright | link media',
         content_css: ['/css/tiny/style.css'],
         min_height: 160,
         height: 220

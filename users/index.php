@@ -4,7 +4,7 @@ define('NEED_AUTH', 'Y');
 
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
-$APPLICATION->SetTitle('Сотрудники');
+$APPLICATION->SetTitle('Пользователи');
  
 $APPLICATION->IncludeComponent('devteam:users_list');
 

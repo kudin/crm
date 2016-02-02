@@ -9,7 +9,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
             <div class="clearfix"></div>
         </div>
         <div class="row">
-            <? if ($arResult['IS_PROGRAMMER']) { ?>
+            <? if ($arResult['IS_PROGRAMMER'] || $arResult['IS_PROGRAMMER_AND_CUSTOMER']) { ?>
                 <div class="col-md-12" id="trackingcol" data-task-id="<?= $arParams['ID'] ?>">   
                     <?
                     foreach ($arResult['TRACKING'] as $track) {
@@ -19,7 +19,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 <a href="#" class="removetrack"><i class="fa fa-remove"></i></a>
                             </div>
                             <div class="col-md-2 col-sm-2 col-xs-12">
-                                <a href="#"><?= $track["PROPERTY_HOURS_VALUE"] ?> ч.</a>
+                                <?= $track["PROPERTY_HOURS_VALUE"] ?> ч. 
                             </div>
                             <div class="col-md-9 col-sm-9 col-xs-12"> 
                                 <?= $track["DETAIL_TEXT"] ?>

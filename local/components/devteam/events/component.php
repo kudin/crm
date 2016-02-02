@@ -19,7 +19,8 @@ if(!$arParams['USER_ID']) {
 
 foreach($arResult['EVENTS'] as $event) {
     $users[] = $event['USER'];
-}
+} 
+
 $arResult['USERS'] = BitrixHelper::getUsersArrByIds($users);
 
 $this->IncludeComponentTemplate();

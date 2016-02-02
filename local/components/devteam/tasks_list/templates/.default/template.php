@@ -82,14 +82,14 @@
                 </select></div>  
             </div>
             <div class="fgroup">
-                <div class="f1"><p>Исполнитель: </p></div>
+                <div class="f1"><p>Задачи: </p></div>
                 <div class="f2">
                 <select id="tasks_show2" class="form-control"> 
                     <?
                     foreach(array(
                         'all' => 'Все',
-                        'my' => 'Я (' . $arResult['USERS'][$arResult['USER_ID']]['FULL_NAME'] . ')',
-                        'not_me' => 'Не я',
+                        'my' => 'Мои (' . $arResult['USERS'][$arResult['USER_ID']]['FULL_NAME'] . ')',
+                        'not_me' => 'Не мои',
                         false,
                     ) as $code => $value) {
                         if(!$value) {
@@ -110,7 +110,7 @@
                     ?>
                 </select>
                 </div>  
-            </div>
+            </div> 
             <? if((!in_array($arResult['FILTER'], array('all', 'open'))) || ($arResult['FILTER2'] != 'my')) { ?>
             <button class="btn btn-default" type="button" id="reset_list_filter">Сбросить фильтр</button>
             <? } ?>
@@ -150,8 +150,8 @@
                         <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 130px;"><?drawHeadTh('ispolnitel', $arResult['SORT'], $arResult['SORT_ORDER']);?> </th>
                         <th class="column-title" style="width: 160px;">Статус </th>
-                        <th class="column-title" style="width: 145px;"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
-                        <th class="column-title" style="width: 145px;"><?drawHeadTh('tracking', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
+                        <th class="column-title" style="width: 165px;"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
+                        <th class="column-title" style="width: 115px;"><?drawHeadTh('tracking', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 130px;"><?drawHeadTh('comments', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 120px;"><?drawHeadTh('priority', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
                         <th class="bulk-actions" colspan="<?=$colspan;?>">
@@ -251,7 +251,7 @@
                         </td>
                         <td>
                             <?if($task['PROPERTIES']['TRACKING']['VALUE']) { ?>
-                            <?=$task['PROPERTIES']['TRACKING']['VALUE']?> ч.
+                                <?=$task['PROPERTIES']['TRACKING']['VALUE']?>
                             <? } ?>
                         </td>    
                         <td>

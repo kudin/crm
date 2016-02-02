@@ -122,13 +122,32 @@ if(!$_SESSION['LIST_FILTER']) {
 }
 $arResult['FILTER'] = $_SESSION['LIST_FILTER'];
 
+/* исполнитель/постановщик */
 $filters2 = array('all' => array(),
-                  'my' => array("PROPERTY_PROGRAMMER" => $USER->GetID()),
-                  'not_me' => array("!PROPERTY_PROGRAMMER" => $USER->GetID())); 
-foreach($arResult['ALL_USERS'] as $userId) {
-    $filters2[$userId] = array("PROPERTY_PROGRAMMER" => $userId);
+                  'my' => array(
+                      array(
+                          "LOGIC" => "OR",
+                          "PROPERTY_PROGRAMMER" => $USER->GetID(),
+                          "PROPERTY_CUSTOMER" => $USER->GetID(),
+                      )
+                  ),
+                  'not_me' => array(
+                          array(
+                              "LOGIC" => "AND",
+                              "!PROPERTY_PROGRAMMER" => $USER->GetID(),
+                              "!PROPERTY_CUSTOMER" => $USER->GetID(),
+                          )
+                      )
+                  );
+foreach ($arResult['ALL_USERS'] as $userId) { 
+    $filters2[$userId] = array(
+        array(
+            "LOGIC" => "OR",
+            "PROPERTY_PROGRAMMER" => $userId,
+            "PROPERTY_CUSTOMER" => $userId,
+        )
+    );
 }
-
 if($filter2 = $_REQUEST['filter2']) {
     if(in_array($filter2, array_keys($filters2))) {
         $_SESSION['LIST_FILTER2'] = $filter2;
@@ -138,12 +157,12 @@ if(!$_SESSION['LIST_FILTER2']) {
     $_SESSION['LIST_FILTER2'] = 'my';
 }
 $arResult['FILTER2'] = $_SESSION['LIST_FILTER2'];
-
+ 
 $arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y');  
 $arFilter['PROPERTY_PROJECT'] = $arParams["PROJECT"] ? $arParams["PROJECT"] : $projects; 
 $statisticFilter = $arFilter = array_merge($USER->GetViewTasksFilter(), $arFilter);
 $arFilter = array_merge($arFilter, $filters[$_SESSION['LIST_FILTER']]); 
-$arFilter = array_merge($arFilter, $filters2[$_SESSION['LIST_FILTER2']]); 
+$arFilter = array_merge($arFilter, $filters2[$_SESSION['LIST_FILTER2']]);  
 $res = CIBlockElement::GetList(array($sorts[$_SESSION['LIST_SORT']] => $_SESSION['LIST_SORT_ORDER']), 
                                $arFilter,
                                false,
