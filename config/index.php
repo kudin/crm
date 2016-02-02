@@ -6,7 +6,7 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 $APPLICATION->SetTitle('Настройки');
  
-$APPLICATION->IncludeComponent('devteam:config');
+$APPLICATION->IncludeComponent('kudin:config');
 
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php");
  

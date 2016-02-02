@@ -6,6 +6,6 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 $APPLICATION->SetTitle('Проекты');
  
-$APPLICATION->IncludeComponent('devteam:projects_list');
+$APPLICATION->IncludeComponent('kudin:projects_list');
 
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php");

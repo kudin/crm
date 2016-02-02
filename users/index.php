@@ -6,7 +6,7 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 $APPLICATION->SetTitle('Пользователи');
  
-$APPLICATION->IncludeComponent('devteam:users_list');
+$APPLICATION->IncludeComponent('kudin:users_list');
 
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php");
  

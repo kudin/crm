@@ -65,8 +65,8 @@
                         <nav class="" role="navigation">  
                          <ul class="nav navbar-nav navbar-right">
                          <?php  
-                         $APPLICATION->IncludeComponent('devteam:current_user', 'nav'); 
-                         $APPLICATION->IncludeComponent('devteam:events', '', array('ID' => $_REQUEST['ID']));
+                         $APPLICATION->IncludeComponent('kudin:current_user', 'nav'); 
+                         $APPLICATION->IncludeComponent('kudin:events', '', array('ID' => $_REQUEST['ID']));
                          ?> 
                          </ul> 
                          <div class="nav toggle">
