@@ -283,6 +283,20 @@ class CrmConfig {
 
 class crmEntitiesHelper {
 
+    public static function RecalcLastCommentDateTime($taskId) {
+        CModule::IncludeModule('iblock'); 
+        $commentres = CIBlockElement::GetList(array('DATE_CREATE' => 'DESC'), 
+                                              array("PROPERTY_TASK" => $taskId, "IBLOCK_ID" => COMMENTS_IBLOCK_ID, "ACTIVE" => "Y"),
+                                              false, array('nTopCount' => 1), array('ID', 'IBLOCK_ID', 'DATE_CREATE')); 
+        if ($comment = $commentres->GetNext()) { 
+            $date = $comment['DATE_CREATE']; 
+        } else {
+            $date = false; 
+        }
+        CIBlockElement::SetPropertyValuesEx($taskId, TASKS_IBLOCK_ID, array('COMMENT_DATE' => $date));
+        return $date;
+    }
+
     public static function recalcCommentsCnt($taskId) {
         CModule::IncludeModule('iblock');
         $num = 0;

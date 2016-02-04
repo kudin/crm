@@ -106,6 +106,7 @@ if ($_REQUEST['add_comment']) {
                         $arParams['ID'], 
                         'comment',
                         $_REQUEST['comment']); 
+            crmEntitiesHelper::RecalcLastCommentDateTime($arParams['ID']);
             LocalRedirect(TASKS_LIST_URL . $arParams['PROJECT'] . '/' . $arParams['ID'] . '/#comment' . $commentId);
         } else {
             ToolTip::AddError($el->LAST_ERROR);
@@ -374,6 +375,7 @@ if(($_REQUEST['edit_comment']) && ($id = intval($_REQUEST['id']))) {
 
 
 /* delete comment */
+
 if($delete_comment = $_REQUEST['delete_comment']) {
     foreach($arResult['COMMENTS'] as $comment) {
         if($comment['ID'] == $delete_comment) {
@@ -383,6 +385,7 @@ if($delete_comment = $_REQUEST['delete_comment']) {
                 $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
                             $arParams['ID'], 'delete_comment', strip_tags($comment['~PREVIEW_TEXT'])); 
                 ToolTip::Add('Комментарий удалён');
+                crmEntitiesHelper::RecalcLastCommentDateTime($arParams['ID']);
             } else { 
                 ToolTip::AddError('Ошибка доступа к комментарию');
             }

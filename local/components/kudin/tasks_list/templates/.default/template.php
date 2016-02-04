@@ -255,7 +255,7 @@
                             <? } ?>
                         </td>    
                         <td>
-                            <span>
+                            <p>
                             <?if($task['NEW_COMMENTS']) {
                                 ?>
                                 <?=$task['PROPERTIES']['COMMNETS_CNT']['VALUE'];?>
@@ -265,7 +265,11 @@
                                 ?>
                                 <?= $task['PROPERTIES']['COMMNETS_CNT']['VALUE'] ? $task['PROPERTIES']['COMMNETS_CNT']['VALUE'] : '';?>
                                 <?
-                            }?></span>
+                            }?></p>
+                            <?if($task['PROPERTIES']['COMMENT_DATE']['VALUE']) {
+                                ?><div class="small"><?=$task['PROPERTIES']['COMMENT_DATE']['VALUE'];?></div>
+                            <?
+                            }?>
                         </td>
                         <td class="last">
                             <div class="priorb prior<?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?>"><?= $task['PROPERTIES']['PRIORITY']['VALUE'] ?></div>

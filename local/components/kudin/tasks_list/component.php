@@ -11,6 +11,10 @@ if(!$arParams['DATE_FORMAT']) {
     $arParams['DATE_FORMAT'] = 'j F Y';
 }
 
+if(!$arParams['DATE_TIME_FORMAT']) {
+    $arParams['DATE_TIME_FORMAT'] = 'j M в H:i:s';
+}
+
 if($arParams["COUNT"] <= 0) {
     $arParams["COUNT"] = 20;
 }
@@ -85,7 +89,7 @@ $sorts = array('date' => 'ID',
                'calc' => 'PROPERTY_CALC_COMMENTS',
                'project' => 'PROPERTY_PROJECT',
                'ispolnitel' => 'PROPERTY_PROGRAMMER',
-               'comments' => 'PROPERTY_COMMNETS_CNT');
+               'comments' => 'PROPERTY_COMMENT_DATE');
 $defaultSort = 'date';
 if($sort = $_REQUEST['sort']) { 
     if(in_array($sort, array_keys($sorts))) {
@@ -151,9 +155,9 @@ foreach ($arResult['ALL_USERS'] as $userId) {
 if($filter2 = $_REQUEST['filter2']) {
     if(in_array($filter2, array_keys($filters2))) {
         $_SESSION['LIST_FILTER2'] = $filter2;
-    }
-}
-if(!$_SESSION['LIST_FILTER2']) {
+    } 
+} 
+if(!$_SESSION['LIST_FILTER2'] || !in_array($_SESSION['LIST_FILTER2'], array_keys($filters2))) {
     $_SESSION['LIST_FILTER2'] = 'my';
 }
 $arResult['FILTER2'] = $_SESSION['LIST_FILTER2'];
@@ -162,7 +166,7 @@ $arFilter = Array("IBLOCK_ID" => TASKS_IBLOCK_ID, 'ACTIVE' => 'Y');
 $arFilter['PROPERTY_PROJECT'] = $arParams["PROJECT"] ? $arParams["PROJECT"] : $projects; 
 $statisticFilter = $arFilter = array_merge($USER->GetViewTasksFilter(), $arFilter);
 $arFilter = array_merge($arFilter, $filters[$_SESSION['LIST_FILTER']]); 
-$arFilter = array_merge($arFilter, $filters2[$_SESSION['LIST_FILTER2']]);  
+$arFilter = array_merge($arFilter, $filters2[$_SESSION['LIST_FILTER2']]); 
 $res = CIBlockElement::GetList(array($sorts[$_SESSION['LIST_SORT']] => $_SESSION['LIST_SORT_ORDER']), 
                                $arFilter,
                                false,
@@ -172,8 +176,11 @@ while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();
     if (strlen($arFields["DATE_CREATE"]) > 0) {
         $arFields["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($arFields["DATE_CREATE"], CSite::GetDateFormat()));
+    } 
+    $arFields['PROPERTIES'] = $ob->GetProperties();   
+    if (strlen($arFields['PROPERTIES']['COMMENT_DATE']['VALUE']) > 0) {
+        $arFields['PROPERTIES']['COMMENT_DATE']['VALUE'] = CIBlockFormatProperties::DateFormat($arParams['DATE_TIME_FORMAT'], MakeTimeStamp($arFields['PROPERTIES']['COMMENT_DATE']['VALUE'], CSite::GetDateFormat()));
     }
-    $arFields['PROPERTIES'] = $ob->GetProperties();  
     $arFields['NOT_VIEWED'] = $logger->isNotViewed($arFields['ID']); 
     $arFields['NEW_COMMENTS'] = $logger->getNewCommentsCnt($arFields['ID']);  
     $arFields['NEW_STATUS'] = $logger->getStatusField($arFields['ID']);
