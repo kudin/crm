@@ -35,7 +35,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     }
                     ?></select>
                 </p> 
-                <p class="status">Статус: <span class="label label-success"><?= $arResult['STATUS_TEXT']; ?></span></p> 
+                <p class="status" <?  
+                    if($arResult['TASK']['PROPS']['STATUS_DATE']['VALUE']) { 
+                        ?> title="Статус установлен <?=$arResult['TASK']['PROPS']['STATUS_DATE']['VALUE'];?>"<? 
+                    } 
+                ?>>Статус: <span class="label label-success"><?= $arResult['STATUS_TEXT']; ?></span></p> 
                 <? if ($arResult['TASK']['PROPS']['CALC']['VALUE']) { 
                     ?>
                     <p>Оценка: <span class="editable_show"><?=$arResult['TASK']['PROPS']['CALC']['VALUE']; ?></span>

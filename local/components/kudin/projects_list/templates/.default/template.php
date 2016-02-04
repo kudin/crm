@@ -11,13 +11,28 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </ul> 
                 <div class="clearfix"></div>
             </div>
-            <?if(count($arResult['ITEMS'])) {?>
+            <?if(count($arResult['ITEMS'])) {
+                
+                function drawProjectsHeadTh($name, $sort, $order) {
+                    $names = array('name' => array('name' => 'Проект', 'desc' => 'Сортировка по названию')); 
+                    if(!in_array($name, array_keys($names))) {
+                        return;
+                    }  
+                    $newOrder = 'desc';
+                    if($sort == $name) { 
+                        ?><i class="fa fa-sort-alpha-<?=$order;?>"></i> <?  
+                        $newOrder = ($order == 'asc' ? 'desc' : 'asc');
+                    } 
+                    ?><a <?if($names[$name]['desc']) { ?> title="<?=$names[$name]['desc'];?>" <? } ?> href="?sort=<?=$name;?>&order=<?=$newOrder;?>"><?=$names[$name]['name'];?></a><?
+                }
+                
+                ?>
             <div class="x_content">  
                 <table class="table table-striped projects" id="projects_list">
                     <thead>
                         <tr>  
                             <th>Лого</th> 
-                            <th style="width: 20%;">Проект</th> 
+                            <th style="width: 20%;"><?drawProjectsHeadTh('name', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                             <th style="width: 40%;">Заказчик</th>
                             <th style="width: 40%;">Исполнитель</th>
                         </tr>
@@ -63,7 +78,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     </tbody>
                 </table>
                 <?=$arResult["NAV_STRING"];?>
-            </div>
+             </div>
             <? } ?>
         </div>
     </div>

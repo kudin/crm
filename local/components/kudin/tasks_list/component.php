@@ -90,7 +90,7 @@ $sorts = array('date' => 'ID',
                'project' => 'PROPERTY_PROJECT',
                'ispolnitel' => 'PROPERTY_PROGRAMMER',
                'comments' => 'PROPERTY_COMMENT_DATE',
-               'status' => 'PROPERTY_COMMENT_DATE');
+               'status' => 'PROPERTY_STATUS_DATE');
 $defaultSort = 'date';
 if($sort = $_REQUEST['sort']) { 
     if(in_array($sort, array_keys($sorts))) {
@@ -178,9 +178,11 @@ while ($ob = $res->GetNextElement()) {
     if (strlen($arFields["DATE_CREATE"]) > 0) {
         $arFields["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($arFields["DATE_CREATE"], CSite::GetDateFormat()));
     } 
-    $arFields['PROPERTIES'] = $ob->GetProperties();   
-    if (strlen($arFields['PROPERTIES']['COMMENT_DATE']['VALUE']) > 0) {
-        $arFields['PROPERTIES']['COMMENT_DATE']['VALUE'] = CIBlockFormatProperties::DateFormat($arParams['DATE_TIME_FORMAT'], MakeTimeStamp($arFields['PROPERTIES']['COMMENT_DATE']['VALUE'], CSite::GetDateFormat()));
+    $arFields['PROPERTIES'] = $ob->GetProperties();
+    foreach(array('STATUS_DATE', 'COMMENT_DATE') as $code) {
+        if (strlen($arFields['PROPERTIES'][$code]['VALUE']) > 0) {
+            $arFields['PROPERTIES'][$code]['VALUE'] = CIBlockFormatProperties::DateFormat($arParams['DATE_TIME_FORMAT'], MakeTimeStamp($arFields['PROPERTIES'][$code]['VALUE'], CSite::GetDateFormat()));
+        }
     }
     $arFields['NOT_VIEWED'] = $logger->isNotViewed($arFields['ID']); 
     $arFields['NEW_COMMENTS'] = $logger->getNewCommentsCnt($arFields['ID']);  

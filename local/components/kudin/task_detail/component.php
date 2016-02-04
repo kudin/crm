@@ -16,6 +16,10 @@ if(!$arParams['DATE_FORMAT']) {
     $arParams['DATE_FORMAT'] = 'j F в H:i';
 }
 
+if(!$arParams['DATE_TIME_FORMAT']) {
+    $arParams['DATE_TIME_FORMAT'] = 'j M в H:i:s';
+}
+
 CModule::IncludeModule('iblock');
 
 $logger = new CrmLog('task');  
@@ -61,6 +65,9 @@ if ($ob = $res->GetNextElement()) {
     if (strlen($arResult['TASK']["DATE_CREATE"]) > 0) {
         $arResult['TASK']["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($arResult['TASK']["DATE_CREATE"], CSite::GetDateFormat()));
     } 
+    if (strlen($arResult['TASK']['PROPS']['STATUS_DATE']['VALUE']) > 0) {
+        $arResult['TASK']['PROPS']['STATUS_DATE']['VALUE'] = CIBlockFormatProperties::DateFormat($arParams['DATE_TIME_FORMAT'], MakeTimeStamp($arResult['TASK']['PROPS']['STATUS_DATE']['VALUE'], CSite::GetDateFormat()));
+    }
     $arResult['STATUS'] = $arResult['TASK']['PROPS']['STATUS']["VALUE_ENUM_ID"]; 
     $arResult['STATUS_TEXT'] = StatusHelper::getStr($arResult['STATUS']);
 } else {
@@ -77,7 +84,8 @@ if(($arResult['USER_ID'] == $arResult['TASK']['PROPS']['CUSTOMER']['VALUE']) &&
     $arResult['IS_PROGRAMMER_AND_CUSTOMER'] = true;
 } elseif ($arResult['USER_ID'] == $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']) {
     $arResult['IS_PROGRAMMER'] = true;
-} elseif(in_array($arResult['USER_ID'], $arResult['CUSTOMERS_IDS'])) {
+} elseif(($arResult['USER_ID'] == $arResult['TASK']['PROPS']['CUSTOMER']['VALUE']) ||
+        in_array($arResult['USER_ID'], $arResult['CUSTOMERS_IDS'])) {
     $arResult['IS_CUSTOMER'] = true; 
 } 
 
@@ -188,21 +196,13 @@ if($action = $_REQUEST['action']) {
                     $newStatus = STATUS_LIST_WORK;
                 }
                 if($newStatus == STATUS_LIST_WORK) {
-                    $res = CIBlockElement::GetList(array(), 
-                                                   array("IBLOCK_ID" => TASKS_IBLOCK_ID,
-                                                         'ACTIVE' => 'Y',  
-                                                         '!ID' => $arParams['ID'],
-                                                         "PROPERTY_PROGRAMMER" => CUser::GetID(),
-                                                         "PROPERTY_STATUS" => STATUS_LIST_WORK),
-                                                   false, false, array('ID')); 
-                    while($taskArr = $res->Fetch()) {
-                        CIBlockElement::SetPropertyValuesEx($taskArr['ID'], TASKS_IBLOCK_ID, array('STATUS' => STATUS_LIST_PAUSE)); 
-                    } 
+                    trackStartedTask();
                 }
                 break; 
             case 'stop':
                 if($arResult['STATUS'] == STATUS_LIST_WORK) {
                     $newStatus = STATUS_LIST_PAUSE;
+                    trackStartedTask(false);
                 }
                 break;
             case 'complete':
@@ -290,7 +290,8 @@ if($action = $_REQUEST['action']) {
     }
     
     if(!is_null($newStatus)) {
-        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus));  
+        CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, array('STATUS' => $newStatus, 
+                                                                                    'STATUS_DATE' => date($DB->DateFormatToPHP(CSite::GetDateFormat("FULL")))));  
         if(!in_array($newStatus, array(STATUS_LIST_PAUSE, STATUS_LIST_WORK))) { 
             $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']),
                         $arParams['ID'], 'status', 

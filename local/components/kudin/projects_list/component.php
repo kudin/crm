@@ -14,10 +14,33 @@ $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL",
 $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
 $userFilter = $USER->GetViewProjectsFilter();
 $arFilter = array_merge($userFilter, $arFilter);
-$res = CIBlockElement::GetList(Array(), $arFilter, false, array('nPageSize' => $arParams['COUNT']), $arSelect);
 
+if($sortOrder = $_REQUEST['order']) {
+    if(in_array($sortOrder, array('asc', 'desc'))) {
+        $_SESSION['PROJECTS_LIST_SORT_ORDER'] = $sortOrder;
+    }
+}
+if(!$_SESSION['PROJECTS_LIST_SORT_ORDER']) {
+    $_SESSION['PROJECTS_LIST_SORT_ORDER'] = 'desc';
+}
+$arResult['SORT_ORDER'] = $_SESSION['PROJECTS_LIST_SORT_ORDER'];
+$sorts = array('name' => 'NAME'); 
+if($sort = $_REQUEST['sort']) { 
+    if(in_array($sort, array_keys($sorts))) {
+        $_SESSION['PROJECTS_LIST_SORT'] = $sort;
+    }
+} 
+if(!$_SESSION['PROJECTS_LIST_SORT']) {
+    $_SESSION['PROJECTS_LIST_SORT'] = 'name';
+} 
+$arResult['SORT'] = $_SESSION['PROJECTS_LIST_SORT'];
+
+$res = CIBlockElement::GetList(array($sorts[$_SESSION['PROJECTS_LIST_SORT']] => $_SESSION['PROJECTS_LIST_SORT_ORDER']),
+                               $arFilter,
+                               false, 
+                               array('nPageSize' => $arParams['COUNT']),
+                               $arSelect);
 $arUsersId = array();
-
 while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields(); 
     $arProps = $ob->GetProperties();

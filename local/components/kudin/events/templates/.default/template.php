@@ -5,7 +5,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
 <li role="presentation" class="dropdown">
     <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
         <i class="fa fa-envelope-o"></i>
-        <?if($arResult['NEW']){?><span class="badge bg-green"><?= $arResult['NEW']; ?></span><?}?>
+        <?if($arResult['NEW']) { ?><span class="badge bg-green"><?= $arResult['NEW']; ?></span><? } ?>
     </a>
     <? if ($arResult['EVENTS']) { ?>
         <ul id="menu1" class="dropdown-menu list-unstyled msg_list animated fadeInDown" role="menu">
@@ -29,5 +29,5 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                 </div>
             </li>
         </ul>
-    <? } ?>
+    <? } ?> 
 </li>

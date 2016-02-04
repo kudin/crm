@@ -1,8 +1,8 @@
 <?php
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
  
-if(!$arResult['PROGRAMERS_IDS']) {
-    ShowError('Нельзя создать задачу в проекте без исполнителей или заказчиков'); 
+if(!count($arResult['PROJECT_USERS'])) {
+    ShowError('Нельзя создать задачу в проекте без исполнителей и заказчиков'); 
     return;
 }
 
@@ -35,9 +35,9 @@ if(!$arResult['PROGRAMERS_IDS']) {
                         <label for="last-name" class="control-label col-md-2 col-sm-2 col-xs-12">Ответственный <span class="required">*</span>
                         </label> 
                         <div class="col-md-3 col-sm-3 col-xs-12"> 
-                            <select class=" form-control"  name='PROGRAMMER'>
+                            <select class=" form-control" name='PROGRAMMER'>
                                 <?
-                                foreach ($arResult['PROGRAMERS_IDS'] as $userId) {
+                                foreach ($arResult['PROJECT_USERS'] as $userId) {
                                     $user = $arResult['USERS'][$userId];
                                     ?>
                                     <option value='<?= $user['ID']; ?>'><?= $user['FULL_NAME']; ?></option>
@@ -48,10 +48,12 @@ if(!$arResult['PROGRAMERS_IDS']) {
                         <label for="last-name" class="control-label col-md-2 col-sm-2 col-xs-12">Постановщик <span class="required">*</span>
                         </label>  
                         <div class="col-md-4 col-sm-4 col-xs-12"> 
-                        <? if (count($arResult['CUSTOMERS_IDS']) > 1) { ?>
+                        <? if (count($arResult['PROJECT_USERS']) > 1) { ?>
+                            <? if($arResult['USERS'][$arResult['USER_ID']]['FULL_NAME']) { ?>
                             <div class="customer_label"><a href="#"><?= $arResult['USERS'][$arResult['USER_ID']]['FULL_NAME']; ?></a></div>
-                            <select class="form-control select-customer" name='CUSTOMER'><?
-                                foreach ($arResult['CUSTOMERS_IDS'] as $userId) {
+                            <? } ?>
+                            <select class="form-control select-customer" name='CUSTOMER' <? if(!$arResult['USERS'][$arResult['USER_ID']]['FULL_NAME']) { ?> style="display: block;" <? }?>><?
+                                foreach ($arResult['PROJECT_USERS'] as $userId) {
                                     $user = $arResult['USERS'][$userId];
                                     ?>
                                     <option <? if ($arResult['USER_ID'] == $user['ID']) { ?> selected <? } ?> value='<?= $user['ID']; ?>'><?= $user['FULL_NAME']; ?>  </option>

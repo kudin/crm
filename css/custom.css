@@ -3954,6 +3954,10 @@ html > body > .ui-pnotify {
     display: block;
 }
 
+.ui-pnotify-text a {
+    color: white;
+}
+
 .ui-pnotify-icon,
 .ui-pnotify-icon span {
     display: block;

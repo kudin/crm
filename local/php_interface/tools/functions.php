@@ -57,3 +57,51 @@ function validatePriority($priority) {
     }
     return $priority;
 }
+
+function trackStartedTask($stopStartedTask = true) {
+    CModule::IncludeModule('iblock');
+    $res = CIBlockElement::GetList(
+            array(), 
+            array("IBLOCK_ID" => TASKS_IBLOCK_ID,
+                'ACTIVE' => 'Y', 
+                "PROPERTY_PROGRAMMER" => CUser::GetID(),
+                "PROPERTY_STATUS" => STATUS_LIST_WORK), 
+            false, 
+            false,
+            array('ID', 'NAME', 'PROPERTY_PROJECT', 'PROPERTY_STATUS_DATE'));
+    if ($taskArr = $res->Fetch()) {
+        if($stopStartedTask) {
+            CIBlockElement::SetPropertyValuesEx($taskArr['ID'], TASKS_IBLOCK_ID, array('STATUS' => STATUS_LIST_PAUSE));
+        }
+        $link = TASKS_LIST_URL . $taskArr["PROPERTY_PROJECT_VALUE"] . '/' . $taskArr['ID'] . '/';
+        $date = new DateTime($taskArr["PROPERTY_STATUS_DATE_VALUE"]);
+        $curdate = new DateTime();
+        $diff = $date->diff($curdate);
+        $h = $diff->format('%h');
+        $i = $diff->format('%i');
+        if ($h) {
+            $timingText = "{$h} ч, ";
+        }
+        if ($i) {
+            $timingText = "{$i} мин. ";
+        }
+        if ($h || $i) {
+            $decTime = $h + ($i / 60);
+            $decTime = round($decTime, 2);
+            $el = new CIBlockElement;
+            if ($el->Add(array(
+                        "DATE_ACTIVE_FROM" => ConvertTimeStamp(time(), "SHORT"),
+                        "MODIFIED_BY" => CUser::GetID(),
+                        "IBLOCK_SECTION_ID" => false,
+                        "IBLOCK_ID" => TRACKING_IBLOCK_ID,
+                        "NAME" => 'Без названия' . ' (' . $decTime . 'ч.)',
+                        "ACTIVE" => "Y",
+                        "PROPERTY_VALUES" => array("HOURS" => $decTime, "TASK" => $taskArr['ID'])))) {
+                crmEntitiesHelper::recalcTaskTracking($taskArr['ID']);
+                ToolTip::Add("+ {$timingText} в трекер задачи \"<a target=\"_blank\" href=\"{$link}\">{$taskArr['ID']} {$taskArr['NAME']}</a>\"");
+            } else {
+                ToolTip::AddError($el->LAST_ERROR);
+            }
+        } 
+    }
+}

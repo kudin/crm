@@ -65,12 +65,16 @@ $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 if ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();  
     $arProps = $ob->GetProperties();
-    $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE']; 
-    if(!in_array($arResult['USER_ID'], $arResult['CUSTOMERS_IDS'])) {
-        $arResult['CUSTOMERS_IDS'][] = $arResult['USER_ID'];
-    } 
-    $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'];   
-    $arResult['USERS'] = BitrixHelper::getUsersArrByIds(array_merge($arResult['CUSTOMERS_IDS'], $arResult['PROGRAMERS_IDS']));
+    if($arProps['PROGRAMMER']['VALUE']) {
+        $arResult['PROJECT_USERS'] = $arProps['PROGRAMMER']['VALUE'];  
+    } else {
+        $arResult['PROJECT_USERS'] = array();
+    }
+    if($arProps['CUSTOMER']['VALUE']) {
+        $arResult['PROJECT_USERS'] = array_merge($arResult['PROJECT_USERS'], $arProps['CUSTOMER']['VALUE']);
+    }  
+    $arResult['PROJECT_USERS'] = array_unique($arResult['PROJECT_USERS']);
+    $arResult['USERS'] = BitrixHelper::getUsersArrByIds($arResult['PROJECT_USERS']);
     $arResult['PROJECT'] = $arFields;
 
     $this->IncludeComponentTemplate();

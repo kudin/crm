@@ -19,7 +19,7 @@
                 <li><a href="#" data-target=".bs-example-modal-sm" data-toggle="modal"><i class="fa fa-plus"></i> Поставить новую задачу</a></li> 
             </ul>  
             <div aria-hidden="true" role="dialog" tabindex="-1" class="modal fade bs-example-modal-sm" style="display: none;">
-                <div class="modal-dialog modal-sm">
+                <div class="modal-dialog">
                     <div class="modal-content"> 
                         <div class="modal-header"><h4 id="myModalLabel2" class="modal-title">Поставить задачу в проекте:</h4></div>
                         <div class="modal-body"><?
@@ -56,8 +56,8 @@
             <div class="fgroup">
                 <div class="f1"><p>Статус: </p></div>
                 <div class="f2"><select id="tasks_show" class="form-control"> 
-                    <? foreach(array('all' => 'Все',  
-                                     'open' => 'Открытые', 
+                    <? foreach(array('open' => 'Открытые', 
+                                     'all' => 'Все',  
                                      'end' => 'Закрытые',
                                      false,
                                      'nocalc' => 'Ожидают оценки',
@@ -86,9 +86,9 @@
                 <div class="f2">
                 <select id="tasks_show2" class="form-control"> 
                     <?
-                    foreach(array(
-                        'all' => 'Все',
+                    foreach(array( 
                         'my' => 'Мои (' . $arResult['USERS'][$arResult['USER_ID']]['FULL_NAME'] . ')',
+                        'all' => 'Все',
                         'not_me' => 'Не мои',
                         false,
                     ) as $code => $value) {
@@ -120,12 +120,12 @@
             function drawHeadTh($name, $sort, $order) {
                 $names = array('priority' => array('name' => 'Приоритет'),
                                'calc' =>  array('name' => 'Оценка, часы'),
-                               'date' => array('name' =>  'Задача', 'desc' => 'Сортировать по дате создания задачи'),
+                               'date' => array('name' =>  'Задача', 'desc' => 'по дате создания задачи'),
                                'tracking' =>  array('name' => 'Затрачено'),
                                'project' =>  array('name' => 'Проект'),
-                               'status' => array('name' => 'Статус', 'desc' => 'Сортировать по дате изменения статуса'),
+                               'status' => array('name' => 'Статус', 'desc' => 'по дате изменения статуса'),
                                'ispolnitel' =>  array('name' => 'Исполнитель'),
-                               'comments' =>  array('name' => 'Комментарии', 'desc' => 'Сортировать по дате последнего комментария')
+                               'comments' =>  array('name' => 'Комментарии', 'desc' => 'по дате последнего комментария')
                     );
                 if(!in_array($name, array_keys($names))) {
                     return;
@@ -150,8 +150,8 @@
                             $colspan = 6;
                         } ?>
                         <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
-                        <th class="column-title" style="width: 130px;"><?drawHeadTh('ispolnitel', $arResult['SORT'], $arResult['SORT_ORDER']);?> </th>
-                        <th class="column-title" style="width: 160px;">Статус </th>
+                        <th class="column-title" style="width: 130px;"><?drawHeadTh('ispolnitel', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
+                        <th class="column-title" style="width: 160px;"><?drawHeadTh('status', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
                         <th class="column-title" style="width: 165px;"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 115px;"><?drawHeadTh('tracking', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 130px;"><?drawHeadTh('comments', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
@@ -237,6 +237,9 @@
                             <p<?if($color) {
                                 ?> class="status_<?=$color;?>" <?
                             }?>><?=$task['STATUS_TEXT'];?></p>
+                            <? if($task['PROPERTIES']['STATUS_DATE']['VALUE']) {?>
+                                <div class="small"><?=$task['PROPERTIES']['STATUS_DATE']['VALUE'];?></div>
+                            <? } ?>
                         </td>   
                         <td><?
                         if($task['PROPERTIES']['CALC_COMMENTS']['VALUE']) { ?>

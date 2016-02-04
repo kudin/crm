@@ -67,6 +67,7 @@
                          <?php  
                          $APPLICATION->IncludeComponent('kudin:current_user', 'nav'); 
                          $APPLICATION->IncludeComponent('kudin:events', '', array('ID' => $_REQUEST['ID']));
+                         $APPLICATION->IncludeComponent('kudin:tracking');
                          ?> 
                          </ul> 
                          <div class="nav toggle">
