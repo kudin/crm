@@ -118,13 +118,15 @@
         <? if (count($arResult['TASKS'])) {
             
             function drawHeadTh($name, $sort, $order) {
-                $names = array('priority' => 'Приоритет',
-                               'calc' => 'Оценка, часы',
-                               'date' => 'Задача',
-                               'tracking' => 'Затрачено',
-                               'project' => 'Проект', 
-                               'ispolnitel' => 'Исполнитель',
-                               'comments' => 'Комментарии');
+                $names = array('priority' => array('name' => 'Приоритет'),
+                               'calc' =>  array('name' => 'Оценка, часы'),
+                               'date' => array('name' =>  'Задача', 'desc' => 'Сортировать по дате создания задачи'),
+                               'tracking' =>  array('name' => 'Затрачено'),
+                               'project' =>  array('name' => 'Проект'),
+                               'status' => array('name' => 'Статус', 'desc' => 'Сортировать по дате изменения статуса'),
+                               'ispolnitel' =>  array('name' => 'Исполнитель'),
+                               'comments' =>  array('name' => 'Комментарии', 'desc' => 'Сортировать по дате последнего комментария')
+                    );
                 if(!in_array($name, array_keys($names))) {
                     return;
                 }  
@@ -132,8 +134,8 @@
                 if($sort == $name) { 
                     ?><i class="fa fa-sort-amount-<?=$order;?>"></i> <?  
                     $newOrder = ($order == 'asc' ? 'desc' : 'asc');
-                }
-                ?><a href="?sort=<?=$name;?>&order=<?=$newOrder;?>"><?=$names[$name];?></a><?
+                } 
+                ?><a <?if($names[$name]['desc']) { ?> title="<?=$names[$name]['desc'];?>" <? } ?> href="?sort=<?=$name;?>&order=<?=$newOrder;?>"><?=$names[$name]['name'];?></a><?
             }
             
             ?>

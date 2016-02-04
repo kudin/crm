@@ -89,7 +89,8 @@ $sorts = array('date' => 'ID',
                'calc' => 'PROPERTY_CALC_COMMENTS',
                'project' => 'PROPERTY_PROJECT',
                'ispolnitel' => 'PROPERTY_PROGRAMMER',
-               'comments' => 'PROPERTY_COMMENT_DATE');
+               'comments' => 'PROPERTY_COMMENT_DATE',
+               'status' => 'PROPERTY_COMMENT_DATE');
 $defaultSort = 'date';
 if($sort = $_REQUEST['sort']) { 
     if(in_array($sort, array_keys($sorts))) {

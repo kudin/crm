@@ -5,15 +5,13 @@
         <?$APPLICATION->ShowHead();?>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>devteam CRM</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <title><?=CRM_NAME;?></title>
         <script src="/js/jquery.min.js"></script>
         <!-- Bootstrap core CSS --> 
         <link href="/css/bootstrap.min.css" rel="stylesheet"> 
         <link href="/fonts/css/font-awesome.min.css" rel="stylesheet">
-        <link href="/css/animate.min.css" rel="stylesheet">
-
+        <link href="/css/animate.min.css" rel="stylesheet"> 
         <!-- Theme styling --> 
         <link href="/css/custom.css" rel="stylesheet">
         <script src="/js/custom.js"></script>
@@ -23,7 +21,6 @@
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->  
     </head>
- 
     <body class="nav-md"> 
         <div class="container body"> 
             <div class="main_container"> 

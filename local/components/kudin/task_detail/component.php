@@ -382,6 +382,7 @@ if($delete_comment = $_REQUEST['delete_comment']) {
             if($comment['CREATED_BY'] == $arResult['USER_ID']) {  
                 $el = new CIBlockElement;  
                 $res = $el->Update($delete_comment, array("ACTIVE" => 'N'));  
+                crmEntitiesHelper::recalcCommentsCnt($arParams['ID']);
                 $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
                             $arParams['ID'], 'delete_comment', strip_tags($comment['~PREVIEW_TEXT'])); 
                 ToolTip::Add('Комментарий удалён');
