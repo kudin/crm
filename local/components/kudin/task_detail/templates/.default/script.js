@@ -81,7 +81,7 @@ $(function() {
             selector: '.edit_task_form textarea',
             language: 'ru',
             plugins: ['textcolor colorpicker link media'],
-            toolbar: 'undo redo | bold italic forecolor underline strikethrough | bullist numlist | alignleft aligncenter alignright | link media',
+            toolbar: 'undo redo | bold italic forecolor underline strikethrough | bullist numlist | alignleft aligncenter alignright | indent outdent | removeformat link media',
             content_css: ['/css/tiny/style.css'], 
             height: 360, 
             gecko_spellcheck:true
@@ -114,7 +114,7 @@ $(function() {
         selector: '.tiny',
         language: 'ru',
         plugins: ['textcolor colorpicker link media'],
-        toolbar: 'undo redo | bold italic forecolor underline strikethrough | bullist numlist | alignleft aligncenter alignright | link media',
+        toolbar: 'undo redo | bold italic forecolor underline strikethrough | bullist numlist | alignleft aligncenter alignright | indent outdent | removeformat link media',
         content_css: ['/css/tiny/style.css'],
         min_height: 160,
         height: 220

@@ -61,15 +61,15 @@ switch ($action) {
             } 
             $el = new CIBlockElement;  
             if($newId = $el->Add(array(
-                "DATE_ACTIVE_FROM" => ConvertTimeStamp(time(), "SHORT"),
-                "MODIFIED_BY"    => $USER->GetID(),  
+                "DATE_ACTIVE_FROM"  => ConvertTimeStamp(time(), "SHORT"),
+                "MODIFIED_BY"       => $USER->GetID(),  
                 "IBLOCK_SECTION_ID" => false, 
-                "IBLOCK_ID"      => TRACKING_IBLOCK_ID, 
-                "NAME"           => (strlen($desc) ? $desc : 'Без названия') . ' (' . $time . 'ч.)',
-                "DETAIL_TEXT"    => $desc,
-                "ACTIVE"         => "Y",
-                "PROPERTY_VALUES" => array("HOURS" => $time, 
-                                           "TASK" => $task)))) {
+                "IBLOCK_ID"         => TRACKING_IBLOCK_ID, 
+                "NAME"              => (strlen($desc) ? $desc : 'Без названия') . ' (' . $time . 'ч.)',
+                "DETAIL_TEXT"       => $desc,
+                "ACTIVE"            => "Y",
+                "PROPERTY_VALUES"   => array("HOURS" => $time, 
+                                             "TASK" => $task)))) {
                 $summ = crmEntitiesHelper::recalcTaskTracking($task);
                 die(json_encode(array('ok' => $newId, 'summ' => $summ)));
             } else { 

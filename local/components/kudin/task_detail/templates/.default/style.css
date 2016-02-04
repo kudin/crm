@@ -97,6 +97,7 @@
 .comment_text{
     margin-top: 3px;
     margin-left: 62px;
+    word-wrap: break-word;
 }
 
 .comment p{
