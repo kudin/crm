@@ -264,7 +264,7 @@
                             <?if($task['NEW_COMMENTS']) {
                                 ?>
                                 <?=$task['PROPERTIES']['COMMNETS_CNT']['VALUE'];?>
-                                <span class="bold">(<?=$task['NEW_COMMENTS'];?>)</span>
+                                <b>(<?=$task['NEW_COMMENTS'];?>)</b>
                                 <?
                             } else {
                                 ?>
