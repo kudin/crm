@@ -328,13 +328,25 @@ if($arResult['CAN_EDIT'] && isset($new_task)) {
             if(in_array($newProgrammer, $arResult['PROGRAMERS_IDS'])) {
                 $propsUpdate['PROGRAMMER'] = $newProgrammer;
             }
-        }    
-        $deletefiles = $_REQUEST['deletefile'];
-        if(is_array($deletefiles) && count($deletefiles)) { 
-            foreach ($deletefiles as $delFileID) {  
-                // удалить файл
-            }
         }
+        foreach ($_FILES['attach'] as $code => $values) { 
+            foreach ($values as $key => $value) { 
+                if($_FILES['attach']["tmp_name"][$key]) {
+                    $arFiles[$key][$code] = $value;
+                } 
+            } 
+        }
+        $deletefiles = $_REQUEST['deletefile'];
+        $db_props = CIBlockElement::GetProperty(TASKS_IBLOCK_ID, $arParams['ID'], "sort", "asc", Array("CODE" => "FILES"));
+        while($ar_props = $db_props->Fetch()) { 
+            $oldfile = CFile::MakeFileArray($ar_props["VALUE"]);
+            if(in_array($ar_props['VALUE'], $deletefiles)) {
+                $oldfile['del'] = 'Y';
+            }
+            $arFiles[] = $oldfile; 
+        } 
+        $propsUpdate['FILES'] = $arFiles; 
+            
         CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, $propsUpdate);
         $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), $arParams['ID'], 'edit', $new_task, true);
         if(isset($propsUpdate['CALC'])) {

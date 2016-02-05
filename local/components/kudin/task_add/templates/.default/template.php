@@ -23,7 +23,7 @@ if(!count($arResult['PROJECT_USERS'])) {
                         <label for="name" class="control-label col-md-2 col-sm-2 col-xs-12">Название задачи <span class="required">*</span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" name="name" class="form-control col-md-7 col-xs-12" required="required" id="name">
+                            <input type="text" name="name" class="form-control col-md-7 col-xs-12" required="required" id="name" autocomplete="off">
                             <select name="priority" class="form-control prior<?=DEFAULT_PRIORITY;?>" name="priory" id="priory"><?
                             for($prior = 0; $prior <= MAX_PRIORITY; $prior++) {
                                 ?><option class="prior<?=$prior;?>" <?if($prior == DEFAULT_PRIORITY) {?> selected="selected" <? } ?>><?=$prior;?></option><?

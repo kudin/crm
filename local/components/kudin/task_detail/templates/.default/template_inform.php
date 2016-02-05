@@ -14,10 +14,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                 <p class="date">Создана: <?= $arResult['TASK']['DATE_CREATE'] ?></p>
                 <?if($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'] != $arResult['TASK']['CREATED_BY']) {
                     ?>
-                <p>Создатель: <?= $arResult['USERS'][$arResult['TASK']['CREATED_BY']]['FULL_NAME']; ?></p>
+                <p>Создатель: <a href="/users/<?=$arResult['TASK']['CREATED_BY'];?>/"><?= $arResult['USERS'][$arResult['TASK']['CREATED_BY']]['FULL_NAME']; ?></a></p>
                 <?
                 }?>
-                <p>Постановщик: <span class="editable_show"><?= $arResult['USERS'][$arResult['TASK']['PROPS']['CUSTOMER']['VALUE']]['FULL_NAME']; ?></span>
+                <p>Постановщик: <span class="editable_show"><a href="/user/<?=$arResult['TASK']['PROPS']['CUSTOMER']['VALUE'];?>/"><?= $arResult['USERS'][$arResult['TASK']['PROPS']['CUSTOMER']['VALUE']]['FULL_NAME']; ?></a></span>
                     <select data-edittask="Y" class="editable_hidden" name="CUSTOMER_NEW"><?
                     foreach($arResult['CUSTOMERS_IDS'] as $id) {
                         ?>

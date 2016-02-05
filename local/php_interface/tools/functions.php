@@ -39,6 +39,13 @@ function getFileIcon($file) {
 
 function formatTime($time, $maxtime = MAX_TASK_TIME) { 
     $time = trim($time);
+    if(strpos($time, ":")) {
+        $ar = explode(':', $time);
+        if(count($ar) == 2) {
+            $time = $ar[0] + ($ar[1] / 60);
+            $time = round($time, 2);
+        } 
+    }
     $time = str_replace(array(',', ' '), array('.', ''), $time);
     $time = floatval($time);
     if($time < 0) {
