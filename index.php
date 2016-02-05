@@ -10,7 +10,7 @@ $APPLICATION->SetTitle('Последние события');
 <?
 
 $APPLICATION->IncludeComponent('kudin:events', 'main');
-$APPLICATION->IncludeComponent('kudin:tracking', 'main');
+        $APPLICATION->IncludeComponent('kudin:user_detail'); 
 
 ?>
 </div>

@@ -151,7 +151,7 @@
                         } ?>
                         <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 130px;"><?drawHeadTh('ispolnitel', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
-                        <th class="column-title" style="width: 160px;"><?drawHeadTh('status', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
+                        <th class="column-title" style="width: 185px;"><?drawHeadTh('status', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>
                         <th class="column-title" style="width: 165px;"><?drawHeadTh('calc', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 115px;"><?drawHeadTh('tracking', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 130px;"><?drawHeadTh('comments', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
