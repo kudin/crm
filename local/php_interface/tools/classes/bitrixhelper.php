@@ -3,10 +3,11 @@
 class BitrixHelper { 
     
     static $usersCache = array();
+    static $defaultUserPicture = '/images/user.png';
     
     public static function getUsersArrByIds($usersIds) {   
         if(!$usersIds) {
-            return false;
+            $usersIds = array(CUser::GetID());
         }
         if(!is_array($usersIds)) {
             $usersIds = array($usersIds);
@@ -26,17 +27,18 @@ class BitrixHelper {
             } else {
                 $otherUsersIds[] = $id;
             }
-        }  
+        }
         if(count($otherUsersIds)) {
             $rsUsers = CUser::GetList(($by="NAME"), ($order="ASCS"), 
                                       array('ACTIVE'=>'Y', 'ID' => implode(' | ', $otherUsersIds)), 
-                                      array('FIELDS' => array('ID', 'NAME', 'LOGIN', 'LAST_NAME', 'PERSONAL_PHOTO')));  
+                                      array('FIELDS' => array('ID', 'NAME', 'LOGIN', 'LAST_NAME',
+                                                              'PERSONAL_PHOTO', 'EMAIL', 'IS_ONLINE')));  
             while($arUser = $rsUsers->Fetch()) {  
                 if($arUser['PERSONAL_PHOTO']) {
                     $arimg = CFile::ResizeImageGet($arUser['PERSONAL_PHOTO'], array('width'=>100, 'height'=>100), BX_RESIZE_IMAGE_EXACT, true);       
                     $src = $arimg['src']; 
                 } else {
-                    $src = '/images/user.png';
+                    $src = self::$defaultUserPicture;
                 }
                 $arUser['PERSONAL_PHOTO'] = $src; 
                 $arUser['FULL_NAME'] = $arUser['NAME'] . ' ' . $arUser['LAST_NAME'];

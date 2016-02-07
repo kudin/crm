@@ -2,21 +2,21 @@
 $aMenuLinks = Array( 
 	Array(
 		"Задачи", 
-		"/tasks/", 
+		TASKS_LIST_URL, 
 		Array(), 
 		Array("CLASS"=>"fa-bug"), 
 		"" 
 	),
 	Array(
 		"Проекты", 
-		"/projects/", 
+		PROJECTS_LIST_URL, 
 		Array(), 
 		Array("CLASS"=>"fa-rocket"), 
 		"" 
 	),
 	Array(
 		"Пользователи", 
-		"/users/", 
+		USERS_LIST_URL, 
 		Array(), 
 		Array("CLASS"=>"fa-users"), 
 		"" 

@@ -34,8 +34,8 @@ $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 if ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();
     $arProps = $ob->GetProperties(); 
-    $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
-    $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'];
+    $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'] ? $arProps['CUSTOMER']['VALUE'] : array();
+    $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'] ? $arProps['PROGRAMMER']['VALUE'] : array();
     $arResult['PROJECT'] = $arFields;
 } else { 
     ShowError('Проект не найден');

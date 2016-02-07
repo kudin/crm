@@ -2,7 +2,7 @@
 include 'constants.php';
 include 'tools/functions.php'; 
             
-foreach(array('ToolTip', 'CrmLog', 'BitrixHelper', 'StatusHelper') as $className) {
+foreach(array('ToolTip', 'CrmLog', 'BitrixHelper', 'StatusHelper', 'FileHelper') as $className) {
     $arrClasses[$className] = "/local/php_interface/tools/classes/" . strtolower($className). ".php";
 }
 CModule::AddAutoloadClasses("", $arrClasses);
@@ -413,5 +413,11 @@ function ChangeCUserToCrmUser() {
     global $USER;
     $USER = new CrmUser();
 }
-            
+
+AddEventHandler('main', 'OnBeforeProlog', 'CustomSetLastActivityDate');
+function CustomSetLastActivityDate() {
+    global $USER; 
+    CUser::SetLastActivityDate($USER->GetID()); 
+}
+
 $GLOBALS['CRM_CONFIG'] = new CrmConfig();

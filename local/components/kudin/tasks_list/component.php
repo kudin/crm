@@ -30,7 +30,7 @@ $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", "D
 $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
 $userFilter = $USER->GetViewProjectsFilter();
 $arFilter = array_merge($userFilter, $arFilter);
-$res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
+$res = CIBlockElement::GetList(array(), $arFilter, false, false, $arSelect);
 $res->NavStart();
 while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();

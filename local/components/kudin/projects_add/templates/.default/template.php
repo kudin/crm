@@ -8,7 +8,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
             <div class="x_title">
                 <h2>Добавление проекта</h2>
                 <ul class="nav navbar-right panel_toolbox"> 
-                    <li><a href="/projects/"><i class="fa fa-arrow-left"></i> К списку проектов</a></li> 
+                    <li><a href="<?=PROJECTS_LIST_URL;?>"><i class="fa fa-arrow-left"></i> К списку проектов</a></li> 
                 </ul>
                 <div class="clearfix"></div>
             </div>

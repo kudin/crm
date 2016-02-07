@@ -42,7 +42,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                     <? if ($arResult['TASK']['PROPS']['FILES']['VALUE']) { ?>  
                                         <p>Удалить файлы</p>
                                         <? foreach ($arResult['TASK']['PROPS']['FILES']['VALUE'] as $file) { ?>
-                                        <p title="<?= $file['ORIGINAL_NAME'] ?>"><input type="checkbox" name="deletefile[]" value="<?=$file['ID'];?>"> <?= $file["TRUNCATED_NAME"]; ?></p> 
+                                        <p title="<?= $file['ORIGINAL_NAME'] ?>"><input type="checkbox" name="deletefile[]" value="<?=$file['ID'];?>"> <i class="fa <?=$file['class'];?>"></i> <?= $file["TRUNCATED_NAME"]; ?></p> 
                                         <? } ?>
                                      <? } ?> 
                                 </div>  

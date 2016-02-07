@@ -27,5 +27,6 @@ define('STATUS_LIST_CALC_AGRED', 10);
 
 define('PROJECTS_LIST_URL', '/projects/');
 define('TASKS_LIST_URL', '/tasks/');
+define('USERS_LIST_URL', '/users/');
 
 define('CRM_NAME', 'devteam CRM');

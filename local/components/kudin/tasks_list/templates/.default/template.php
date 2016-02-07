@@ -184,7 +184,7 @@
                             <? } ?>
                         </td>    
                         <td>
-                            <a title="<?=$arResult['USERS'][$task['PROPERTIES']['CUSTOMER']['VALUE']]['FULL_NAME'];?> &rarr; <?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?>" href="/users/<?=$task['PROPERTIES']['PROGRAMMER']['VALUE'];?>/"><?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?></a>
+                            <a title="<?=$arResult['USERS'][$task['PROPERTIES']['CUSTOMER']['VALUE']]['FULL_NAME'];?> &rarr; <?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?>" href="<?=USERS_LIST_URL;?><?=$task['PROPERTIES']['PROGRAMMER']['VALUE'];?>/"><?=$arResult['USERS'][$task['PROPERTIES']['PROGRAMMER']['VALUE']]['FULL_NAME'];?></a>
                         </td>
                         <td><?  $color = false;
                                 if(($task['PROPERTIES']['PROGRAMMER']['VALUE'] == $arResult['USER_ID']) 
