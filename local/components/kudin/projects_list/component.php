@@ -56,8 +56,7 @@ while ($ob = $res->GetNextElement()) {
     $arResult['ITEMS'][] = $arFields;
 }
 $arResult["NAV_STRING"] = $res->GetPageNavString();
-
-$arUsersId = array_unique($arUsersId);
+ 
 $arResult['USERS'] = BitrixHelper::getUsersArrByIds($arUsersId);
 $arResult['HAS_RIGHTS_TO_ADD_PROJECT'] = $USER->hasRigthsToAddProject();
 $this->IncludeComponentTemplate();

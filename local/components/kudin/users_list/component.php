@@ -1,13 +1,20 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
  
-$rsUsers = CUser::GetList(($by="NAME"), ($order="ASCS"), 
-                          array('ACTIVE'=>'Y'), 
-                          array('FIELDS'=> array('ID', 'NAME', 'LOGIN', 'LAST_NAME', 'EMAIL', 'PERSONAL_PHOTO')) );    
-while($arUser = $rsUsers->Fetch()) { 
-    if($arUser['PERSONAL_PHOTO']) {
-        $arUser['PERSONAL_PHOTO'] = CFile::ResizeImageGet($arUser['PERSONAL_PHOTO'], array('width'=>100, 'height'=>100), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);       
-    } 
-    $arResult['USERS'][] = $arUser;
+$res = CIBlockElement::GetList(Array(), 
+        array_merge($USER->GetViewProjectsFilter(), Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID)), 
+        false, 
+        false,
+        array("ID", "IBLOCK_ID", "PROPERTY_*")); 
+while ($ob = $res->GetNextElement()) {
+    $arFields = $ob->GetFields();
+    $arProps = $ob->GetProperties();  
+    foreach(array('PROGRAMMER', 'CUSTOMER') as $propCode) {
+        foreach ($arProps[$propCode]['VALUE'] as $userid) {
+            $arResult['ALL_USERS'][] = $userid;
+        } 
+    }   
 }
+
+$arResult['USERS'] = BitrixHelper::getUsersArrByIds($arResult['ALL_USERS']);
 
 $this->IncludeComponentTemplate();

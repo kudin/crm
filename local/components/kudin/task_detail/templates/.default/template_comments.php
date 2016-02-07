@@ -10,7 +10,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     <? }
     foreach ($arResult['COMMENTS'] as $comment) { ?> 
         <div class="col-md-12 comment">
-            <img class="avatar" src="<?=$arResult['USERS'][$comment['CREATED_BY']]['PERSONAL_PHOTO']['src'];?>">
+            <img class="avatar" src="<?=$arResult['USERS'][$comment['CREATED_BY']]['PERSONAL_PHOTO'];?>">
             <div class="commentcalc">
                 <a name="comment<?=$comment['ID']?>"></a>
                 <? 

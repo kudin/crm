@@ -111,12 +111,12 @@
                 </select>
                 </div>  
             </div> 
-            <? if((!in_array($arResult['FILTER'], array('all', 'open'))) || ($arResult['FILTER2'] != 'my')) { ?>
+            <? if((!in_array($arResult['FILTER'], array('open'))) || ($arResult['FILTER2'] != 'my')) { ?>
             <button class="btn btn-default" type="button" id="reset_list_filter">Сбросить фильтр</button>
             <? } ?>
         </div>     
         <? if (count($arResult['TASKS'])) {
-            
+
             function drawHeadTh($name, $sort, $order) {
                 $names = array('priority' => array('name' => 'Приоритет'),
                                'calc' =>  array('name' => 'Оценка, часы'),
@@ -144,10 +144,10 @@
                     <tr class="headings">
                         <th style="width: 20px;"></th>
                         <? if($GLOBALS['CRM_CONFIG']->getBool('show_project_logo_in_list') && !$arParams["PROJECT"]) { 
-                            $colspan = 7; ?>
+                            $colspan = 8; ?>
                         <th class="column-title column-project-ico"><?drawHeadTh('project', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>  
                         <? } else {
-                            $colspan = 6;
+                            $colspan = 7;
                         } ?>
                         <th class="column-title"><?drawHeadTh('date', $arResult['SORT'], $arResult['SORT_ORDER']);?></th> 
                         <th class="column-title" style="width: 130px;"><?drawHeadTh('ispolnitel', $arResult['SORT'], $arResult['SORT_ORDER']);?></th>

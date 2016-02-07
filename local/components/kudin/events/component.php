@@ -16,11 +16,11 @@ if(!$arParams['USER_ID']) {
 } else {
     $arResult['EVENTS'] = $log->getUserEvents($arParams['USER_ID']);
 }
-
+ 
 foreach($arResult['EVENTS'] as $event) {
-    $users[] = $event['USER'];
+    $users[] = $event['FROM_USER']; 
 } 
-
+ 
 $arResult['USERS'] = BitrixHelper::getUsersArrByIds($users);
 
 $this->IncludeComponentTemplate();

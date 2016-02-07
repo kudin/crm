@@ -56,7 +56,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <ul class="list-inline">
                                     <?foreach($project['PROPERTIES']['CUSTOMER']['VALUE'] as $userId) {?>
                                     <li>
-                                        <a href="/users/<?=$userId;?>/"><img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] ? $arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] : '/images/user.png';?>"><div class="username"><?=$arResult['USERS'][$userId]['FULL_NAME'];?></div></a>
+                                        <a href="/users/<?=$userId;?>/"><img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO'];?>"><div class="username"><?=$arResult['USERS'][$userId]['FULL_NAME'];?></div></a>
                                     </li> 
                                     <?}?>
                                 </ul>
@@ -67,7 +67,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <ul class="list-inline">
                                     <?foreach($project['PROPERTIES']['PROGRAMMER']['VALUE'] as $userId) {?>
                                     <li>
-                                        <a href="/users/<?=$userId;?>/"><img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] ? $arResult['USERS'][$userId]['PERSONAL_PHOTO']['src'] : '/images/user.png';?>"><div class="username"><?=$arResult['USERS'][$userId]['FULL_NAME'];?></div></a>
+                                        <a href="/users/<?=$userId;?>/"><img alt="<?=$arResult['USERS'][$userId]['NAME'];?>" title="<?=$arResult['USERS'][$userId]['NAME'];?> <?=$arResult['USERS'][$userId]['LAST_NAME'];?>" class="avatar" src="<?=$arResult['USERS'][$userId]['PERSONAL_PHOTO'];?>"><div class="username"><?=$arResult['USERS'][$userId]['FULL_NAME'];?></div></a>
                                     </li> 
                                     <?}?>
                                 </ul>

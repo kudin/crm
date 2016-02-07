@@ -15,10 +15,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
             }
             ?>
             <li><a href="<?= $event['LINK']; ?>">
-                    <span class="image"><img src="<?= $arResult['USERS'][$event['FROM_USER']]['PERSONAL_PHOTO']['src']; ?>"></span>
+                    <span class="image"><img src="<?= $arResult['USERS'][$event['FROM_USER']]['PERSONAL_PHOTO'];?>"></span>
                     <span><span><?= $arResult['USERS'][$event['FROM_USER']]['FULL_NAME']; ?></span>
-                    <span class="time"><?= $event['DATE'] ?></span></span>
-                    <span class="message<?if(!$event['VIEW']) {?> red<?}?>"><b><?= $event['TEXT_ACTION']; ?></b></span>
+                    <span class="time"><?= $event['DATE']; ?></span></span>
+                    <span class="message<?if(!$event['VIEW']) { ?> red<? } ?>"><b><?= $event['TEXT_ACTION']; ?></b></span>
                     <span class="message"><?= $event['MESSAGE']; ?></span>
                 </a>
             </li> 

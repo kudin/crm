@@ -1,7 +1,7 @@
 <?php
 include 'constants.php';
 include 'tools/functions.php'; 
-
+            
 foreach(array('ToolTip', 'CrmLog', 'BitrixHelper', 'StatusHelper') as $className) {
     $arrClasses[$className] = "/local/php_interface/tools/classes/" . strtolower($className). ".php";
 }

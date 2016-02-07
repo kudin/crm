@@ -16,7 +16,7 @@ die();
                 <?
                 foreach ($arResult['EVENTS'] as $event) {
                     ?>
-                    <li><a href="<?= $event['LINK']; ?>"><span class="image"><img alt="<?= $arResult['USERS'][$event['FROM_USER']]['FULL_NAME']; ?>" src="<?= $arResult['USERS'][$event['FROM_USER']]['PERSONAL_PHOTO']['src']; ?>"></span>
+                    <li><a href="<?= $event['LINK']; ?>"><span class="image"><img alt="<?= $arResult['USERS'][$event['FROM_USER']]['FULL_NAME']; ?>" src="<?= $arResult['USERS'][$event['FROM_USER']]['PERSONAL_PHOTO']; ?>"></span>
                             <span>
                                 <span><?= $event['TEXT_ACTION']; ?></span>
                                 <span class="time"><?= $event['DATE'] ?></span> 
