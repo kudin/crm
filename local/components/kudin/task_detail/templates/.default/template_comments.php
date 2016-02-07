@@ -89,14 +89,52 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             if(($comment['CREATED_BY'] == $arResult['USER_ID']) && ($arResult['EDIT_COMMENT'] == $comment['ID'])) { ?>
                 <form action="<?= $APPLICATION->GetCurPage(); ?>" method="POST" enctype="multipart/form-data" class="commentEditForm">  
                     <textarea class="tiny" name="comment_text"><?= $comment['~PREVIEW_TEXT']; ?></textarea> 
-                    <div class="compose-btn pull-right">
-                        <input type="hidden" name="id" value="<?=$comment['ID'];?>">
-                        <input type="submit" class="btn btn-sm btn-danger" name="cancel_edit_comment" value="Отмена">
-                        <input type="submit" class="btn btn-sm btn-success" value="Изменить" name="edit_comment"> 
-                    </div>
+                    <div class="row editfilerow">  
+                        <div class="col-md-4 col-sm-4 col-xs-12 hiddenfiles" style="display: block;"> 
+                            <p><a href="#" onclick="$('.add_editcomments_files').show(); return false;">Добавить файлы</a></p>
+                            <div class="add_editcomments_files">
+                            <label class="form-control"><input type="file" name="attach[]"></label> 
+                            <label class="form-control"><input type="file" name="attach[]"></label> 
+                            <label class="form-control"><input type="file" name="attach[]"></label> 
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-12">  
+                            <? if ($comment['FILES']) { ?>  
+                                <p>Удалить файлы</p>
+                                <? foreach ($comment['FILES'] as $file) { ?>
+                                    <p title="<?= $file['ORIGINAL_NAME'] ?>"><input type="checkbox" name="deletefile[]" value="<?=$file['ID'];?>"> <i class="fa <?=$file['class'];?>"></i> <?= $file["TRUNCATED_NAME"]; ?></p> 
+                                <? } ?>
+                             <? } ?> 
+                        </div>  
+                        <div class="col-md-4 col-sm-4 col-xs-12"> 
+                            <div class="compose-btn pull-right">
+                                <input type="hidden" name="id" value="<?=$comment['ID'];?>">
+                                <input type="submit" class="btn btn-sm btn-danger" name="cancel_edit_comment" value="Отмена">
+                                <input type="submit" class="btn btn-sm btn-success" value="Изменить" name="edit_comment"> 
+                            </div>
+                        </div>  
+                    </div>  
                 </form>
             <? } else { ?>
-                <div class="comment_text"><?= $comment['~PREVIEW_TEXT']; ?></div>
+                <div class="comment_text"><?= $comment['~PREVIEW_TEXT']; ?><?
+                if ($comment['FILES']) { ?>
+                <div class="attachment"> 
+                    <ul><? 
+                        foreach ($comment['FILES'] as $file) { ?>
+                            <li>
+                                <a class="atch-thumb" href="<?= $file['SRC'] ?>"><img title="<?=$file['ORIGINAL_NAME']?>" src="<?= $file['icon'] ?>"></a>
+                                <br>
+                                <div class="file-name">
+                                    <a title="<?=$file['ORIGINAL_NAME']?>" href="<?= $file['SRC'] ?>"><?= $file["TRUNCATED_NAME"]; ?></a>
+                                </div>
+                                <br>
+                                <span class="file-size"><?= $file["FILE_SIZE"] ?></span> 
+                            </li> 
+                        <? } ?>
+                    </ul>
+                </div>
+                <? } ?> 
+                </div>
             <? } ?>
         </div> 
     <? } ?>
@@ -110,8 +148,20 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <form action="<?= $APPLICATION->GetCurPage(); ?>" method="POST" enctype="multipart/form-data"> 
             <h4>Новый комментарий</h4>
             <textarea class="tiny" name="comment"></textarea> 
-            <div class="compose-btn pull-right">
-                <input type="submit" class="btn btn-sm btn-success" value="Отправить" name="add_comment"> 
+            <div class="row editfilerow">  
+                <div class="col-md-4 col-sm-4 col-xs-12 hiddenfiles" style="display: block;"> 
+                    <p><a href="#" onclick="$('.add_comments_files').toggle(); return false;">Добавить файлы</a></p>
+                    <div class="add_comments_files">
+                        <label class="form-control"><input type="file" name="attach[]"></label> 
+                        <label class="form-control"><input type="file" name="attach[]"></label> 
+                        <label class="form-control"><input type="file" name="attach[]"></label> 
+                    </div>
+                </div> 
+                <div class="col-md-8 col-sm-8 col-xs-12"> 
+                    <div class="compose-btn pull-right">
+                        <input type="submit" class="btn btn-sm btn-success" value="Отправить" name="add_comment"> 
+                    </div>
+                </div>  
             </div>
         </form>
     </div>  

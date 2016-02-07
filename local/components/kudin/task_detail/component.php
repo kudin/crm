@@ -99,13 +99,21 @@ if ($_REQUEST['add_comment']) {
     if (!$_REQUEST['comment']) {
         ToolTip::AddError('Не введён комментарий'); 
     } else {
+        foreach ($_FILES['attach'] as $code => $values) { 
+            foreach ($values as $key => $value) { 
+                if($_FILES['attach']["tmp_name"][$key]) {
+                    $arFiles[$key][$code] = $value;
+                } 
+            } 
+        }
         $el = new CIBlockElement;
         if ($commentId = $el->Add(
             array("MODIFIED_BY" => $USER->GetID(),
                   "IBLOCK_SECTION_ID" => false,
                   "IBLOCK_ID" => COMMENTS_IBLOCK_ID,
                   "DATE_ACTIVE_FROM" => ConvertTimeStamp(false, 'FULL'),
-                  "PROPERTY_VALUES" => array('TASK' => $arParams['ID']),
+                  "PROPERTY_VALUES" => array('TASK' => $arParams['ID'],
+                                             'FILES' => $arFiles), 
                   "NAME" => TruncateText(strip_tags($_REQUEST['comment']), 100),
                   "ACTIVE" => "Y",
                   "PREVIEW_TEXT" => TruncateText($_REQUEST['comment'], COMMENT_MAX_LENGHT)))) {
@@ -132,16 +140,22 @@ $res = CIBlockElement::GetList(
     false,  
     array('DATE_ACTIVE_FROM', 'PREVIEW_TEXT', 'CREATED_BY', 
           'ID', 'IBLOCK_ID', 'DATE_CREATE', 'PROPERTY_STATUS', 'PROPERTY_CALC')); 
-while ($ar_fields = $res->GetNext()) {  
+while ($obComment = $res->GetNextElement()) {  
+    $ar_fields = $obComment->GetFields();
     $created_by[] = $ar_fields['CREATED_BY'];
     $ar_fields['STATUS'] = $ar_fields["PROPERTY_STATUS_ENUM_ID"];
     $arComments[$ar_fields['ID']] = $ar_fields['STATUS']; 
+    $files = $obComment->GetProperty('FILES'); 
+    if($files = $files["VALUE"]) {
+        foreach ($files as $fileId) {
+            $ar_fields['FILES'][] = CFile::GetFileArray($fileId);
+        }
+    }
     if (strlen($ar_fields["DATE_CREATE"]) > 0) {
         $ar_fields["DATE_CREATE"] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($ar_fields["DATE_CREATE"], CSite::GetDateFormat()));
     }
-    $arResult['COMMENTS'][] = $ar_fields; 
-}
-
+    $arResult['COMMENTS'][] = $ar_fields;
+} 
 
 /* users */
 
@@ -345,8 +359,7 @@ if($arResult['CAN_EDIT'] && isset($new_task)) {
             }
             $arFiles[] = $oldfile; 
         } 
-        $propsUpdate['FILES'] = $arFiles; 
-            
+        $propsUpdate['FILES'] = $arFiles;
         CIBlockElement::SetPropertyValuesEx($arParams['ID'], TASKS_IBLOCK_ID, $propsUpdate);
         $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), $arParams['ID'], 'edit', $new_task, true);
         if(isset($propsUpdate['CALC'])) {
@@ -374,7 +387,25 @@ if(($_REQUEST['edit_comment']) && ($id = intval($_REQUEST['id']))) {
         if($comment['ID'] == $id) {
             if($comment['CREATED_BY'] == $arResult['USER_ID']) { 
                 $el = new CIBlockElement;  
-                $res = $el->Update($id, array("PREVIEW_TEXT" => TruncateText($_REQUEST['comment_text'], COMMENT_MAX_LENGHT)));  
+                $el->Update($id, array("PREVIEW_TEXT" => TruncateText($_REQUEST['comment_text'], COMMENT_MAX_LENGHT)));  
+                $arFiles = array();
+                foreach ($_FILES['attach'] as $code => $values) { 
+                    foreach ($values as $key => $value) { 
+                        if($_FILES['attach']["tmp_name"][$key]) {
+                            $arFiles[$key][$code] = $value;
+                        } 
+                    } 
+                }
+                $deletefiles = $_REQUEST['deletefile'];
+                $db_props = CIBlockElement::GetProperty(COMMENTS_IBLOCK_ID, $id, "sort", "asc", Array("CODE" => "FILES"));
+                while($ar_props = $db_props->Fetch()) { 
+                    $oldfile = CFile::MakeFileArray($ar_props["VALUE"]);
+                    if(in_array($ar_props['VALUE'], $deletefiles)) {
+                        $oldfile['del'] = 'Y';
+                    }
+                    $arFiles[] = $oldfile; 
+                }  
+                CIBlockElement::SetPropertyValuesEx($id, COMMENTS_IBLOCK_ID, array('FILES' => $arFiles)); 
                 $logger->add(array($arResult['TASK']['PROPS']['CUSTOMER']['VALUE'], $arResult['TASK']['PROPS']['PROGRAMMER']['VALUE']), 
                             $arParams['ID'], 'edit_comment', $_REQUEST['comment_text']);
             } else {
@@ -422,7 +453,5 @@ while ($ar_fields = $res->GetNext()) {
     $arResult['TRACKING'][] = $ar_fields;
 }
 
-
-$logger->view($arParams['ID']);
 
 $this->IncludeComponentTemplate();

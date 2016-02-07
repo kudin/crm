@@ -163,7 +163,7 @@
     margin-top: 5px;
 }
 
-.add_files {
+.add_files, .add_comments_files, .add_editcomments_files {
     display: none;
 }
 
@@ -187,4 +187,15 @@
 
 .trackingrow .col-md-2 {
     padding-right: 3px;
+}
+
+.comment_text .attachment {
+    margin-top: 6px;
+}
+.comment_text .attachment ul {
+    margin-bottom: 0px;
+}
+.comment_text .attachment ul li {
+    margin-bottom: 0px;
+    min-width: 100px;
 }

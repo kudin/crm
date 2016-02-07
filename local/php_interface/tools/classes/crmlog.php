@@ -177,7 +177,7 @@ class CrmLog {
         $DB->Query($query);
     }
 
-    public function view($itemid) {
+    public function view($itemid) { 
         $itemid = intval($itemid);
         if(!$itemid) {
             return;

@@ -10,3 +10,13 @@ foreach ($arResult['TASK']['PROPS']['FILES']['VALUE'] as &$file) {
     $file['TRUNCATED_NAME'] = TruncateText($file['ORIGINAL_NAME'], 20);
     $file["FILE_SIZE"] = formatBytes($file["FILE_SIZE"]);
 }
+
+foreach($arResult['COMMENTS'] as &$comment) {
+    foreach($comment['FILES'] as &$file) {
+        $f = new fileHelper($file);
+        $file['icon'] = $f->getFileIcon(); 
+        $file['class'] = $f->getFileClass();
+        $file['TRUNCATED_NAME'] = TruncateText($file['ORIGINAL_NAME'], 20);
+        $file["FILE_SIZE"] = formatBytes($file["FILE_SIZE"]);
+    }
+}
