@@ -13,7 +13,7 @@ $(function () {
     }); 
     
     $(document).on('click', '.add-files', function(e) {
-        $(this).removeClass('add-files').addClass('add-more-files').html('<i class="fa fa-plus"></i>  Добавить ещё файлы');
+        $(this).removeClass('add-files').addClass('add-more-files').html('<i class="fa fa-paperclip"></i>  Добавить ещё файлы');
         $('.hiddenfiles').show();
         e.preventDefault(); 
     });

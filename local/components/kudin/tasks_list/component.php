@@ -199,17 +199,22 @@ $arResult['USER_ID'] = CUser::GetID();
 
 $arResult['ALL_TASK_TIME'] = $arResult['TASK_CNT'] = $arResult['ACCEPTED_TASK_TIME'] = $arResult['ACCEPTED_TASK_CNT'] = 0;
 $statisticFilter['!PROPERTY_STATUS'] = STATUS_LIST_REJECT;
-$res = CIBlockElement::GetList(array(), $statisticFilter, false, array(), array("ID", "PROPERTY_CALC", "PROPERTY_STATUS", "IBLOCK_ID"));
+$res = CIBlockElement::GetList(array(), 
+                               $statisticFilter,
+                               false, 
+                               false, 
+                               array("ID", "PROPERTY_CALC_COMMENTS", "PROPERTY_STATUS", 
+                                     "IBLOCK_ID", 'PROPERTY_TRACKING'));
 while ($item = $res->Fetch()) {
     if($item["PROPERTY_STATUS_ENUM_ID"] == STATUS_LIST_ACCEPT) { 
-        $arResult['ACCEPTED_TASK_TIME'] += $item["PROPERTY_CALC_VALUE"];
         $arResult['ACCEPTED_TASK_CNT'] += 1; 
     }
-    $arResult['ALL_TASK_TIME'] += $item["PROPERTY_CALC_VALUE"];
+    $arResult['TRACKING_TASK_TIME'] += $item["PROPERTY_TRACKING_VALUE"];
+    $arResult['ALL_TASK_TIME'] += $item["PROPERTY_CALC_COMMENTS_VALUE"];
     $arResult['TASK_CNT'] += 1;
 }
 $arResult['PERCENTS_CNT'] = intval(($arResult['ACCEPTED_TASK_CNT'] / $arResult['TASK_CNT']) * 100);
-$arResult['PERCENTS_TIME'] = intval(($arResult['ACCEPTED_TASK_TIME'] / $arResult['ALL_TASK_TIME']) * 100);
+$arResult['PERCENTS_TIME'] = intval(($arResult['TRACKING_TASK_TIME'] / $arResult['ALL_TASK_TIME']) * 100);
 
 
 $this->IncludeComponentTemplate();

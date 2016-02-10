@@ -13,7 +13,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
         <? } ?>
         <li><a href="/cabinet/profile/">Профиль</a></li>
         <li><a href="/config/"><span>Настройки</span></a></li> 
-        <li><a href="?logout=yes"><i class="fa fa-sign-out pull-right"></i>Выйти</a>
+        <li><a href="/?logout=yes"><i class="fa fa-sign-out pull-right"></i>Выйти</a>
         </li>
     </ul>
 </li>

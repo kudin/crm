@@ -297,11 +297,11 @@
                     <? } ?>
                 </div>  
                 <div class="col-md-6">
-                    <p><b><?=$arResult['PERCENTS_TIME'];?>%</b> <?=$arResult['ACCEPTED_TASK_TIME'];?> из <?=$arResult['ALL_TASK_TIME'];?> часов</p >
+                    <p><b><?=$arResult['PERCENTS_TIME'];?>%</b> внесено затрат <?=$arResult['TRACKING_TASK_TIME'];?> из <?=$arResult['ALL_TASK_TIME'];?> часов</p >
                     <div class="progress progress_sm">
                         <div role="progressbar" class="progress-bar bg-green" style="width: <?=$arResult['PERCENTS_TIME'];?>%;"></div>
                     </div> 
-                    <h3><?=$arResult['ACCEPTED_TASK_TIME'];?> ч.</h3>
+                    <h3><?=$arResult['TRACKING_TASK_TIME'];?> ч.</h3>
                 </div>   
             </div>  
         <? } else { ?>

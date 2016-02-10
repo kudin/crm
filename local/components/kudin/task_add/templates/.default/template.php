@@ -78,7 +78,7 @@ if(!count($arResult['PROJECT_USERS'])) {
                             <label class="form-control"><input type="file" name="attach[]"></label> 
                             <label class="form-control"><input type="file" name="attach[]"></label> 
                         </div>
-                        <a class="btn add-files"><i class="fa fa-plus"></i> Добавить файл </a>
+                        <a class="btn add-files"><i class="fa fa-paperclip"></i> Добавить файл </a>
                     </div>  
                     <div class="ln_solid"></div>
                     <div class="form-group">

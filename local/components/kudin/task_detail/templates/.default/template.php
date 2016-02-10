@@ -31,7 +31,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                             <textarea name="new_task"><?= $arResult['TASK']['~DETAIL_TEXT'] ? $arResult['TASK']['~DETAIL_TEXT'] : $arResult['TASK']['NAME']; ?></textarea> 
                             <div class="row editfilerow">  
                                 <div class="col-md-4 col-sm-4 col-xs-12 hiddenfiles" style="display: block;"> 
-                                    <p><a href="#" onclick="$('.add_files').show(); return false;">Добавить файлы</a></p>
+                                    <p><a href="#" onclick="$('.add_files').toggle(); return false;"><i class="fa fa-paperclip"></i> Добавить файлы</a></p>
                                     <div class="add_files">
                                     <label class="form-control"><input type="file" name="attach[]"></label> 
                                     <label class="form-control"><input type="file" name="attach[]"></label> 

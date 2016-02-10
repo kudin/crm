@@ -45,10 +45,10 @@ if(!function_exists('drawProgressBar')) {
                             <thead>
                                 <tr> 
                                     <th style="width: 190px;">
-                                        <a href="/tasks/?filter=open&filter2=<?=$arParams['USER_ID']?>">Всего открытых задач:</a>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=open&filter2=<?=$arParams['USER_ID']?>">Всего открытых задач:</a>
                                     </th>
                                     <th>
-                                        <a href="/tasks/?filter=open&filter2=<?=$arParams['USER_ID']?>">
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=open&filter2=<?=$arParams['USER_ID']?>">
                                            <?=$arResult['ALL_PROGR_TASKS_CNT']?>
                                         </a>
                                     </th>
@@ -58,11 +58,11 @@ if(!function_exists('drawProgressBar')) {
                             <tbody> 
                                 <tr> 
                                     <td>
-                                        <a href="/tasks/?filter=nocalc&filter2=<?=$arParams['USER_ID']?>">Ожидает оценки:</a>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=nocalc&filter2=<?=$arParams['USER_ID']?>">Ожидает оценки:</a>
                                     </td>
                                     <td colspan="2">
                                         <? if($arResult['COUNTERS'][0]['COUNT']) { ?>
-                                            <a href="/tasks/?filter=nocalc&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][0]['COUNT'];?></a>
+                                            <a href="<?=TASKS_LIST_URL;?>?filter=nocalc&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][0]['COUNT'];?></a>
                                         <? } else {
                                         ?> - <?
                                         }?>
@@ -70,11 +70,11 @@ if(!function_exists('drawProgressBar')) {
                                 </tr>   
                                 <tr> 
                                     <td>
-                                        <a href="/tasks/?filter=complete&filter2=<?=$arParams['USER_ID']?>">Ожидает проверки:</a>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=complete&filter2=<?=$arParams['USER_ID']?>">Ожидает проверки:</a>
                                     </td> 
                                     <td>
                                         <? if($arResult['COUNTERS'][STATUS_LIST_COMPLETE]['COUNT']) { ?>
-                                            <a href="/tasks/?filter=complete&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_COMPLETE]['COUNT']?></a>
+                                            <a href="<?=TASKS_LIST_URL;?>?filter=complete&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_COMPLETE]['COUNT']?></a>
                                         <? } else { ?> - <? } ?> 
                                     </td>
                                     <td class="vertical-align-mid">
@@ -85,11 +85,11 @@ if(!function_exists('drawProgressBar')) {
                                 </tr> 
                                 <tr> 
                                     <td>
-                                        <a href="/tasks/?filter=pause&filter2=<?=$arParams['USER_ID']?>">На паузе:</a>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=pause&filter2=<?=$arParams['USER_ID']?>">На паузе:</a>
                                     </td> 
                                     <td>
                                         <? if($arResult['COUNTERS'][STATUS_LIST_PAUSE]['COUNT']) { ?>
-                                            <a href="/tasks/?filter=pause&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_PAUSE]['COUNT']?></a>
+                                            <a href="<?=TASKS_LIST_URL;?>?filter=pause&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_PAUSE]['COUNT']?></a>
                                         <? } else { ?> - <? } ?> 
                                     </td>
                                     <td class="vertical-align-mid"> 
@@ -100,11 +100,11 @@ if(!function_exists('drawProgressBar')) {
                                 </tr>  
                                  <tr> 
                                     <td>
-                                        <a href="/tasks/?filter=pause&filter2=<?=$arParams['USER_ID']?>">В очереди на выполнение:</a>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=calcagred&filter2=<?=$arParams['USER_ID']?>">В очереди на выполнение:</a>
                                     </td> 
                                     <td>
                                         <? if($arResult['COUNTERS'][STATUS_LIST_CALC_AGRED]['COUNT']) { ?>
-                                            <a href="/tasks/?filter=pause&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_CALC_AGRED]['COUNT']?></a>
+                                            <a href="<?=TASKS_LIST_URL;?>?filter=calcagred&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_CALC_AGRED]['COUNT']?></a>
                                         <? } else { ?> - <? } ?> 
                                     </td>
                                     <td class="vertical-align-mid"> 
@@ -115,11 +115,11 @@ if(!function_exists('drawProgressBar')) {
                                 </tr>  
                                 <tr> 
                                     <td>
-                                        <a href="/tasks/?filter=agrcalced&filter2=<?=$arParams['USER_ID']?>">Согласование оценки:</a>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=agrcalced&filter2=<?=$arParams['USER_ID']?>">Согласование оценки:</a>
                                     </td> 
                                     <td colspan="2">
                                         <? if($arResult['COUNTERS'][STATUS_LIST_AGR_CALCED]['COUNT']) { ?>
-                                           <a href="/tasks/?filter=agrcalced&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_AGR_CALCED]['COUNT']?></a>
+                                           <a href="<?=TASKS_LIST_URL;?>?filter=agrcalced&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_AGR_CALCED]['COUNT']?></a>
                                         <? } else { 
                                             ?> - <?
                                         } ?> 
@@ -127,10 +127,10 @@ if(!function_exists('drawProgressBar')) {
                                 </tr> 
                                 <tr> 
                                     <td>
-                                        <a href="/tasks/?filter=reject&filter2=<?=$arParams['USER_ID']?>">Отклонена:</a></td> 
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=reject&filter2=<?=$arParams['USER_ID']?>">Отклонена:</a></td> 
                                     <td>
                                         <? if($arResult['COUNTERS'][STATUS_LIST_REJECT]['COUNT']) { ?>
-                                            <a href="/tasks/?filter=reject&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_REJECT]['COUNT']?></a>
+                                            <a href="<?=TASKS_LIST_URL;?>?filter=reject&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_REJECT]['COUNT']?></a>
                                         <? } else { ?> - <? } ?>
                                     </td>
                                     <td class="vertical-align-mid"> 
@@ -162,10 +162,10 @@ if(!function_exists('drawProgressBar')) {
                              <thead>
                                 <tr> 
                                     <th style="width: 190px;">
-                                        <a href="/tasks/?filter=end&filter2=<?=$arParams['USER_ID']?>">Всего закрытых задач:</a></th>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=end&filter2=<?=$arParams['USER_ID']?>">Всего закрытых задач:</a></th>
                                     <th>
                                      <? if($arResult['COUNTERS'][STATUS_LIST_ACCEPT]['COUNT']) { ?>
-                                        <a href="/tasks/?filter=end&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_ACCEPT]['COUNT']?></a>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=end&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['COUNTERS'][STATUS_LIST_ACCEPT]['COUNT']?></a>
                                         <? } else { ?> - <? } ?>
                                     </th>
                                     <th class="hidden-phone" style="width: 240px;">
@@ -189,21 +189,21 @@ if(!function_exists('drawProgressBar')) {
                             <tbody> 
                                 <tr> 
                                     <td>
-                                        <a href="/tasks/?filter=agrcalced&filter2=<?=$arParams['USER_ID']?>">Согласование оценки:</a>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=agrcalced&filter2=<?=$arParams['USER_ID']?>">Согласование оценки:</a>
                                     </td>
                                     <td>
                                         <? if($arResult['CUSTOMERS_COUNTERS'][STATUS_LIST_AGR_CALCED]['COUNT']) { ?>
-                                            <a href="/tasks/?filter=agrcalced&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['CUSTOMERS_COUNTERS'][STATUS_LIST_AGR_CALCED]['COUNT'];?></a>
+                                            <a href="<?=TASKS_LIST_URL;?>?filter=agrcalced&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['CUSTOMERS_COUNTERS'][STATUS_LIST_AGR_CALCED]['COUNT'];?></a>
                                         <? } else { ?> - <? } ?>
                                     </td>  
                                 </tr>  
                                 <tr> 
                                     <td>
-                                        <a href="/tasks/?filter=complete&filter2=<?=$arParams['USER_ID']?>">Ожидает проверки:</a>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=complete&filter2=<?=$arParams['USER_ID']?>">Ожидает проверки:</a>
                                     </td> 
                                     <td> 
                                         <? if($arResult['CUSTOMERS_COUNTERS'][STATUS_LIST_COMPLETE]['COUNT']) { ?>
-                                        <a href="/tasks/?filter=complete&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['CUSTOMERS_COUNTERS'][STATUS_LIST_COMPLETE]['COUNT'];?></a>
+                                        <a href="<?=TASKS_LIST_URL;?>?filter=complete&filter2=<?=$arParams['USER_ID']?>"><?=$arResult['CUSTOMERS_COUNTERS'][STATUS_LIST_COMPLETE]['COUNT'];?></a>
                                         <? } else { ?> - <? } ?>
                                     </td> 
                                 </tr> 
