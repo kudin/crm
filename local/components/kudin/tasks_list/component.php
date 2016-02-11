@@ -29,12 +29,11 @@ $logger = new CrmLog();
 $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PROPERTY_*", "DETAIL_PICTURE");
 $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID);
 $userFilter = $USER->GetViewProjectsFilter();
-$arFilter = array_merge($userFilter, $arFilter);
-$res = CIBlockElement::GetList(array(), $arFilter, false, false, $arSelect);
-$res->NavStart();
-while ($ob = $res->GetNextElement()) {
+$arFilter = array_merge($userFilter, $arFilter); 
+$res = CIBlockElement::GetList(array(), $arFilter, false, array('nTopCount' => 500), $arSelect);
+while ($ob = $res->GetNextElement()) { 
     $arFields = $ob->GetFields();
-    $arProps = $ob->GetProperties(); 
+    $arProps = $ob->GetProperties();
     if($arParams["PROJECT"] && ($arParams["PROJECT"] == $arFields['ID'])) {
         $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'];
         $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'];  

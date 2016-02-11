@@ -3,7 +3,7 @@
 CPageOption::SetOptionString("main", "nav_page_in_session", "N");
 
 if($arParams["COUNT"] <= 0) {
-    $arParams["COUNT"] = 10;
+    $arParams["COUNT"] = 30;
 }
 
 CModule::IncludeModule('iblock');

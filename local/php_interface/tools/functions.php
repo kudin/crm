@@ -64,14 +64,15 @@ function trackStartedTask($stopStartedTask = true) {
         $curdate = new DateTime();
         $diff = $date->diff($curdate);
         $h = $diff->format('%h');
-        $i = $diff->format('%i');
-        if ($h) {
-            $timingText = "{$h} ч, ";
-        }
-        if ($i) {
-            $timingText = "{$i} мин. ";
-        }
+        $i = $diff->format('%i'); 
         if ($h || $i) {
+            $timingText = '';
+            if ($h) {
+                $timingText = "{$h} ч, ";
+            }
+            if ($i) {
+                $timingText = $timingText . "{$i} мин. ";
+            }
             $decTime = $h + ($i / 60);
             $decTime = round($decTime, 2);
             $el = new CIBlockElement;
