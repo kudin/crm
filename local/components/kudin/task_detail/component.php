@@ -26,7 +26,7 @@ $logger = new CrmLog('task');
 
 /* project */
 
-$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "CREATED_BY");
+$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "CREATED_BY", "DETAIL_PICTURE");
 $arFilter = Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID, 'ID' => $arParams['PROJECT']);
 $userFilter = $USER->GetViewProjectsFilter();
 $arFilter = array_merge($userFilter, $arFilter); 
@@ -34,6 +34,9 @@ $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
 if ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();
     $arProps = $ob->GetProperties(); 
+    if($arFields['DETAIL_PICTURE']) {
+        $arFields['DETAIL_PICTURE'] = CFile::ResizeImageGet($arFields['DETAIL_PICTURE'], array('width'=>60, 'height'=>50), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);                
+    }
     $arResult['CUSTOMERS_IDS'] = $arProps['CUSTOMER']['VALUE'] ? $arProps['CUSTOMER']['VALUE'] : array();
     $arResult['PROGRAMERS_IDS'] = $arProps['PROGRAMMER']['VALUE'] ? $arProps['PROGRAMMER']['VALUE'] : array();
     $arResult['PROJECT'] = $arFields;

@@ -199,3 +199,14 @@
     margin-bottom: 0px;
     min-width: 100px;
 }
+
+.inbox-body{
+    overflow: hidden;
+}
+
+h2.with-icon {
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    padding-left: 27px;
+} 

@@ -74,13 +74,15 @@ class CrmLog {
 
     private function collectEventsToArr($res, $collectNotViewed = false) {
         while ($item = $res->Fetch()) {
-                if($collectNotViewed && !$item['VIEW']) {
+            if($collectNotViewed && !$item['VIEW']) {
                 $this->newCnt++;
                 self::$notViewedIds[] = $item['ITEM_ID'];
                 if($item['ACTION'] == 2) {
                     self::$commentsCnt[$item['ITEM_ID']]++; 
                 }
             }
+            $date = new DateTime($item['DATE']);
+            $item['DATE_FORMATED'] = $date->format('H:i d.m.Y');
             switch ($item['MODULE']) {
                 case TASKS_IBLOCK_ID:
                     $item['LINK'] = crmEntitiesHelper::GetTaskUrl($item['ITEM_ID']);

@@ -1,4 +1,4 @@
-.big-imgs .image img{
+.big-imgs .image img {
     min-width: 68px;
 }
 
@@ -6,10 +6,16 @@
     text-decoration: none;
 }
 
-.big-imgs .time{
+.big-imgs .time {
     font-weight: normal!important; 
 }
 
-.big-imgs .notviewed{ 
+.big-imgs .notviewed { 
     font-weight: bold;
 }
+ 
+.with_image {
+    padding-right: 70px!important;
+    background-repeat: no-repeat; 
+    background-position: 98% 28px;
+} 

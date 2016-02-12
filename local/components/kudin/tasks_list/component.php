@@ -12,11 +12,11 @@ if(!$arParams['DATE_FORMAT']) {
 }
 
 if(!$arParams['DATE_TIME_FORMAT']) {
-    $arParams['DATE_TIME_FORMAT'] = 'j M в H:i:s';
+    $arParams['DATE_TIME_FORMAT'] = 'j M в H:i';
 }
 
 if($arParams["COUNT"] <= 0) {
-    $arParams["COUNT"] = 20;
+    $arParams["COUNT"] = 30;
 }
 
 CModule::IncludeModule('iblock');
@@ -42,10 +42,7 @@ while ($ob = $res->GetNextElement()) {
         foreach ($arProps[$propCode]['VALUE'] as $userid) {
             $arResult['ALL_USERS'][] = $userid;
         } 
-    } 
-    if(!$arParams["PROJECT"] && $res->NavRecordCount == 1) {
-        LocalRedirect(TASKS_LIST_URL . $arFields['ID'] . '/');
-    } 
+    }
     if($arFields['DETAIL_PICTURE']) {
         $arFields['DETAIL_PICTURE'] = CFile::ResizeImageGet($arFields['DETAIL_PICTURE'], array('width'=>60, 'height'=>50), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);                
     }
