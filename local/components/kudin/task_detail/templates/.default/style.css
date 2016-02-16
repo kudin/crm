@@ -46,8 +46,9 @@
    font-size: 100%;
 }
 
-.calcblock{
+.calcblock {
     padding-left: 0px;
+    min-height: 60px;
 }
 
 .calcblock input[type=text] {
