@@ -18,9 +18,63 @@ while ($ob = $res->GetNextElement()) {
             }
         }
     }
-    $arResult['PROJECTS'][] = $arFields;
+    $arResult['PROJECTS'][$arFields['ID']] = $arFields;
 }
 
+$arParams['USER_ID'] = CUser::GetID();
+
 $arResult['USERS'] = BitrixHelper::getUsersArrByIds($allUsers);
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $arResult['IS_REPORT'] = true;
+    $projects = $_REQUEST['projects'];
+    $access = true;
+    $user = $_REQUEST['user']; 
+    foreach($projects as $project) {
+        if(!in_array($project, $arResult['USER_TO_PROJECT'][$user])) {
+            $access = false; 
+            break;
+        }
+    }
+    $dates = explode(' - ', $_POST["reservation"]); 
+    if($access && count($dates) == 2) {
+        $dateFrom = new DateTime($dates[0]);
+        $dateTo = new DateTime($dates[1]);    
+        $res = CIBlockElement::GetList(Array('DATE_CREATE' => 'ASC'), 
+            array('IBLOCK_ID' => TRACKING_IBLOCK_ID, 
+                  'CREATED_BY' => $user,
+                  '>=DATE_CREATE' => $dateFrom->format("d.m.Y 00:00:00"),
+                  '<=DATE_CREATE' => $dateTo->format("d.m.Y 23:59:59")
+                ),
+            false, 
+            false,
+            array("ID", "IBLOCK_ID", "DATE_CREATE", "PROPERTY_HOURS", 'PROPERTY_TASK')); 
+        while ($row = $res->Fetch()) {
+            $tasks[] = $row["PROPERTY_TASK_VALUE"];
+            $timers[$row["PROPERTY_TASK_VALUE"]][] = $row;
+        }
+        $tasks = array_unique($tasks);
+        if(count($tasks) && count($projects)) {
+            $arResult['ALLSUMM'] = 0;
+            $res = CIBlockElement::GetList(
+                array(), 
+                array('IBLOCK_ID' => TASKS_IBLOCK_ID,
+                      'ID' => $tasks, 
+                      'PROPERTY_PROJECT' => $projects),
+                false, 
+                false,
+                array("ID", "NAME", "PROPERTY_PROJECT")); 
+            while($task = $res->Fetch()) {
+                $time = 0;
+                foreach($timers[$task['ID']] as $timer) {
+                    $time += $timer['PROPERTY_HOURS_VALUE'];
+                }
+                $arResult['ALLSUMM'] += $time;
+                $task['TIME'] = $time;
+                $arResult['TASKS'][$task['PROPERTY_PROJECT_VALUE']][] = $task;
+            }
+        }
+    } 
+}
 
 $this->IncludeComponentTemplate();

@@ -1,4 +1,5 @@
 $(function () {
+    
     $('#reservation').daterangepicker({
         ranges: {
             'Сегодня': [moment(), moment()],
@@ -47,9 +48,24 @@ $(function () {
         val = $(this).val();
         $('#userprojects').html('');
         for (id in usersToProjects[val]) {
-            $('#userprojects').append('<option selected value="' + id + '">' + projects[usersToProjects[val][id]].name + '</option>');
+            $('#userprojects').append('<option selected value="' + usersToProjects[val][id] + '">' + projects[usersToProjects[val][id]].name + '</option>');
         }
     });
+    
     $('#userid').change();
+    
+    $(document).on('click', '.makereport', function (e) {
+        e.preventDefault();
+        formdata = $('#reportform').serialize();
+        $('.report-title').text('Затраты ' + $('#userid :selected').text() + ' за период с ' + $('#reservation').val().replace('-', 'по'));
+        $.ajax({
+            data: formdata,
+            method: 'POST',
+            success: function (data) {
+                $('#report-area').html($(data).find('#report-area'));
+            }
+        }); 
+    });
+ 
 });
  
