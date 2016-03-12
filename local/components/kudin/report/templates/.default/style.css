@@ -1,7 +1,21 @@
 #userprojects {
-    height: 270px;
+    height: 250px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .report .input-group {
     margin-top: 20px;
+}
+
+#reservation {
+    width: 210px
+}
+
+.input-mini {
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 180px;
+    text-align: center;
 }

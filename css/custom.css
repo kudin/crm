@@ -3155,7 +3155,7 @@ select.parsley-error {
 .daterangepicker.opensright .calendar,
 .daterangepicker.openscenter .ranges,
 .daterangepicker.openscenter .calendar {
-    float: right;
+    float: left;
 }
 
 .daterangepicker.dropdown-menu .calendar {}
