@@ -2,6 +2,8 @@
 if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
 $allUsers = array();
+
+CModule::IncludeModule('iblock');
 $res = CIBlockElement::GetList(Array('SORT' => 'ASC' ,'NAME' => 'ASC'), 
         array_merge($USER->GetViewProjectsFilter(), Array("IBLOCK_ID" => PROJECTS_IBLOCK_ID)), 
         false, 
@@ -29,20 +31,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $arResult['IS_REPORT'] = true;
     $projects = $_REQUEST['projects'];
     $access = true;
-    $user = $_REQUEST['user']; 
+    $arResult['USER'] = $_REQUEST['user']; 
     foreach($projects as $project) {
-        if(!in_array($project, $arResult['USER_TO_PROJECT'][$user])) {
+        if(!in_array($project, $arResult['USER_TO_PROJECT'][$arResult['USER']])) {
             $access = false; 
             break;
         }
     }
-    $dates = explode(' - ', $_POST["reservation"]); 
+    $arResult['RESERVATION'] = $_POST["reservation"];
+    $dates = explode(' - ', $arResult['RESERVATION']); 
     if($access && count($dates) == 2) {
         $dateFrom = new DateTime($dates[0]);
         $dateTo = new DateTime($dates[1]);    
         $res = CIBlockElement::GetList(Array('DATE_CREATE' => 'ASC'), 
             array('IBLOCK_ID' => TRACKING_IBLOCK_ID, 
-                  'CREATED_BY' => $user,
+                  'CREATED_BY' => $arResult['USER'],
                   '>=DATE_CREATE' => $dateFrom->format("d.m.Y 00:00:00"),
                   '<=DATE_CREATE' => $dateTo->format("d.m.Y 23:59:59")
                 ),
@@ -74,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $arResult['TASKS'][$task['PROPERTY_PROJECT_VALUE']][] = $task;
             }
         }
-    } 
+    }
 }
 
 $this->IncludeComponentTemplate();

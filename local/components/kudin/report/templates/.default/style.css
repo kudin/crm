@@ -19,3 +19,7 @@
     width: 180px;
     text-align: center;
 }
+
+.report .panel_toolbox {
+    display: none;
+}

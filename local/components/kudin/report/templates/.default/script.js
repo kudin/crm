@@ -54,7 +54,7 @@ $(function () {
     
     $('#userid').change();
     
-    $(document).on('click', '.makereport', function (e) {
+    $(document).on('click', '.makereport', function(e) {
         e.preventDefault();
         formdata = $('#reportform').serialize();
         $('.report-title').text('Затраты ' + $('#userid :selected').text() + ' за период с ' + $('#reservation').val().replace('-', 'по'));
@@ -63,9 +63,14 @@ $(function () {
             method: 'POST',
             success: function (data) {
                 $('#report-area').html($(data).find('#report-area'));
+                $('.report .panel_toolbox').show();
             }
         }); 
     });
  
+    $(document).on('click', '.html_link', function() {
+       $('#reportform').attr('action', '/report/download/html/').submit(); 
+    });
+      
 });
  

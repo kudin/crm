@@ -24,7 +24,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
             <div class="x_content"> 
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
-                        <form method="POST" id="reportform">
+                        <form method="POST" id="reportform" target="_blank">
                             <select class="form-control" id="userid" name="user">
                                 <? foreach ($arResult['USERS'] as $user) { ?>
                                 <option <?if($arParams['USER_ID'] == $user['ID']) { ?> selected <? } ?> value="<?= $user['ID']; ?>"><?= $user['FULL_NAME']; ?></option>
@@ -46,6 +46,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
         <div class="x_panel">
             <div class="x_title">
                 <h2 class="report-title">Отчёт</h2>  
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a href="#" class="html_link"><i class="fa fa fa-file-o"></i></a></li> 
+                </ul>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content"> 
@@ -55,13 +58,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                         if ($arResult['IS_REPORT']) {
                             foreach ($arResult['TASKS'] as $project => $tasks) {
                                 $summ = 0;
-                                ?>
-                                <h2><?= $arResult['PROJECTS'][$project]['NAME']; ?></h2>
+                                ?> 
                                 <table class="table table-bordered"> 
                                     <thead>
                                         <tr>
-                                            <th width="10%">#</th>
-                                            <th width="80%">Задача</th>
+                                            <th colspan="2"><?= $arResult['PROJECTS'][$project]['NAME']; ?></th>
                                             <th width="10%">Затраты</th> 
                                         </tr>
                                     </thead>
@@ -71,7 +72,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                             $summ += $task['TIME'];
                                             ?> 
                                             <tr>
-                                                <th scope="row"><a target="_blank" href="<?= TASKS_LIST_URL ?><?= $project; ?>/<?= $task['ID']; ?>/"><?= $task['ID']; ?></a></th>
+                                                <th width="10%" scope="row"><a target="_blank" href="<?= TASKS_LIST_URL ?><?= $project; ?>/<?= $task['ID']; ?>/"><?= $task['ID']; ?></a></th>
                                                 <td><?= $task['NAME']; ?></td>
                                                 <td><?= $task['TIME']; ?></td> 
                                             </tr> 
