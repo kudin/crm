@@ -1,6 +1,6 @@
 <?php
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
- 
+
 if(!$arResult['IS_REPORT']) {
     return;
 }
@@ -53,9 +53,9 @@ if(!$arResult['IS_REPORT']) {
                     <tr>
                         <th scope="row" width="10%"><a target="_blank" href="http://<?=$_SERVER["SERVER_NAME"];?><?= TASKS_LIST_URL ?><?= $project; ?>/<?= $task['ID']; ?>/"><?= $task['ID']; ?></a></th>
                         <td><?= $task['NAME']; ?></td>
-                        <td><?= $task['TIME']; ?></td> 
+                        <td title="<?= $task['TIME_NAME']; ?>"><?= $task['TIME']; ?></td> 
                     </tr> 
-                <? } ?>   
+                <? } ?>
                 <tr>
                     <td colspan="2">Всего по проекту:</td>
                     <td><b><?= $summ; ?></b></td> 

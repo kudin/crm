@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ),
             false, 
             false,
-            array("ID", "IBLOCK_ID", "DATE_CREATE", "PROPERTY_HOURS", 'PROPERTY_TASK')); 
+            array("ID", "IBLOCK_ID", "DATE_CREATE", "NAME", "PROPERTY_HOURS", 'PROPERTY_TASK')); 
         while ($row = $res->Fetch()) {
             $tasks[] = $row["PROPERTY_TASK_VALUE"];
             $timers[$row["PROPERTY_TASK_VALUE"]][] = $row;
@@ -69,11 +69,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 array("ID", "NAME", "PROPERTY_PROJECT")); 
             while($task = $res->Fetch()) {
                 $time = 0;
+                $names = array();
                 foreach($timers[$task['ID']] as $timer) {
                     $time += $timer['PROPERTY_HOURS_VALUE'];
+                    $names[] = $timer['NAME'];
                 }
                 $arResult['ALLSUMM'] += $time;
                 $task['TIME'] = $time;
+                $task['TIME_NAME'] = implode(', ', $names);
                 $arResult['TASKS'][$task['PROPERTY_PROJECT_VALUE']][] = $task;
             }
         }

@@ -453,6 +453,7 @@ $res = CIBlockElement::GetList(
     false,  
     array('DETAIL_TEXT', 'ID', 'DATE_CREATE', 'PROPERTY_HOURS')); 
 while ($ar_fields = $res->GetNext()) {  
+    $ar_fields['DATE_CREATE'] = CIBlockFormatProperties::DateFormat($arParams['DATE_FORMAT'], MakeTimeStamp($ar_fields['DATE_CREATE'], CSite::GetDateFormat()));
     $arResult['TRACKING'][] = $ar_fields;
 }
 

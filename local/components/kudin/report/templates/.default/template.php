@@ -74,7 +74,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                             <tr>
                                                 <th width="10%" scope="row"><a target="_blank" href="<?= TASKS_LIST_URL ?><?= $project; ?>/<?= $task['ID']; ?>/"><?= $task['ID']; ?></a></th>
                                                 <td><?= $task['NAME']; ?></td>
-                                                <td><?= $task['TIME']; ?></td> 
+                                                <td title="<?= $task['TIME_NAME']; ?>"><?= $task['TIME']; ?></td> 
                                             </tr> 
                                         <? } ?>   
                                         <tr>

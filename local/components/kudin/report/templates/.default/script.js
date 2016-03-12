@@ -68,6 +68,8 @@ $(function () {
         }); 
     });
  
+    $('.makereport').click();
+ 
     $(document).on('click', '.html_link', function() {
        $('#reportform').attr('action', '/report/download/html/').submit(); 
     });

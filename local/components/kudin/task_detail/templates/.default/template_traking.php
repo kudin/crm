@@ -14,7 +14,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     <?
                     foreach ($arResult['TRACKING'] as $track) {
                         ?>
-                        <div class="row trackingrow" data-track="<?= $track['ID']; ?>"> 
+                        <div class="row trackingrow" data-track="<?= $track['ID']; ?>" title="<?=$track['DATE_CREATE']?>"> 
                             <div class="col-md-1 col-sm-1 col-xs-12">
                                 <a href="#" class="removetrack"><i class="fa fa-remove"></i></a>
                             </div>
