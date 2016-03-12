@@ -10,11 +10,11 @@ while ($ob = $res->GetNextElement()) {
     $arProps = $ob->GetProperties();  
     foreach(array('PROGRAMMER', 'CUSTOMER') as $propCode) {
         foreach ($arProps[$propCode]['VALUE'] as $userid) {
-            $arResult['ALL_USERS'][] = $userid;
+            $allUsers[] = $userid;
         } 
     }   
 }
 
-$arResult['USERS'] = BitrixHelper::getUsersArrByIds($arResult['ALL_USERS']);
+$arResult['USERS'] = BitrixHelper::getUsersArrByIds($allUsers);
 
 $this->IncludeComponentTemplate();
