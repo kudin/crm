@@ -79,13 +79,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                         <? } ?>   
                                         <tr>
                                             <td colspan="2"></td>
-                                            <td><b><?= $summ; ?></b></td> 
+                                            <td><b><?= $summ; ?> ч.</b></td> 
                                         </tr> 
                                     </tbody>
                                 </table> 
                             <? }
                             if ($arResult['ALLSUMM']) { ?>
-                                <p>Всего времени: <b><?= $arResult['ALLSUMM']; ?></b></p>
+                                <p>Всего времени: <b><?= $arResult['ALLSUMM']; ?> ч.</b></p>
                             <? } else { ?>
                                 <p>Задач по выбраному фильтру не найдено</p>
                                 <? }  

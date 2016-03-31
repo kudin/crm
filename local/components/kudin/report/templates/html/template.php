@@ -58,13 +58,13 @@ if(!$arResult['IS_REPORT']) {
                 <? } ?>
                 <tr>
                     <td colspan="2">Всего по проекту:</td>
-                    <td><b><?= $summ; ?></b></td> 
+                    <td><b><?= $summ; ?> ч.</b></td> 
                 </tr> 
             </tbody>
         </table>
     <? }
     if ($arResult['ALLSUMM']) { ?>
-        <p>Всего времени: <b><?= $arResult['ALLSUMM']; ?></b></p>
+        <p>Всего времени: <b><?= $arResult['ALLSUMM']; ?> ч.</b></p>
     <? } else { ?>
         <p>Задач по выбраному фильтру не найдено</p>
     <? } ?>
