@@ -1718,6 +1718,7 @@ ul.msg_list li a .time {
 ul.msg_list li a .message {
     display: block !important;
     font-size: 11px;
+    word-wrap: break-word;
 }
 
 .dropdown-menu.msg_list {

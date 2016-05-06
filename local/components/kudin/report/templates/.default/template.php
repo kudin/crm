@@ -51,9 +51,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                 </ul>
                 <div class="clearfix"></div>
             </div>
-            <div class="x_content"> 
+            <div class="x_content">
                 <div class="row">
-                    <div class="col-md-12 col-sm-12" id="report-area"> 
+                    <div class="col-md-12 col-sm-12" id="report-area">
                         <?
                         if ($arResult['IS_REPORT']) {
                             foreach ($arResult['TASKS'] as $project => $tasks) {
@@ -63,10 +63,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                     <thead>
                                         <tr>
                                             <th colspan="2"><?= $arResult['PROJECTS'][$project]['NAME']; ?></th>
-                                            <th width="10%">Затраты</th> 
+                                            <th width="10%">Затраты</th>
                                         </tr>
                                     </thead>
-                                    <tbody> 
+                                    <tbody>
                                         <?
                                         foreach ($tasks as $task) {
                                             $summ += $task['TIME'];
@@ -79,10 +79,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                         <? } ?>   
                                         <tr>
                                             <td colspan="2"></td>
-                                            <td><b><?= $summ; ?> ч.</b></td> 
-                                        </tr> 
+                                            <td><b><?= $summ; ?> ч.</b></td>
+                                        </tr>
                                     </tbody>
-                                </table> 
+                                </table>
                             <? }
                             if ($arResult['ALLSUMM']) { ?>
                                 <p>Всего времени: <b><?= $arResult['ALLSUMM']; ?> ч.</b></p>
@@ -90,9 +90,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                                 <p>Задач по выбраному фильтру не найдено</p>
                                 <? }  
                             } ?>
-                    </div>    
+                    </div>
                 </div>
-            </div> 
+            </div>
         </div>
-    </div> 
+    </div>
 </div>
