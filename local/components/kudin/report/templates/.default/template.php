@@ -12,6 +12,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
     <? foreach ($arResult['USER_TO_PROJECT'] as $user => $projects) { ?>
         <?= $user; ?>: [<?= implode(',', $projects) ?>],
     <? } ?>
+        0: [<?=implode(', ', $arResult['ALL_PROJECTS']);?>]
     };
 </script>
 <div class="row report">
@@ -26,6 +27,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
                     <div class="col-md-12 col-sm-12">
                         <form method="POST" id="reportform" target="_blank">
                             <select class="form-control" id="userid" name="user">
+                                <option value="0">Все</option>
                                 <? foreach ($arResult['USERS'] as $user) { ?>
                                 <option <?if($arParams['USER_ID'] == $user['ID']) { ?> selected <? } ?> value="<?= $user['ID']; ?>"><?= $user['FULL_NAME']; ?></option>
                                 <? } ?> 
@@ -54,7 +56,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
             <div class="x_content">
                 <div class="row">
                     <div class="col-md-12 col-sm-12" id="report-area">
-                        <?
+                        <? 
                         if ($arResult['IS_REPORT']) {
                             foreach ($arResult['TASKS'] as $project => $tasks) {
                                 $summ = 0;

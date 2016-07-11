@@ -7,7 +7,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
         <div class="x_panel">
             <div class="x_title">
                 <? $icon = $arResult['PROJECT']["DETAIL_PICTURE"]["src"]; ?>
-                <h2 class="editable_show<? if($icon) { ?> with-icon<? } ?>"<?if($icon) { ?> style="background-image: url('<?=$icon;?>');"<? } ?>><?= $arResult['TASK']['NAME']; ?>
+                <h2 title="<?=$arResult['TASK']['NAME'];?>" class="editable_show<? if($icon) { ?> with-icon<? } ?>"<?if($icon) { ?> style="background-image: url('<?=$icon;?>');"<? } ?>><?=TruncateText($arResult['TASK']['NAME'], 100); ?>
                     <div class="priorb prior<?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?>" title="Приоритет: <?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?>"><?= $arResult['TASK']['PROPS']['PRIORITY']['VALUE'] ?></div>
                 </h2> 
                 <input data-edittask="Y" name="NAME_NEW" type="text" class="form-control editable_hidden" value="<?= $arResult['TASK']['NAME']; ?>" style="width: 66%"> 

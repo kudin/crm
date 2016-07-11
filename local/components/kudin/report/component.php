@@ -12,6 +12,7 @@ $res = CIBlockElement::GetList(Array('SORT' => 'ASC' ,'NAME' => 'ASC'),
 while ($ob = $res->GetNextElement()) {
     $arFields = $ob->GetFields();
     $arProps = $ob->GetProperties();
+    $arResult['ALL_PROJECTS'][] = $arFields['ID'];
     foreach(array('PROGRAMMER', 'CUSTOMER') as $propCode) { 
         foreach ($arProps[$propCode]['VALUE'] as $userid) {
             $allUsers[] = $userid;
@@ -31,24 +32,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $arResult['IS_REPORT'] = true;
     $projects = $_REQUEST['projects'];
     $access = true;
-    $arResult['USER'] = $_REQUEST['user']; 
-    foreach($projects as $project) {
-        if(!in_array($project, $arResult['USER_TO_PROJECT'][$arResult['USER']])) {
-            $access = false; 
-            break;
+    $arResult['USER'] = $_REQUEST['user'];
+    if($arResult['USER']) {
+        foreach($projects as $project) {
+            if(!in_array($project, $arResult['USER_TO_PROJECT'][$arResult['USER']])) {
+                $access = false; 
+                break;
+            }
         }
+    } else {
+        foreach($projects as $project) {
+            if(!$arResult['PROJECTS'][$project]) {
+                continue;
+            }
+            $tmpProjects[] = $project;
+        }
+        $projects = $tmpProjects;
     }
     $arResult['RESERVATION'] = $_POST["reservation"];
     $dates = explode(' - ', $arResult['RESERVATION']); 
     if($access && count($dates) == 2) {
         $dateFrom = new DateTime($dates[0]);
-        $dateTo = new DateTime($dates[1]);    
+        $dateTo = new DateTime($dates[1]);
+        $arFilter = array('IBLOCK_ID' => TRACKING_IBLOCK_ID,
+                          '>=DATE_CREATE' => $dateFrom->format("d.m.Y 00:00:00"),
+                          '<=DATE_CREATE' => $dateTo->format("d.m.Y 23:59:59") );
+        if($arResult['USER']) {
+            $arFilter['CREATED_BY'] = $arResult['USER'];
+        } 
         $res = CIBlockElement::GetList(Array('DATE_CREATE' => 'ASC'), 
-            array('IBLOCK_ID' => TRACKING_IBLOCK_ID, 
-                  'CREATED_BY' => $arResult['USER'],
-                  '>=DATE_CREATE' => $dateFrom->format("d.m.Y 00:00:00"),
-                  '<=DATE_CREATE' => $dateTo->format("d.m.Y 23:59:59")
-                ),
+            $arFilter,
             false, 
             false,
             array("ID", "IBLOCK_ID", "DATE_CREATE", "NAME", "PROPERTY_HOURS", 'PROPERTY_TASK')); 

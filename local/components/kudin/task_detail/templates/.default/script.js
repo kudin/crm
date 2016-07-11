@@ -13,7 +13,7 @@ $(function() {
                         new PNotify({title :'Ошибка', text: data.error, type: 'error' });
                     } else {  
                          if(data.summ > 0) {
-                             $('.alltrackingsumm p').text('Всего потрачено ' +  data.summ +' ч.'); 
+                             $('.alltrackingsumm p').text('Всего потрачено: ' +  data.summ +' ч.'); 
                           } else {
                              $('.alltrackingsumm p').text('Затраты не внесены'); 
                           }
@@ -42,7 +42,7 @@ $(function() {
                     if(data.error != undefined) {
                         new PNotify({title :'Ошибка', text: data.error, type: 'error' });
                     } else {  
-                        $('.alltrackingsumm p').text('Всего потрачено ' +  data.summ +' ч.'); 
+                        $('.alltrackingsumm p').text('Всего потрачено: ' +  data.summ +' ч.'); 
                         $('#trackh, #trackdesc').val('');  
                         html = '<div data-track="' + data.ok + '" class="row trackingrow">\n\
                             <div class="col-md-1 col-sm-1 col-xs-12">\n\
@@ -62,7 +62,7 @@ $(function() {
         }  
     });
     
-    $('.edit_task_form .btn-success').on('click', function(e) { // грязновато
+    $('.edit_task_form .btn-success').on('click', function(e) {
         e.preventDefault();
         $('.editable_show').show();
         $('.editable_hidden').hide();
