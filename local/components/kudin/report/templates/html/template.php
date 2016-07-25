@@ -38,7 +38,7 @@ if(!$arResult['IS_REPORT']) {
     foreach ($arResult['TASKS'] as $project => $tasks) {
         $summ = 0;
         ?> 
-            <table class="table-bordered"> 
+            <table class="table-bordered" width="95%"> 
             <thead>
                 <tr>
                     <th colspan="2"><?= $arResult['PROJECTS'][$project]['NAME']; ?></th>
