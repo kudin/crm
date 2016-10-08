@@ -20,8 +20,8 @@ class FileHelper {
             $icon = CFile::ResizeImageGet($this->file, array('width' => 256, 'height' => 256), BX_RESIZE_IMAGE_EXACT, true);
             $icon = $icon['src'];
         }
-        if (in_array($ext, array('ac3', 'doc', 'mp3', 'php', 'pyc', 'rpm', 'xcf', 'js',
-                                 'tgz', 'xls', 'bmp', 'gz', 'py', 'svg', 'txt', 'tiff',
+        if (in_array($ext, array('ac3', 'doc', 'mp3', 'php', 'pyc', 'rpm', 'xcf', 'js', 'csv',
+                                 'tgz', 'xls', 'xlsx', 'bmp', 'gz', 'py', 'svg', 'txt', 'tiff',
                                  'zip', 'c', 'html', 'pdf', 'psd', 'rar', 'tga', 'docx'))) {
             $icon = self::$iconsPath . $ext . '.png';
         } 

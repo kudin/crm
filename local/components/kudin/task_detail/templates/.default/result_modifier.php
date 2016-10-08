@@ -20,3 +20,14 @@ foreach($arResult['COMMENTS'] as &$comment) {
         $file["FILE_SIZE"] = formatBytes($file["FILE_SIZE"]);
     }
 }
+ /*
+$reg = "/[^>\"']((ftp|https?):\/\/)(www\.)?([a-z0-9:\/?&=%#_.-]+)(<\/a|['\"])/i";
+$replace = "<a href='\$1\$3\$4' target='_blank'>\$1\$3\$4</a>";
+$te = preg_replace($reg, $replace, " df df  
+  https://na.com</a 
+  https://na.com'dsf fs  
+  https://ne.com$dsf fs  
+  https://na.com\"dsf fs  
+  https://ne.com</b df df ");
+
+echo $te;*/
